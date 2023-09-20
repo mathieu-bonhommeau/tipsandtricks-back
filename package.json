@@ -4,10 +4,11 @@
   "description": "Backend of Tips and tricks - Nodejs Express Typescript",
   "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest -c jest.config.ts",
     "build": "vite build",
     "start": "node ./dist/index.mjs",
-    "dev": "nodemon ./src/index.ts"
+    "dev": "nodemon ./src/index.ts",
+    "init-db": "ts-node ./src/_config/db/init-db.ts"
   },
   "repository": {
     "type": "git",
