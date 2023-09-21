@@ -34,7 +34,7 @@ describe('Register a user', () => {
     test('return an error message if password is too weak', async () => {
         const inputUserDatas = sut.givenAnInputUserDataWithWeakPassword();
         const errorResponse = await new RegisterUserUseCase(userRepository).register(inputUserDatas);
-        expect(errorResponse).toEqual({ message: 'Password too weak !' });
+        expect(errorResponse).toEqual({ message: 'Register failed !' });
     });
 
     test('the password is hash in the database', async () => {
@@ -53,7 +53,13 @@ describe('Register a user', () => {
     test('a username must have 2 or more than 2 characters', async () => {
         const inputUserDatas = sut.givenAnInputDataWithATooLittleUsername();
         const errorResponse = await new RegisterUserUseCase(userRepository).register(inputUserDatas);
-        expect(errorResponse).toEqual({ message: 'Username too short !' });
+        expect(errorResponse).toEqual({ message: 'Register failed !' });
+    });
+
+    test('an email must have the good format', async () => {
+        const inputUserDatas = sut.givenAnInputDataWithABadEmailFormat();
+        const errorResponse = await new RegisterUserUseCase(userRepository).register(inputUserDatas);
+        expect(errorResponse).toEqual({ message: 'Register failed !' });
     });
 });
 
@@ -80,6 +86,11 @@ class SUT {
 
     givenAnInputDataWithATooLittleUsername(): InputUserData {
         this._userTestBuilder.withUsername('t');
+        return this._userTestBuilder.buildInputUserData();
+    }
+
+    givenAnInputDataWithABadEmailFormat(): InputUserData {
+        this._userTestBuilder.withEmail('test');
         return this._userTestBuilder.buildInputUserData();
     }
 }

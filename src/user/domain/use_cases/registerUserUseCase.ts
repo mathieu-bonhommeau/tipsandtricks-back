@@ -13,14 +13,8 @@ export interface RegisterUserUseCaseInterface {
 export default class RegisterUserUseCase implements RegisterUserUseCaseInterface {
     constructor(private readonly _userRepository: UserRepositoryInterface) {}
     async register(input: InputUserData): Promise<User | InputError> {
-        const isUsernameLongEnough = this._checkLengthUsername(input.username);
-        if (!isUsernameLongEnough) {
-            return new InputError('Username too short !');
-        }
-
-        const isPasswordStrong = this._checkStrengthPassword(input.password);
-        if (!isPasswordStrong) {
-            return new InputError('Password too weak !');
+        if (!this.inputRegisterValidate(input)) {
+            return new InputError('Register failed !');
         }
 
         input.password = bcrypt.hashSync(input.password, parseInt(process.env.ROUND_SALT_PWD));
@@ -32,6 +26,31 @@ export default class RegisterUserUseCase implements RegisterUserUseCaseInterface
         }
 
         return userJustCreated;
+    }
+
+    private inputRegisterValidate(inputUserData: InputUserData): boolean {
+        const isValid: boolean[] = [];
+
+        for (const [inputKey, value] of Object.entries(inputUserData)) {
+            switch (inputKey) {
+                case 'email':
+                    isValid.push(this._checkEmailFormat(value));
+                    break;
+                case 'username':
+                    isValid.push(this._checkLengthUsername(value));
+                    break;
+                case 'password':
+                    isValid.push(this._checkStrengthPassword(value));
+                    break;
+            }
+        }
+
+        return isValid.every((item) => item);
+    }
+
+    private _checkEmailFormat(password: string): boolean {
+        const emailRegex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
+        return emailRegex.test(password);
     }
 
     private _checkStrengthPassword(password: string): boolean {
