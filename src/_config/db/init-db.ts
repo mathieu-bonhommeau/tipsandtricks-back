@@ -48,6 +48,9 @@ export class InitDb {
     const init = new InitDb();
     await init.init();
     await init.clearDb();
-    await init.readFiles();
+    await init
+        .readFiles()
+        .then(() => console.log('Migrations Success !'))
+        .catch((err) => console.log('Migrations failed : ' + err.message));
     await init.pg.end();
 })();
