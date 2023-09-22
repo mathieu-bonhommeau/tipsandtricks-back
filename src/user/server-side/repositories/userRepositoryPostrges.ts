@@ -1,11 +1,11 @@
 import UserRepositoryInterface from '../../domain/ports/userRepositoryInterface';
-import InputUserData from '../../domain/models/inputUserData';
+import InputRegisterUser from '../../domain/models/inputRegisterUser';
 import User from '../../domain/models/User';
 import { Row, Sql } from 'postgres';
 
 export default class UserRepositoryPostgres implements UserRepositoryInterface {
     constructor(private readonly _sql: Sql) {}
-    async create(input: InputUserData): Promise<User | null> {
+    async create(input: InputRegisterUser): Promise<User | null> {
         return this._sql`insert into "user" ${this._sql(
             input,
         )} returning id, email, username, roles, created_at, updated_at`.then((rows) => {

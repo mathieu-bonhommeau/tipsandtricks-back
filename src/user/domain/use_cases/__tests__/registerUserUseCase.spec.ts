@@ -1,6 +1,6 @@
 import RegisterUserUseCase from '../registerUserUseCase';
 import User from '../../models/User';
-import InputUserData from '../../models/inputUserData';
+import InputRegisterUser from '../../models/inputRegisterUser';
 import UserRepositoryInMemory from '../../../server-side/repositories/userRepositoryInMemory';
 import UserTestBuilder from './UserTestBuilder';
 import bcrypt from 'bcrypt';
@@ -17,19 +17,19 @@ describe('Register a user', () => {
     });
 
     test('can register a user', async () => {
-        const inputUserDatas = sut.givenAnInputUserData();
+        const inputRegisterUser = sut.givenAnInputRegisterUser();
         const expectedUser = sut.givenAUser();
 
-        const userJustCreated = await new RegisterUserUseCase(userRepository).register(inputUserDatas);
+        const userJustCreated = await new RegisterUserUseCase(userRepository).register(inputRegisterUser);
         expect(userJustCreated).toEqual(expectedUser);
     });
 
     test('return an error message if persist user failed and return null', async () => {
         //TODO - use toThrow for check this test
         try {
-            const inputUserDatas = sut.givenAnInputUserData();
+            const inputRegisterUser = sut.givenAnInputRegisterUser();
             sut.givenAnError();
-            await new RegisterUserUseCase(userRepository).register(inputUserDatas);
+            await new RegisterUserUseCase(userRepository).register(inputRegisterUser);
             expect(false).toEqual(true);
         } catch (err) {
             expect(err.message).toEqual('Register failed !');
@@ -38,8 +38,8 @@ describe('Register a user', () => {
 
     test('return an error message if password is too weak', async () => {
         try {
-            const inputUserDatas = sut.givenAnInputUserDataWithWeakPassword();
-            await new RegisterUserUseCase(userRepository).register(inputUserDatas);
+            const inputRegisterUser = sut.givenAnInputRegisterUserWithWeakPassword();
+            await new RegisterUserUseCase(userRepository).register(inputRegisterUser);
             expect(false).toEqual(true);
         } catch (err) {
             expect(err.message).toEqual('Register failed !');
@@ -47,13 +47,13 @@ describe('Register a user', () => {
     });
 
     test('the password is hash in the database', async () => {
-        const inputUserDatas = sut.givenAnInputUserData();
+        const inputRegisterUser = sut.givenAnInputRegisterUser();
         const expectedHashPassword = await bcrypt.hashSync(
-            inputUserDatas.password,
+            inputRegisterUser.password,
             parseInt(process.env.ROUND_SALT_PWD),
         );
 
-        await new RegisterUserUseCase(userRepository).register(inputUserDatas);
+        await new RegisterUserUseCase(userRepository).register(inputRegisterUser);
 
         // For the test, we need to slice the 2 string for check only 6 first letters - the others are random
         expect(userRepository.getPassword().slice(0, 6)).toEqual(expectedHashPassword.slice(0, 6));
@@ -61,8 +61,8 @@ describe('Register a user', () => {
 
     test('a username must have 2 or more than 2 characters', async () => {
         try {
-            const inputUserDatas = sut.givenAnInputDataWithATooLittleUsername();
-            await new RegisterUserUseCase(userRepository).register(inputUserDatas);
+            const inputRegisterUser = sut.givenAnInputRegisterUserWithATooLittleUsername();
+            await new RegisterUserUseCase(userRepository).register(inputRegisterUser);
             expect(false).toEqual(true);
         } catch (err) {
             expect(err.message).toEqual('Register failed !');
@@ -71,8 +71,8 @@ describe('Register a user', () => {
 
     test('an email must have the good format', async () => {
         try {
-            const inputUserDatas = sut.givenAnInputDataWithABadEmailFormat();
-            await new RegisterUserUseCase(userRepository).register(inputUserDatas);
+            const inputRegisterUser = sut.givenAnInputRegisterUserWithABadEmailFormat();
+            await new RegisterUserUseCase(userRepository).register(inputRegisterUser);
             expect(false).toEqual(true);
         } catch (err) {
             expect(err.message).toEqual('Register failed !');
@@ -85,29 +85,29 @@ class SUT {
     constructor(private readonly _userRepositoryInMemory: UserRepositoryInMemory) {
         this._userTestBuilder = new UserTestBuilder();
     }
-    givenAnInputUserData(): InputUserData {
-        return this._userTestBuilder.buildInputUserData();
+    givenAnInputRegisterUser(): InputRegisterUser {
+        return this._userTestBuilder.buildInputRegisterUser();
     }
     givenAUser(): User {
         return this._userTestBuilder.buildUser();
     }
 
-    givenAnError(): void {
+    givenAnError(): UserRepositoryInMemory {
         return this._userRepositoryInMemory.setError();
     }
 
-    givenAnInputUserDataWithWeakPassword(): InputUserData {
+    givenAnInputRegisterUserWithWeakPassword(): InputRegisterUser {
         this._userTestBuilder.withPassword('passwordweak');
-        return this._userTestBuilder.buildInputUserData();
+        return this._userTestBuilder.buildInputRegisterUser();
     }
 
-    givenAnInputDataWithATooLittleUsername(): InputUserData {
+    givenAnInputRegisterUserWithATooLittleUsername(): InputRegisterUser {
         this._userTestBuilder.withUsername('t');
-        return this._userTestBuilder.buildInputUserData();
+        return this._userTestBuilder.buildInputRegisterUser();
     }
 
-    givenAnInputDataWithABadEmailFormat(): InputUserData {
+    givenAnInputRegisterUserWithABadEmailFormat(): InputRegisterUser {
         this._userTestBuilder.withEmail('test');
-        return this._userTestBuilder.buildInputUserData();
+        return this._userTestBuilder.buildInputRegisterUser();
     }
 }
