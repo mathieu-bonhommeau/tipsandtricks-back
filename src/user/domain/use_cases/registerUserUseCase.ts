@@ -14,15 +14,14 @@ export default class RegisterUserUseCase implements RegisterUserUseCaseInterface
     constructor(private readonly _userRepository: UserRepositoryInterface) {}
     async register(input: InputUserData): Promise<User | InputError> {
         if (!this.inputRegisterValidate(input)) {
-            return new InputError('Register failed !');
+            throw new InputError('Register failed !');
         }
 
         input.password = bcrypt.hashSync(input.password, parseInt(process.env.ROUND_SALT_PWD));
 
         const userJustCreated = await this._userRepository.create(input);
-
         if (!userJustCreated) {
-            return new InputError('Register failed !');
+            throw new InputError('Register failed !');
         }
 
         return userJustCreated;

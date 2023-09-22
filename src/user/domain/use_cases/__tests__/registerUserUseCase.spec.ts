@@ -25,16 +25,25 @@ describe('Register a user', () => {
     });
 
     test('return an error message if persist user failed and return null', async () => {
-        const inputUserDatas = sut.givenAnInputUserData();
-        sut.givenAnError();
-        const errorResponse = await new RegisterUserUseCase(userRepository).register(inputUserDatas);
-        expect(errorResponse).toEqual({ message: 'Register failed !' });
+        //TODO - use toThrow for check this test
+        try {
+            const inputUserDatas = sut.givenAnInputUserData();
+            sut.givenAnError();
+            await new RegisterUserUseCase(userRepository).register(inputUserDatas);
+            expect(false).toEqual(true);
+        } catch (err) {
+            expect(err.message).toEqual('Register failed !');
+        }
     });
 
     test('return an error message if password is too weak', async () => {
-        const inputUserDatas = sut.givenAnInputUserDataWithWeakPassword();
-        const errorResponse = await new RegisterUserUseCase(userRepository).register(inputUserDatas);
-        expect(errorResponse).toEqual({ message: 'Register failed !' });
+        try {
+            const inputUserDatas = sut.givenAnInputUserDataWithWeakPassword();
+            await new RegisterUserUseCase(userRepository).register(inputUserDatas);
+            expect(false).toEqual(true);
+        } catch (err) {
+            expect(err.message).toEqual('Register failed !');
+        }
     });
 
     test('the password is hash in the database', async () => {
@@ -51,15 +60,23 @@ describe('Register a user', () => {
     });
 
     test('a username must have 2 or more than 2 characters', async () => {
-        const inputUserDatas = sut.givenAnInputDataWithATooLittleUsername();
-        const errorResponse = await new RegisterUserUseCase(userRepository).register(inputUserDatas);
-        expect(errorResponse).toEqual({ message: 'Register failed !' });
+        try {
+            const inputUserDatas = sut.givenAnInputDataWithATooLittleUsername();
+            await new RegisterUserUseCase(userRepository).register(inputUserDatas);
+            expect(false).toEqual(true);
+        } catch (err) {
+            expect(err.message).toEqual('Register failed !');
+        }
     });
 
     test('an email must have the good format', async () => {
-        const inputUserDatas = sut.givenAnInputDataWithABadEmailFormat();
-        const errorResponse = await new RegisterUserUseCase(userRepository).register(inputUserDatas);
-        expect(errorResponse).toEqual({ message: 'Register failed !' });
+        try {
+            const inputUserDatas = sut.givenAnInputDataWithABadEmailFormat();
+            await new RegisterUserUseCase(userRepository).register(inputUserDatas);
+            expect(false).toEqual(true);
+        } catch (err) {
+            expect(err.message).toEqual('Register failed !');
+        }
     });
 });
 
