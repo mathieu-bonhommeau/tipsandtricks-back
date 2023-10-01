@@ -15,6 +15,18 @@ export default class UserRepositoryPostgres implements UserRepositoryInterface {
             return null;
         });
     }
+
+    async getByEmail(email: string): Promise<User & { password: string }> {
+        return this._sql`select * from "user" where "email" = ${email}`.then((rows) => {
+            if (rows.length > 0) {
+                return {
+                    ...UserRepositoryPostgresFactory.create(rows[0]),
+                    password: rows[0].password as string,
+                };
+            }
+            return null;
+        });
+    }
 }
 
 export class UserRepositoryPostgresFactory {

@@ -48,10 +48,7 @@ describe('Register a user', () => {
 
     test('the password is hash in the database', async () => {
         const inputRegisterUser = sut.givenAnInputRegisterUser();
-        const expectedHashPassword = await bcrypt.hashSync(
-            inputRegisterUser.password,
-            parseInt(process.env.ROUND_SALT_PWD),
-        );
+        const expectedHashPassword = bcrypt.hashSync(inputRegisterUser.password, parseInt(process.env.ROUND_SALT_PWD));
 
         await new RegisterUserUseCase(userRepository).register(inputRegisterUser);
 

@@ -11,7 +11,6 @@ export interface RegisterUserUseCaseInterface {
 }
 
 export default class RegisterUserUseCase implements RegisterUserUseCaseInterface {
-
     constructor(private readonly _userRepository: UserRepositoryInterface) {}
 
     async register(input: InputRegisterUser): Promise<User | InputError> {

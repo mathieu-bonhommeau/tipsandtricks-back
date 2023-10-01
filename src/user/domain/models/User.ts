@@ -16,14 +16,13 @@ export default class User {
 export class JwtToken {
     constructor(
         public access_token: string,
-        public refresh_token: string
+        public refresh_token: string,
     ) {}
 }
 
 export class UserLogged {
     constructor(
         public user: User,
-        public tokens: JwtToken
+        public tokens: JwtToken,
     ) {}
-
 }

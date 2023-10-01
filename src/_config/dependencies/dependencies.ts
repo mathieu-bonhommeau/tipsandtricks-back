@@ -4,6 +4,7 @@ import UserRepositoryInterface from '../../user/domain/ports/userRepositoryInter
 import UserRepositoryPostgres from '../../user/server-side/repositories/userRepositoryPostrges';
 import postgres, { Sql } from 'postgres';
 import process from 'process';
+import AuthUserUseCase from '../../user/domain/use_cases/authUserUseCase';
 
 dependencyContainer.set<Sql>('sql', () => {
     return postgres({
@@ -19,6 +20,9 @@ dependencyContainer.set<UserRepositoryInterface>('UserRepository', () => {
 });
 dependencyContainer.set<RegisterUserUseCase>('RegisterUserUseCase', () => {
     return new RegisterUserUseCase(dependencyContainer.get<UserRepositoryInterface>('UserRepository'));
+});
+dependencyContainer.set<AuthUserUseCase>('AuthUserUseCase', () => {
+    return new AuthUserUseCase(dependencyContainer.get<UserRepositoryInterface>('UserRepository'));
 });
 
 export default dependencyContainer;

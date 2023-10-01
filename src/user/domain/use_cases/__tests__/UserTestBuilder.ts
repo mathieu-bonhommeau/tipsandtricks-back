@@ -1,10 +1,10 @@
 import User, { Roles } from '../../models/User';
 import InputRegisterUser from '../../models/inputRegisterUser';
-import InputLoginUser from "../../models/inputLoginUser";
-import * as dotenv from 'dotenv'
+import InputLoginUser from '../../models/inputLoginUser';
+import * as dotenv from 'dotenv';
 
-import bcrypt from "bcrypt";
-dotenv.config()
+import bcrypt from 'bcrypt';
+dotenv.config();
 
 export default class UserTestBuilder {
     private readonly _id: number | null = 1;
@@ -20,12 +20,12 @@ export default class UserTestBuilder {
         return new User(this._id, this._email, this._username, this._roles, this._created_at, this._updated_at);
     }
 
-    buildUserWithPassword(): User & {password: string} {
-        const user = new User(this._id, this._email, this._username,this._roles, this._created_at, this._updated_at);
+    buildUserWithPassword(): User & { password: string } {
+        const user = new User(this._id, this._email, this._username, this._roles, this._created_at, this._updated_at);
         return {
             ...user,
-            password: this.hashPassword(this._password)
-        }
+            password: this.hashPassword(this._password),
+        };
     }
 
     buildInputRegisterUser(): InputRegisterUser {
@@ -33,7 +33,7 @@ export default class UserTestBuilder {
     }
 
     buildInputLoginUser(): InputLoginUser {
-        return new InputLoginUser(this._email, this._password)
+        return new InputLoginUser(this._email, this._password);
     }
 
     withEmail(email: string): UserTestBuilder {
@@ -52,7 +52,7 @@ export default class UserTestBuilder {
     }
 
     withHashPassword(password: string): void {
-        this._password = this.hashPassword(password)
+        this._password = this.hashPassword(password);
     }
 
     hashPassword(password: string): string {
