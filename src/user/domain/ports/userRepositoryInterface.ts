@@ -1,6 +1,7 @@
-import InputUserData from '../models/inputUserData';
+import InputRegisterUser from '../models/inputRegisterUser';
 import User from '../models/User';
 
 export default interface UserRepositoryInterface {
-    create(input: InputUserData): Promise<User>;
+    create(input: InputRegisterUser): Promise<User>;
+    getByEmail(email: string): Promise<User & { password?: string }>;
 }

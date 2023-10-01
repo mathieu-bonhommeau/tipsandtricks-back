@@ -1,4 +1,4 @@
-import InputUserData from '../models/inputUserData';
+import InputRegisterUser from '../models/inputRegisterUser';
 import User from '../models/User';
 import UserRepositoryInterface from '../ports/userRepositoryInterface';
 import bcrypt from 'bcrypt';
@@ -7,12 +7,13 @@ import InputError from '../../../_common/domain/models/inputError';
 dotenv.config();
 
 export interface RegisterUserUseCaseInterface {
-    register(input: InputUserData): Promise<User | InputError>;
+    register(input: InputRegisterUser): Promise<User | InputError>;
 }
 
 export default class RegisterUserUseCase implements RegisterUserUseCaseInterface {
     constructor(private readonly _userRepository: UserRepositoryInterface) {}
-    async register(input: InputUserData): Promise<User | InputError> {
+
+    async register(input: InputRegisterUser): Promise<User | InputError> {
         if (!this.inputRegisterValidate(input)) {
             throw new InputError('Register failed !');
         }
@@ -27,7 +28,7 @@ export default class RegisterUserUseCase implements RegisterUserUseCaseInterface
         return userJustCreated;
     }
 
-    private inputRegisterValidate(inputUserData: InputUserData): boolean {
+    private inputRegisterValidate(inputUserData: InputRegisterUser): boolean {
         const isValid: boolean[] = [];
 
         for (const [inputKey, value] of Object.entries(inputUserData)) {
