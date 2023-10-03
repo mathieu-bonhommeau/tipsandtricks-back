@@ -34,6 +34,5 @@ jobs:
                      whoami
                      ls -al
                   SCRIPT_AFTER: |
-                     whoami
-                     ls -al
-                     echo $RSYNC_STDOUT
+                     ls -al 
+                     touch .env
