@@ -30,9 +30,16 @@ jobs:
                   SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
                   REMOTE_HOST: ${{ secrets.HOST_DNS }}
                   REMOTE_USER: ${{ secrets.USERNAME }}
-                  SCRIPT_BEFORE: |
-                     whoami
-                     ls -al
-                  SCRIPT_AFTER: |
-                     ls -al 
-                     touch .env
+
+            - name: Build and Run
+              env:
+                  SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+                  HOST_DNS: ${{ secrets.HOST_DNS }}
+                  USERNAME: ${{ secrets.USERNAME }}
+              run: |
+                  echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
+                  ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOST_DNS} '
+                        touch .env
+                        npm install &&
+                        npm run build
+                  '
