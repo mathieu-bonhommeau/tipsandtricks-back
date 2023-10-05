@@ -18,7 +18,8 @@ export class InitDb {
             port: process.env.PGPORT ? parseInt(process.env.PGPORT) : 5433, // Postgres server port[s]
             database: process.env.PGDB || 'tipsandtricks', // Name of database to connect to
             username: process.env.PGUSER || 'ttuser', // Username of database user
-            password: process.env.PGPASSWORD || 'changeme', // Username of database user
+            password: process.env.PGPASSWORD || 'changeme', // Username of database
+            ssl: process.env.ENVIRONMENT === 'production'
         });
     }
 
@@ -26,7 +27,6 @@ export class InitDb {
         const sqlFiles: { schema: string[] } = {
             schema: fs.readdirSync(path.join(__dirname, './migrations/schema')),
         };
-
         for (const [type, files] of Object.entries(sqlFiles)) {
             await this.playSqlQueries(type, files);
         }
