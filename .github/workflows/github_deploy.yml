@@ -37,7 +37,6 @@ jobs:
                   SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
                   HOST_DNS: ${{ secrets.HOST_DNS }}
                   USERNAME: ${{ secrets.USERNAME }}
-                  ENV_PRODUCTION_FILE: ${{ secrets.ENV_PRODUCTION_FILE }}
                   NODE_PORT: ${{ secrets.NODE_PORT }}
               run: |
                   echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key

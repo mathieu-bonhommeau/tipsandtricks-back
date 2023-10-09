@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/O-clock-Minotaure/projet-07-tips-and-tricks-back#readme",
   "dependencies": {
+    "@faker-js/faker": "^8.1.0",
     "bcrypt": "^5.1.1",
     "check-password-strength": "^2.0.7",
     "dotenv": "^16.3.1",

@@ -26,6 +26,10 @@ export default class UserRepositoryInMemory implements UserRepositoryInterface {
         return this._usersInMemory.find((user: User & { password: string }) => user.email === email);
     }
 
+    async getByUsername(username: string): Promise<User> {
+        return this._usersInMemory.find((user: User) => user.username === username);
+    }
+
     setUser(user: User): UserRepositoryInMemory {
         this._usersInMemory.push(user);
         return this;
@@ -34,6 +38,11 @@ export default class UserRepositoryInMemory implements UserRepositoryInterface {
     setError(): UserRepositoryInMemory {
         this._error = true;
         return this;
+    }
+
+    clear(): UserRepositoryInMemory {
+        this._usersInMemory = []
+        return this
     }
 
     getPassword(): string {
