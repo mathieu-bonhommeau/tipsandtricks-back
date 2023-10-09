@@ -14,21 +14,29 @@ export default class RegisterUserUseCase implements RegisterUserUseCaseInterface
     constructor(private readonly _userRepository: UserRepositoryInterface) {}
 
     async register(input: InputRegisterUser): Promise<User | InputError> {
-        if (!this.inputRegisterValidate(input)) {
+        if (!this.inputRegisterValidateFormat(input)) {
+            console.error('Format error')
             throw new InputError('Register failed !');
         }
+
+        const isEmailExist = await this._checkUnicityEmail(input.email)
+        if (isEmailExist) throw new InputError('This email already exists in database !')
+
+        const isUsernameExist = await this._checkUnicityUsername(input.username)
+        if (isUsernameExist) throw new InputError('This username already exists in database !')
 
         input.password = bcrypt.hashSync(input.password, parseInt(process.env.ROUND_SALT_PWD));
 
         const userJustCreated = await this._userRepository.create(input);
         if (!userJustCreated) {
+            console.error('BDD error')
             throw new InputError('Register failed !');
         }
 
         return userJustCreated;
     }
 
-    private inputRegisterValidate(inputUserData: InputRegisterUser): boolean {
+    private inputRegisterValidateFormat(inputUserData: InputRegisterUser): boolean {
         const isValid: boolean[] = [];
 
         for (const [inputKey, value] of Object.entries(inputUserData)) {
@@ -60,5 +68,15 @@ export default class RegisterUserUseCase implements RegisterUserUseCaseInterface
 
     private _checkLengthUsername(username: string): boolean {
         return !(username.length < 2);
+    }
+
+    private async _checkUnicityEmail(email: string): Promise<boolean> {
+        const existingUser = await this._userRepository.getByEmail(email);
+        return !!existingUser
+    }
+
+    private async _checkUnicityUsername(username: string): Promise<boolean> {
+        const existingUser = await this._userRepository.getByUsername(username);
+        return !!existingUser
     }
 }

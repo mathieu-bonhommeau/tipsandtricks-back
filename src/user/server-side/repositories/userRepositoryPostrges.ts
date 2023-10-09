@@ -27,6 +27,14 @@ export default class UserRepositoryPostgres implements UserRepositoryInterface {
             return null;
         });
     }
+
+    async getByUsername(username: string): Promise<User> {
+        const rows = await this._sql`select * from "user" where "username" = ${username}`;
+        if (rows.length > 0) {
+            return UserRepositoryPostgresFactory.create(rows[0]);
+        }
+        return null;
+    }
 }
 
 export class UserRepositoryPostgresFactory {

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest -c jest.config.ts",
     "build": "vite build",
-    "start": "node ./dist/index.mjs",
+    "start": "sudo pm2 start ./dist/index.mjs",
+    "restart": "sudo pm2 restart ./dist/index.mjs",
     "dev": "nodemon ./src/index.ts",
     "pretty-lint": "prettier src --check --write && eslint src --fix",
     "init-db": "ts-node ./src/_config/db/init-db.ts"
@@ -22,13 +23,13 @@
   },
   "homepage": "https://github.com/O-clock-Minotaure/projet-07-tips-and-tricks-back#readme",
   "dependencies": {
+    "@faker-js/faker": "^8.1.0",
     "bcrypt": "^5.1.1",
     "check-password-strength": "^2.0.7",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "jsonwebtoken-refresh": "^5.7.0",
-    "pm2": "^5.3.0",
     "postgres": "^3.3.5",
     "ts-node": "^10.9.1",
     "vite-node": "^0.34.4"

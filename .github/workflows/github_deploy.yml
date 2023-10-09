@@ -17,7 +17,7 @@ jobs:
 
         steps:
             - name: Git clone checkout repository
-              uses: actions/checkout@v2
+              uses: actions/checkout@v3
 
             - name: Install Node.js
               uses: actions/setup-node@v3
@@ -30,10 +30,21 @@ jobs:
                   SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
                   REMOTE_HOST: ${{ secrets.HOST_DNS }}
                   REMOTE_USER: ${{ secrets.USERNAME }}
-                  SCRIPT_BEFORE: |
-                     whoami
-                     ls -al
-                  SCRIPT_AFTER: |
-                     whoami
-                     ls -al
-                     echo $RSYNC_STDOUT
+                  TARGET: ${{ secrets.TARGET }}
+
+            - name: Build and Run
+              env:
+                  SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+                  HOST_DNS: ${{ secrets.HOST_DNS }}
+                  USERNAME: ${{ secrets.USERNAME }}
+                  NODE_PORT: ${{ secrets.NODE_PORT }}
+              run: |
+                  echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
+                  ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOST_DNS} '
+                      source /home/ubuntu/.profile &&
+                      cd tipsandtricks &&
+                      export NVM_DIR=/home/ubuntu/.nvm &&
+                      source /home/ubuntu/.nvm/nvm.sh &&
+                      npm install && npm run build &&
+                      npm run restart
+                  '
