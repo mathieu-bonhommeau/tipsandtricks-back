@@ -13,7 +13,7 @@ dependencyContainer.set<Sql>('sql', () => {
         database: process.env.PGDB || 'tipsandtricks', // Name of database to connect to
         username: process.env.PGUSER || 'ttuser', // Username of database user
         password: process.env.PGPASSWORD || 'changeme', // Username of database user
-        ssl: process.env.ENVIRONMENT === 'production'
+        ssl: process.env.ENVIRONMENT === 'production',
     });
 });
 dependencyContainer.set<UserRepositoryInterface>('UserRepository', () => {

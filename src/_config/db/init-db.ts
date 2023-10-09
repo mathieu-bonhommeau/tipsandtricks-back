@@ -19,7 +19,7 @@ export class InitDb {
             database: process.env.PGDB || 'tipsandtricks', // Name of database to connect to
             username: process.env.PGUSER || 'ttuser', // Username of database user
             password: process.env.PGPASSWORD || 'changeme', // Username of database
-            ssl: process.env.ENVIRONMENT === 'production'
+            ssl: process.env.ENVIRONMENT === 'production',
         });
     }
 

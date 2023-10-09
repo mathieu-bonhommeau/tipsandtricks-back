@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors'
 import * as dotenv from 'dotenv';
 import router from './_config/router/router';
+import {errorsMiddleware} from "./_config/middlewares/errorsMiddleware";
 dotenv.config();
 
 const app = express();
@@ -11,10 +12,13 @@ const corsOptions = {
 }
 app.use(cors(corsOptions))
 
+
 const port = process.env.NODE_PORT || 5000;
 
 app.use(express.json());
 app.use(router);
+
+app.use(errorsMiddleware)
 
 app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`);
