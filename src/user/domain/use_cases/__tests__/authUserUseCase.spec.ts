@@ -2,7 +2,7 @@ import UserRepositoryInMemory from '../../../server-side/repositories/userReposi
 import UserTestBuilder from './UserTestBuilder';
 import InputLoginUser from '../../models/inputLoginUser';
 import AuthUserUseCase from '../authUserUseCase';
-import User, {JwtToken, UserLogged} from '../../models/User';
+import User, { JwtToken, UserLogged } from '../../models/User';
 import UserFactory from '../../factories/userFactory';
 
 describe('Login a user', () => {
@@ -51,18 +51,16 @@ describe('Login a user', () => {
             expect(userLogged.tokens.access_token).not.toBeNull();
             expect(userLogged.tokens.refresh_token).not.toBeNull();
         });
-    })
+    });
 
     describe('Token refresh', () => {
         test('returns a new access_token and a new refresh_token', async () => {
-            const userLogged = await sut.givenALoggedUser()
-            const tokens = await new AuthUserUseCase(userRepository).refreshToken(userLogged.tokens.refresh_token) as JwtToken
+            const userLogged = await sut.givenALoggedUser();
+            const tokens = (await new AuthUserUseCase(userRepository).refreshToken(userLogged.user.email)) as JwtToken;
             expect(tokens.access_token).not.toBeNull();
             expect(tokens.refresh_token).not.toBeNull();
-        })
-    })
-
-
+        });
+    });
 });
 
 class SUT {

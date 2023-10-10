@@ -1,12 +1,11 @@
-import {NextFunction, Request, Response} from 'express';
+import { NextFunction, Response } from 'express';
 import RegisterUserUseCase from '../../domain/use_cases/registerUserUseCase';
 import InputRegisterUser from '../../domain/models/inputRegisterUser';
+import { RequestLogged } from '../../../_common/client-side/types/requestLogged';
 
 export default class RegisterController {
-    constructor(
-        private readonly _registerUserUseCase: RegisterUserUseCase,
-    ) {}
-    public async register(req: Request, res: Response, next: NextFunction) {
+    constructor(private readonly _registerUserUseCase: RegisterUserUseCase) {}
+    public async register(req: RequestLogged, res: Response, next: NextFunction) {
         try {
             const inputRegisterUser = new InputRegisterUser(req.body.email, req.body.username, req.body.password);
             const data = await this._registerUserUseCase.register(inputRegisterUser);
@@ -14,7 +13,7 @@ export default class RegisterController {
                 data: data,
             });
         } catch (err) {
-            next(err)
+            next(err);
         }
     }
 }

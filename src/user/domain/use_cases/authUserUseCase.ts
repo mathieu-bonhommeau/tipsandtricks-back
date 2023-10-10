@@ -4,11 +4,9 @@ import InputLoginUser from '../models/inputLoginUser';
 import UserRepositoryInterface from '../ports/userRepositoryInterface';
 import bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
-import debug from "debug"
+import debug from 'debug';
 import UserFactory from '../factories/userFactory';
-import AuthError from "../../../_common/domain/models/authError";
-import {JwtPayload} from "jsonwebtoken";
-const logger = debug("tipsandtricks:authUserUseCase")
+const logger = debug('tipsandtricks:authUserUseCase');
 
 export interface AuthUserUseCaseInterface {
     login(input: InputLoginUser): Promise<UserLogged | InputError>;
@@ -20,13 +18,13 @@ export default class AuthUserUseCase implements AuthUserUseCaseInterface {
     async login(input: InputLoginUser): Promise<UserLogged | InputError> {
         const user = (await this._userRepository.getByEmail(input.email)) as User & { password: string };
         if (!user) {
-            logger('bad email')
-            throw new InputError('Login error !')
+            logger('bad email');
+            throw new InputError('Login error !');
         }
 
         const isSamePassword = bcrypt.compareSync(input.password, user.password);
         if (!isSamePassword) {
-            logger('bad password')
+            logger('bad password');
             throw new InputError('Login error !');
         }
 
@@ -36,15 +34,13 @@ export default class AuthUserUseCase implements AuthUserUseCaseInterface {
         return new UserLogged(userToSend, jwtTokens);
     }
 
-    async refreshToken(refreshToken: string): Promise<JwtToken> {
-        const tokenDecoded = jwt.verify(refreshToken, process.env.JWT_SECRET_REFRESH || 'secret_refresh') as JwtPayload
-        if (!tokenDecoded) {
-            logger('refresh token invalid')
-            throw new AuthError('Invalid token - Unauthorized')
+    async refreshToken(email: string): Promise<JwtToken> {
+        const user = await this._userRepository.getByEmail(email);
+        if (!user) {
+            logger('user does not exist');
+            throw new InputError('Refresh token error !');
         }
 
-        const user = await this._userRepository.getByEmail(tokenDecoded.data)
-        // TODO ajouter test si user n'existe pas
         const userToSend = UserFactory.createWithoutPassword(user);
         return this._generateTokens(userToSend);
     }
