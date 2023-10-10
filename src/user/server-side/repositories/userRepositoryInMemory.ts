@@ -41,8 +41,8 @@ export default class UserRepositoryInMemory implements UserRepositoryInterface {
     }
 
     clear(): UserRepositoryInMemory {
-        this._usersInMemory = []
-        return this
+        this._usersInMemory = [];
+        return this;
     }
 
     getPassword(): string {

@@ -1,13 +1,24 @@
-import { Request, Response } from 'express';
+import debug from 'debug';
+import { Response } from 'express';
+import { RequestLogged } from '../_common/client-side/types/requestLogged';
+const logger = debug('tipsandtricks:errorsHandler');
 
 export default class ErrorsHandler {
-    static handle(err: Error, req: Request, res: Response) {
+    static handle(err: Error, req: RequestLogged, res: Response) {
         if (err['statusCode']) {
-            res.status(err['statusCode']).send(err.message);
-            console.error(err.message);
+            res.status(err['statusCode']).send({
+                status: err['statusCode'],
+                message: err.message,
+            });
+            logger(err.message);
+            logger(err.stack);
             return;
         }
-        console.error(err.message);
-        res.status(500).send('Server error');
+        logger(err.message);
+        logger(err.stack);
+        res.status(500).send({
+            status: err['statusCode'],
+            message: 'Server error',
+        });
     }
 }
