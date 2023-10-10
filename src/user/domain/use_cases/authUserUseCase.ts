@@ -4,7 +4,11 @@ import InputLoginUser from '../models/inputLoginUser';
 import UserRepositoryInterface from '../ports/userRepositoryInterface';
 import bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
+import debug from "debug"
 import UserFactory from '../factories/userFactory';
+import AuthError from "../../../_common/domain/models/authError";
+import {JwtPayload} from "jsonwebtoken";
+const logger = debug("tipsandtricks:authUserUseCase")
 
 export interface AuthUserUseCaseInterface {
     login(input: InputLoginUser): Promise<UserLogged | InputError>;
@@ -15,15 +19,34 @@ export default class AuthUserUseCase implements AuthUserUseCaseInterface {
 
     async login(input: InputLoginUser): Promise<UserLogged | InputError> {
         const user = (await this._userRepository.getByEmail(input.email)) as User & { password: string };
-        if (!user) throw new InputError('Login error !');
+        if (!user) {
+            logger('bad email')
+            throw new InputError('Login error !')
+        }
 
         const isSamePassword = bcrypt.compareSync(input.password, user.password);
-        if (!isSamePassword) throw new InputError('Login error !');
+        if (!isSamePassword) {
+            logger('bad password')
+            throw new InputError('Login error !');
+        }
 
         const userToSend = UserFactory.createWithoutPassword(user);
         const jwtTokens = this._generateTokens(userToSend);
 
         return new UserLogged(userToSend, jwtTokens);
+    }
+
+    async refreshToken(refreshToken: string): Promise<JwtToken> {
+        const tokenDecoded = jwt.verify(refreshToken, process.env.JWT_SECRET_REFRESH || 'secret_refresh') as JwtPayload
+        if (!tokenDecoded) {
+            logger('refresh token invalid')
+            throw new AuthError('Invalid token - Unauthorized')
+        }
+
+        const user = await this._userRepository.getByEmail(tokenDecoded.data)
+        // TODO ajouter test si user n'existe pas
+        const userToSend = UserFactory.createWithoutPassword(user);
+        return this._generateTokens(userToSend);
     }
 
     private _generateTokens(user: User): JwtToken {

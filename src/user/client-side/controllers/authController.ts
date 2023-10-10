@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from 'express';
 import InputLoginUser from '../../domain/models/inputLoginUser';
 import AuthUserUseCase from '../../domain/use_cases/authUserUseCase';
-import {UserLogged} from "../../domain/models/User";
+import {JwtToken, UserLogged} from "../../domain/models/User";
 
 export default class AuthController {
     constructor(
@@ -35,6 +35,29 @@ export default class AuthController {
     }
 
     public async refreshToken(req: Request, res: Response, next: NextFunction) {
+        try {
+            const tokens: JwtToken = await this._authUserUseCase.refreshToken(req.body.refreshToken)
 
+            const today = new Date()
+
+            res.cookie("accessToken", tokens.access_token, {
+                httpOnly: true,
+                sameSite: true,
+                expires: new Date(today.setHours(today.getHours() + 24))
+            })
+
+            res.cookie("refreshToken", tokens.refresh_token, {
+                httpOnly: true,
+                sameSite: true,
+                expires: new Date(today.setMonth(today.getMonth() + 1))
+            })
+
+            return res.status(200).send({
+                data: 'Tokens regenerate with success'
+            })
+
+        } catch (err) {
+            next(err)
+        }
     }
 }

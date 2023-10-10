@@ -1,4 +1,6 @@
+import debug from "debug"
 import { Request, Response } from 'express';
+const logger = debug("tipsandtricks:errorsHandler")
 
 export default class ErrorsHandler {
     static handle(err: Error, req: Request, res: Response) {
@@ -7,10 +9,12 @@ export default class ErrorsHandler {
                 status: err['statusCode'],
                 message: err.message
             });
-            console.error(err.message);
+            logger(err.message)
+            logger(err.stack)
             return;
         }
-        console.error(err.message);
+        logger(err.message)
+        logger(err.stack)
         res.status(500).send({
             status: err['statusCode'],
             message: "Server error"

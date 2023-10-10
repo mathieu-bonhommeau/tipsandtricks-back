@@ -28,4 +28,10 @@ router.post('/api/login', async (req: Request, res: Response, next: NextFunction
     ).login(req, res, next);
 });
 
+router.post('/api/refresh-token', async (req: Request, res: Response, next: NextFunction) => {
+    return await new AuthController(
+        dependencyContainer.get<AuthUserUseCase>('AuthUserUseCase'),
+    ).refreshToken(req, res, next)
+})
+
 export default router;

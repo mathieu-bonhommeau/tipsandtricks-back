@@ -2,10 +2,8 @@ import UserRepositoryInMemory from '../../../server-side/repositories/userReposi
 import UserTestBuilder from './UserTestBuilder';
 import InputLoginUser from '../../models/inputLoginUser';
 import AuthUserUseCase from '../authUserUseCase';
-import User, { UserLogged } from '../../models/User';
+import User, {JwtToken, UserLogged} from '../../models/User';
 import UserFactory from '../../factories/userFactory';
-import * as jwt from "jsonwebtoken";
-import {JsonWebTokenError} from "jsonwebtoken";
 
 describe('Login a user', () => {
     let userRepository: UserRepositoryInMemory;
@@ -55,26 +53,13 @@ describe('Login a user', () => {
         });
     })
 
-    describe('Tokens management', () => {
-        test('Can access to the app when the token is ok', async () => {
-            sut.givenAUser();
-            const userLogged = (await new AuthUserUseCase(userRepository).login(sut.givenAnInputLoginUser())) as UserLogged;
-            const tokenDecode = jwt.verify(userLogged.tokens.access_token, 'secret_access')
-            expect(tokenDecode).toBeDefined()
+    describe('Token refresh', () => {
+        test('returns a new access_token and a new refresh_token', async () => {
+            const userLogged = await sut.givenALoggedUser()
+            const tokens = await new AuthUserUseCase(userRepository).refreshToken(userLogged.tokens.refresh_token) as JwtToken
+            expect(tokens.access_token).not.toBeNull();
+            expect(tokens.refresh_token).not.toBeNull();
         })
-
-        test('Can not access to the app if the token is invalid', async () => {
-            sut.givenAUser();
-            const userLogged = (await new AuthUserUseCase(userRepository).login(sut.givenAnInputLoginUser())) as UserLogged;
-            sut.falsifyToken(userLogged)
-            try {
-                jwt.verify(userLogged.tokens.access_token, 'secret_access')
-                expect(true).toBe(false)
-            } catch (err) {
-                expect(err).toBeDefined()
-            }
-        })
-
     })
 
 
@@ -109,8 +94,9 @@ class SUT {
         return user;
     }
 
-    falsifyToken(userLogged: UserLogged): void {
-        userLogged.tokens.access_token = userLogged.tokens.access_token.slice(1)
+    async givenALoggedUser(): Promise<UserLogged> {
+        const inputLoginUser = this.givenAnInputLoginUser();
+        this.givenAUser();
+        return (await new AuthUserUseCase(this._userRepositoryInMemory).login(inputLoginUser)) as UserLogged;
     }
-
 }

@@ -2,9 +2,11 @@ import InputRegisterUser from '../models/inputRegisterUser';
 import User from '../models/User';
 import UserRepositoryInterface from '../ports/userRepositoryInterface';
 import bcrypt from 'bcrypt';
+import debug from "debug"
 import * as dotenv from 'dotenv';
 import InputError from '../../../_common/domain/models/inputError';
 dotenv.config();
+const logger = debug("tipsandtricks:registerUserUseCase")
 
 export interface RegisterUserUseCaseInterface {
     register(input: InputRegisterUser): Promise<User | InputError>;
@@ -15,21 +17,25 @@ export default class RegisterUserUseCase implements RegisterUserUseCaseInterface
 
     async register(input: InputRegisterUser): Promise<User | InputError> {
         if (!this.inputRegisterValidateFormat(input)) {
-            console.error('Format error');
+            logger('format invalid')
             throw new InputError('Register failed !');
         }
 
         const isEmailExist = await this._checkUnicityEmail(input.email);
-        if (isEmailExist) throw new InputError('This email already exists in database !');
+        if (isEmailExist) {
+            throw new InputError('This email already exists in database !');
+        }
 
         const isUsernameExist = await this._checkUnicityUsername(input.username);
-        if (isUsernameExist) throw new InputError('This username already exists in database !');
+        if (isUsernameExist) {
+            throw new InputError('This username already exists in database !')
+        }
 
         input.password = bcrypt.hashSync(input.password, parseInt(process.env.ROUND_SALT_PWD));
 
         const userJustCreated = await this._userRepository.create(input);
         if (!userJustCreated) {
-            console.error('BDD error');
+            logger('bdd error')
             throw new InputError('Register failed !');
         }
 
