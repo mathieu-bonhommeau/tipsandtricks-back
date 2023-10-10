@@ -17,8 +17,9 @@ describe('Return tips list', () => {
 
     test('can return a list of tips', async () => {
         const execptedlistOfTips = sut.givenAListOfTips();
-        console.log(execptedlistOfTips);
+        // console.log(execptedlistOfTips);
         const listOfTip = await new ListTipsUseCase(tipsRepository).getList();
+        console.log(listOfTip);
 
         expect(listOfTip).toEqual(execptedlistOfTips);
     });
