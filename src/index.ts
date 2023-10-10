@@ -3,6 +3,9 @@ import cors from 'cors';
 import * as dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import router from './_config/router/router';
+import swaggerConfig from '../swagger.config'
+import swaggerJsdoc from 'swagger-jsdoc'
+import swaggerUi from 'swagger-ui-express'
 import { errorsMiddleware } from './_config/middlewares/errorsMiddleware';
 dotenv.config();
 
@@ -20,6 +23,12 @@ app.use(express.json());
 app.use(router);
 
 app.use(errorsMiddleware);
+
+app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerJsdoc(swaggerConfig), { explorer: true })
+);
 
 app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`);

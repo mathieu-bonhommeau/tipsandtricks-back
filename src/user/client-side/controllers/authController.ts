@@ -9,6 +9,43 @@ dotenv.config();
 export default class AuthController {
     constructor(private readonly _authUserUseCase: AuthUserUseCase) {}
 
+    /**
+     * @openapi
+     * tags:
+     *   name: User
+     *   description: Login a user
+     * /login:
+     *   post:
+     *     summary: Login a user
+     *     tags: [User]
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             $ref: '#/components/schemas/InputLoginUser'
+     *     responses:
+     *       200:
+     *         description: the logged user and .
+     *         headers:
+     *             Set-Cookie:
+     *               schema:
+     *                 type: string
+     *                 example:
+     *                   ACCESS_TOKEN=abcde12345; Path=/; HttpOnly;
+     *                   REFRESH_TOKEN=abcde12345; Path=/; HttpOnly;
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/User'
+     *       400:
+     *         description: Bad request
+     *       401:
+     *         description: Unauthorized
+     *       500:
+     *         description: Some server error
+     *
+     */
     public async login(req: RequestLogged, res: Response, next: NextFunction) {
         try {
             const inputLoginUser = new InputLoginUser(req.body.email, req.body.password);
@@ -38,6 +75,38 @@ export default class AuthController {
         }
     }
 
+    /**
+     * @openapi
+     * tags:
+     *   name: User
+     *   description: Refresh user tokens
+     * /refresh-token:
+     *   get:
+     *     summary: Refresh tokens
+     *     tags: [User]
+     *     security:
+     *         - cookieAuth: [
+     *             REFRESH_TOKEN=abcde12345; Path=/; HttpOnly;
+     *         ]
+     *
+     *     responses:
+     *       200:
+     *         description: the logged user and .
+     *         headers:
+     *             Set-Cookie:
+     *               schema:
+     *                 type: string
+     *                 example:
+     *                   ACCESS_TOKEN=abcde12345; Path=/; HttpOnly;
+     *                   REFRESH_TOKEN=abcde12345; Path=/; HttpOnly;
+     *       400:
+     *         description: Bad request
+     *       401:
+     *         description: Unauthorized
+     *       500:
+     *         description: Some server error
+     *
+     */
     public async refreshToken(req: RequestLogged, res: Response, next: NextFunction) {
         try {
             const tokens: JwtToken = await this._authUserUseCase.refreshToken(req.email);
