@@ -5,6 +5,35 @@ import { RequestLogged } from '../../../_common/client-side/types/requestLogged'
 
 export default class RegisterController {
     constructor(private readonly _registerUserUseCase: RegisterUserUseCase) {}
+
+    /**
+     * @openapi
+     * tags:
+     *   name: User
+     *   description: Register a user
+     * /register:
+     *   post:
+     *     summary: Create a new user
+     *     tags: [User]
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             $ref: '#/components/schemas/InputRegisterUser'
+     *     responses:
+     *       201:
+     *         description: The created user.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/User'
+     *       400:
+     *          description: Bad request
+     *       500:
+     *         description: Some server error
+     *
+     */
     public async register(req: RequestLogged, res: Response, next: NextFunction) {
         try {
             const inputRegisterUser = new InputRegisterUser(req.body.email, req.body.username, req.body.password);

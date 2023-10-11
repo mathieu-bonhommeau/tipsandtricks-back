@@ -4,8 +4,8 @@ import dependencyContainer from '../dependencies/dependencies';
 import AuthUserUseCase from '../../user/domain/use_cases/authUserUseCase';
 import RegisterController from '../../user/client-side/controllers/registerController';
 import AuthController from '../../user/client-side/controllers/authController';
-import AuthMiddleware from '../middlewares/authMiddleware';
 import { RequestLogged } from '../../_common/client-side/types/requestLogged';
+import AuthMiddleware from "../../_common/client-side/middlewares/authMiddleware";
 
 const router = Router();
 
@@ -27,6 +27,10 @@ router.post('/api/register', async (req: RequestLogged, res: Response, next: Nex
 
 router.post('/api/login', async (req: RequestLogged, res: Response, next: NextFunction) => {
     return await new AuthController(dependencyContainer.get<AuthUserUseCase>('AuthUserUseCase')).login(req, res, next);
+});
+
+router.post('/api/logout', async (req: RequestLogged, res: Response, next: NextFunction) => {
+    return await new AuthController(dependencyContainer.get<AuthUserUseCase>('AuthUserUseCase')).logout(req, res, next);
 });
 
 router.get(
