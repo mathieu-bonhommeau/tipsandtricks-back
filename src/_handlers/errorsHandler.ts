@@ -7,7 +7,8 @@ export default class ErrorsHandler {
     static handle(err: Error, req: RequestLogged, res: Response) {
         if (err['statusCode']) {
             res.status(err['statusCode']).send({
-                status: err['statusCode'],
+                status: err['statusCode'] ?? '',
+                code: err['code'] ?? '',
                 message: err.message,
             });
             logger(err.message);
@@ -17,7 +18,8 @@ export default class ErrorsHandler {
         logger(err.message);
         logger(err.stack);
         res.status(500).send({
-            status: err['statusCode'],
+            status: err['statusCode'] ?? '',
+            code: err['code'] ?? '',
             message: 'Server error',
         });
     }

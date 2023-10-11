@@ -1,4 +1,4 @@
-import InputError from '../../../_common/domain/models/inputError';
+import InputError from '../../../_common/domain/errors/inputError';
 import User, { JwtToken, UserLogged } from '../models/User';
 import InputLoginUser from '../models/inputLoginUser';
 import UserRepositoryInterface from '../ports/userRepositoryInterface';
