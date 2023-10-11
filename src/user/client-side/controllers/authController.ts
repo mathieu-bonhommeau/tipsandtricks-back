@@ -135,4 +135,34 @@ export default class AuthController {
             next(err);
         }
     }
+
+    /**
+     * @openapi
+     * tags:
+     *   name: User
+     *   description: Logout
+     * /logout:
+     *   post:
+     *     summary: Logout a user
+     *     tags: [User]
+     *     responses:
+     *       200:
+     *         description: logout success - delete cookie ACCESS_TOKEN
+     *       400:
+     *         description: Bad request
+     *       401:
+     *         description: Unauthorized
+     *       500:
+     *         description: Some server error
+     *
+     */
+    public async logout(_: RequestLogged, res: Response, next: NextFunction){
+        try {
+            res.clearCookie("ACCESS_TOKEN")
+            res.end()
+
+        } catch (err) {
+            next(err)
+        }
+    }
 }
