@@ -1,9 +1,9 @@
 import * as jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
-import AuthError from '../../_common/domain/models/authError';
 import { Response, NextFunction } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
-import { RequestLogged } from '../../_common/client-side/types/requestLogged';
+import {RequestLogged} from "../types/requestLogged";
+import AuthError from "../../domain/models/authError";
 
 dotenv.config();
 

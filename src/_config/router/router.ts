@@ -4,8 +4,8 @@ import dependencyContainer from '../dependencies/dependencies';
 import AuthUserUseCase from '../../user/domain/use_cases/authUserUseCase';
 import RegisterController from '../../user/client-side/controllers/registerController';
 import AuthController from '../../user/client-side/controllers/authController';
-import AuthMiddleware from '../middlewares/authMiddleware';
 import { RequestLogged } from '../../_common/client-side/types/requestLogged';
+import AuthMiddleware from "../../_common/client-side/middlewares/authMiddleware";
 
 const router = Router();
 
