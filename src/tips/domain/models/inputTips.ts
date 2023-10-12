@@ -1,3 +1,28 @@
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     InputTips:
+ *       type: object
+ *       required:
+ *         - title
+ *         - command
+ *         - user_id
+ *       properties:
+ *         title:
+ *           type: string
+ *         command:
+ *           type: string
+ *         description:
+ *           type: string
+ *         user_id:
+ *           type: number
+ *       example:
+ *         title: Exemple de tips !
+ *         command: npm run dev
+ *         description: Tips incroyable.
+ *         user_id: 2
+ */
 export default class InputTips {
     constructor(
         public title: string,

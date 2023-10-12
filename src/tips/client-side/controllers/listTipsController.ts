@@ -8,6 +8,39 @@ import Tips from '../../domain/models/Tips';
 export default class ListTipsController {
     constructor(private readonly _listTipsUseCase: ListTipsUseCase) {}
 
+    /**
+     * @openapi
+     * tags:
+     *   name: Tips
+     *   description: Manages tips app
+     * /tips?page=&length=:
+     *   get:
+     *     summary: Retrieve tips list
+     *     parameters:
+     *      - in: query
+     *        name: page
+     *        schema:
+     *           type: integer
+     *           description: The page for which tips are retrieved.
+     *      - in: query
+     *        name: length
+     *        schema:
+     *           type: integer
+     *           description: The page for which tips are retrieved.
+     *     tags: [Tips]
+     *     responses:
+     *       200:
+     *         description: Tips recovered.
+     *         content:
+     *          application/json:
+     *              schema:
+     *                  $ref: '#/components/schemas/Tips'
+     *       401:
+     *         description: Unauthorized
+     *       500:
+     *         description: Some server errors
+     *
+     */
     public async tipsList(req: RequestLogged, res: Response, next: NextFunction) {
         try {
             const paginatedInput = new PaginatedInput(
