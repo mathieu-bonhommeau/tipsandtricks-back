@@ -3,8 +3,8 @@ import * as dotenv from 'dotenv';
 import { Response, NextFunction } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
 import { isEmpty } from 'lodash';
-import {RequestLogged} from "../types/requestLogged";
-import AuthError from "../../domain/models/authError";
+import { RequestLogged } from '../types/requestLogged';
+import AuthError from '../../domain/errors/authError';
 
 dotenv.config();
 

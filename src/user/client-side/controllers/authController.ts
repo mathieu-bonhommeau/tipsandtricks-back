@@ -156,13 +156,44 @@ export default class AuthController {
      *         description: Some server error
      *
      */
-    public async logout(_: RequestLogged, res: Response, next: NextFunction){
+    public async logout(_: RequestLogged, res: Response, next: NextFunction) {
         try {
-            res.clearCookie("ACCESS_TOKEN")
-            res.end()
-
+            res.clearCookie('ACCESS_TOKEN');
+            res.end();
         } catch (err) {
-            next(err)
+            next(err);
+        }
+    }
+
+    /**
+     * @openapi
+     * tags:
+     *   name: User
+     *   description: Reconnect a user
+     * /reconnect:
+     *   post:
+     *     summary: Reconnect a user
+     *     tags: [User]
+     *     security:
+     *         - cookieAuth: [
+     *             ACCESS_TOKEN=abcde12345; Path=/; HttpOnly;
+     *         ]
+     *     responses:
+     *       200:
+     *         description: reconnect success
+     *       401:
+     *         description: Unauthorized
+     *       500:
+     *         description: Some server error
+     *
+     */
+    public async reconnect(req: RequestLogged, res: Response, next: NextFunction) {
+        try {
+            res.status(200).send({
+                data: req.user,
+            });
+        } catch (err) {
+            next(err);
         }
     }
 }

@@ -5,7 +5,7 @@ import AuthUserUseCase from '../../user/domain/use_cases/authUserUseCase';
 import RegisterController from '../../user/client-side/controllers/registerController';
 import AuthController from '../../user/client-side/controllers/authController';
 import { RequestLogged } from '../../_common/client-side/types/requestLogged';
-import AuthMiddleware from "../../_common/client-side/middlewares/authMiddleware";
+import AuthMiddleware from '../../_common/client-side/middlewares/authMiddleware';
 
 const router = Router();
 
@@ -13,9 +13,17 @@ router.get('/test', (_, res) => {
     res.send('Express running on test route !');
 });
 
-router.get('/isConnect', new AuthMiddleware().authorize('ACCESS_TOKEN'), (req: RequestLogged, res) => {
-    res.send('You are connect !, user: ' + req.user.username);
-});
+router.get(
+    '/api/reconnect',
+    new AuthMiddleware().authorize('ACCESS_TOKEN'),
+    async (req: RequestLogged, res: Response, next: NextFunction) => {
+        return await new AuthController(dependencyContainer.get<AuthUserUseCase>('AuthUserUseCase')).reconnect(
+            req,
+            res,
+            next,
+        );
+    },
+);
 
 router.post('/api/register', async (req: RequestLogged, res: Response, next: NextFunction) => {
     return await new RegisterController(dependencyContainer.get<RegisterUserUseCase>('RegisterUserUseCase')).register(
@@ -44,5 +52,7 @@ router.get(
         );
     },
 );
+
+router;
 
 export default router;
