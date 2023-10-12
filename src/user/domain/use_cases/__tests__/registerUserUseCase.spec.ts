@@ -35,6 +35,7 @@ describe('Register a user', () => {
             const inputRegisterUser = sut.givenAnInputRegisterUser();
             sut.givenAnError();
             await new RegisterUserUseCase(userRepository).register(inputRegisterUser);
+            //This expect breaks the test because it must throw an error
             expect(false).toEqual(true);
         } catch (err) {
             expect(err.message).toEqual('Register failed !');
@@ -45,6 +46,7 @@ describe('Register a user', () => {
         try {
             const inputRegisterUser = sut.givenAnInputRegisterUserWithWeakPassword();
             await new RegisterUserUseCase(userRepository).register(inputRegisterUser);
+            //This expect breaks the test because it must throw an error
             expect(false).toEqual(true);
         } catch (err) {
             expect(err.message).toEqual('Register failed !');
@@ -65,6 +67,7 @@ describe('Register a user', () => {
         try {
             const inputRegisterUser = sut.givenAnInputRegisterUserWithATooLittleUsername();
             await new RegisterUserUseCase(userRepository).register(inputRegisterUser);
+            //This expect breaks the test because it must throw an error
             expect(false).toEqual(true);
         } catch (err) {
             expect(err.message).toEqual('Register failed !');
@@ -75,6 +78,7 @@ describe('Register a user', () => {
         try {
             const inputRegisterUser = sut.givenAnInputRegisterUserWithABadEmailFormat();
             await new RegisterUserUseCase(userRepository).register(inputRegisterUser);
+            //This expect breaks the test because it must throw an error
             expect(false).toEqual(true);
         } catch (err) {
             expect(err.message).toEqual('Register failed !');
@@ -86,6 +90,7 @@ describe('Register a user', () => {
             const user = sut.givenAUser();
             const userWithAnExistingEmail = sut.givenAnInputRegisterUserWithSameEmail(user.email);
             await new RegisterUserUseCase(userRepository).register(userWithAnExistingEmail);
+            //This expect breaks the test because it must throw an error
             expect(false).toEqual(true);
         } catch (err) {
             expect(err.message).toEqual('This email already exists in database !');
@@ -97,6 +102,7 @@ describe('Register a user', () => {
             const user = sut.givenAUser();
             const userWithAnExistingUsername = sut.givenAnInputRegisterUserWithSameUsername(user.username);
             await new RegisterUserUseCase(userRepository).register(userWithAnExistingUsername);
+            //This expect breaks the test because it must throw an error
             expect(false).toEqual(true);
         } catch (err) {
             expect(err.message).toEqual('This username already exists in database !');
