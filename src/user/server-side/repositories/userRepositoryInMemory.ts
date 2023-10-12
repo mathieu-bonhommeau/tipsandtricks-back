@@ -7,7 +7,7 @@ dotenv.config();
 export type UserWithPassword = User & { password: string };
 
 export default class UserRepositoryInMemory implements UserRepositoryInterface {
-    private _usersInMemory: Array<User & { password?: string }> = [];
+    private _usersInMemory: Array<User & { password?: string; refresh_token?: string | null }> = [];
     private _password: string;
     private _error: boolean = false;
 
@@ -22,12 +22,26 @@ export default class UserRepositoryInMemory implements UserRepositoryInterface {
         return null;
     }
 
-    async getByEmail(email: string): Promise<User & { password?: string }> {
+    async getByEmail(email: string): Promise<User & { password?: string; refresh_token?: string | null }> {
         return this._usersInMemory.find((user: User & { password: string }) => user.email === email);
     }
 
     async getByUsername(username: string): Promise<User> {
         return this._usersInMemory.find((user: User) => user.username === username);
+    }
+
+    async setRefreshToken(userId: number, refreshToken: string): Promise<boolean> {
+        const user = this._usersInMemory.find((user) => user.id === userId);
+        if (!user) return false;
+        user.refresh_token = refreshToken;
+        return true;
+    }
+
+    async revokeToken(email: string): Promise<boolean> {
+        const user = this._usersInMemory.find((user: User & { password: string }) => user.email === email);
+        if (!user) return false;
+        user.refresh_token = null;
+        return true;
     }
 
     setUser(user: User): UserRepositoryInMemory {

@@ -4,6 +4,7 @@ import InputLoginUser from '../../models/inputLoginUser';
 import AuthUserUseCase from '../authUserUseCase';
 import User, { JwtToken, UserLogged } from '../../models/User';
 import UserFactory from '../../factories/userFactory';
+import { faker } from '@faker-js/faker';
 
 describe('Login a user', () => {
     let userRepository: UserRepositoryInMemory;
@@ -44,21 +45,71 @@ describe('Login a user', () => {
             }
         });
 
-        test('if a user is logged successfully, the server send an access_token and refresh_token', async () => {
+        test('if a user is logged successfully, the server send an access_token and refresh_token and the refresh token is saved in DB  ', async () => {
             const inputLoginUser = sut.givenAnInputLoginUser();
             sut.givenAUser();
+
             const userLogged = (await new AuthUserUseCase(userRepository).login(inputLoginUser)) as UserLogged;
             expect(userLogged.tokens.access_token).not.toBeNull();
             expect(userLogged.tokens.refresh_token).not.toBeNull();
+
+            const user = await userRepository.getByEmail(userLogged.user.email);
+            expect(user.refresh_token).toEqual(userLogged.tokens.refresh_token);
         });
     });
 
     describe('Token refresh', () => {
         test('returns a new access_token and a new refresh_token', async () => {
             const userLogged = await sut.givenALoggedUser();
+
             const tokens = (await new AuthUserUseCase(userRepository).refreshToken(userLogged.user.email)) as JwtToken;
             expect(tokens.access_token).not.toBeNull();
             expect(tokens.refresh_token).not.toBeNull();
+
+            const user = await userRepository.getByEmail(userLogged.user.email);
+            expect(user.refresh_token).toEqual(userLogged.tokens.refresh_token);
+        });
+    });
+
+    describe('Check refresh token', () => {
+        test('return true if refresh token is in bdd for this user', async () => {
+            const userLogged = await sut.givenALoggedUser();
+            const res = await new AuthUserUseCase(userRepository).checkRefreshToken(
+                userLogged.user.email,
+                userLogged.tokens.refresh_token,
+            );
+            expect(res).toBe(true);
+        });
+
+        test('return false if refresh token is not in bdd for this user or if user does not exist', async () => {
+            const userLogged = await sut.givenALoggedUser();
+            const res = await new AuthUserUseCase(userRepository).checkRefreshToken(
+                userLogged.user.email,
+                'invalid_token',
+            );
+            expect(res).toBe(false);
+        });
+    });
+
+    describe('Delete refresh token', () => {
+        test('return void and throw no error if refresh token is delete for this user', async () => {
+            try {
+                const userLogged = await sut.givenALoggedUser();
+                await new AuthUserUseCase(userRepository).revokeRefreshToken(userLogged.user.email);
+                expect(true).toBe(true);
+            } catch (err) {
+                expect(true).toBe(false);
+            }
+        });
+
+        test('throw error if user does not exist', async () => {
+            try {
+                await sut.givenALoggedUser();
+                await new AuthUserUseCase(userRepository).revokeRefreshToken(faker.internet.email());
+                expect(false).toBe(true);
+            } catch (err) {
+                expect(true).toBe(true);
+            }
         });
     });
 });

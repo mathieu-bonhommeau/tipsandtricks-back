@@ -156,8 +156,10 @@ export default class AuthController {
      *         description: Some server errors
      *
      */
-    public async logout(_: RequestLogged, res: Response, next: NextFunction) {
+    public async logout(req: RequestLogged, res: Response, next: NextFunction) {
         try {
+            console.log(req.user);
+            await this._authUserUseCase.revokeRefreshToken(req.user.email);
             res.clearCookie('ACCESS_TOKEN');
             res.end();
         } catch (err) {

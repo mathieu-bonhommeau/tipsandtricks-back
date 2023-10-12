@@ -5,12 +5,14 @@ import { JwtPayload } from 'jsonwebtoken';
 import { isEmpty } from 'lodash';
 import { RequestLogged } from '../types/requestLogged';
 import AuthError from '../../domain/errors/authError';
+import dependencyContainer from '../../../_dependencyContainer/dependencyContainer';
+import AuthUserUseCase from '../../../user/domain/use_cases/authUserUseCase';
 
 dotenv.config();
 
 export default class AuthMiddleware {
     authorize(tokenName: string): (request: RequestLogged, response: Response, next: NextFunction) => void {
-        return (request: RequestLogged, _: Response, next: NextFunction) => {
+        return async (request: RequestLogged, _: Response, next: NextFunction) => {
             const authCookies = request.cookies;
             if (!isEmpty(authCookies)) {
                 switch (tokenName) {
@@ -28,6 +30,14 @@ export default class AuthMiddleware {
                             process.env.JWT_SECRET_REFRESH || 'refresh_secret',
                         ) as JwtPayload;
                         if (decodedRefresh) request.email = decodedRefresh.data;
+                        const isValid = await dependencyContainer
+                            .get<AuthUserUseCase>('AuthUserUseCase')
+                            .checkRefreshToken(request.email, authCookies['REFRESH_TOKEN']);
+                        if (!isValid) {
+                            const error = new AuthError('Invalid refresh_token');
+                            next(error);
+                        }
+
                         return next();
                     }
                     default: {
