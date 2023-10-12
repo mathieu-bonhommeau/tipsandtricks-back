@@ -31,7 +31,7 @@ export default class RegisterUserUseCase implements RegisterUserUseCaseInterface
 
         const isUsernameExist = await this._checkUnicityUsername(input.username);
         if (isUsernameExist) {
-            throw new InputError('This username already exists in database !');
+            throw new UsernameAlreadyExistInputError('This username already exists in database !');
         }
 
         input.password = bcrypt.hashSync(input.password, parseInt(process.env.ROUND_SALT_PWD));
@@ -39,7 +39,7 @@ export default class RegisterUserUseCase implements RegisterUserUseCaseInterface
         const userJustCreated = await this._userRepository.create(input);
         if (!userJustCreated) {
             logger('bdd error');
-            throw new UsernameAlreadyExistInputError('Register failed !');
+            throw new InputError('Register failed !');
         }
 
         return userJustCreated;

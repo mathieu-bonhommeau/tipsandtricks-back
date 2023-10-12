@@ -35,6 +35,19 @@ export default class UserRepositoryPostgres implements UserRepositoryInterface {
         }
         return null;
     }
+
+    async revokeToken(email: string): Promise<boolean> {
+        return await this._sql`update "user" u set "refresh_token" = null where u.email = ${email} returning id`.then(
+            (rows) => rows.length > 0,
+        );
+    }
+
+    async setRefreshToken(userId: number, refreshToken: string): Promise<boolean> {
+        return await this
+            ._sql`update "user" u set "refresh_token" = ${refreshToken} where u.id = ${userId} returning id`.then(
+            (rows) => rows.length > 0,
+        );
+    }
 }
 
 export class UserRepositoryPostgresFactory {

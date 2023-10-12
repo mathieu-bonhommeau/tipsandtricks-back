@@ -37,9 +37,17 @@ router.post('/api/login', async (req: RequestLogged, res: Response, next: NextFu
     return await new AuthController(dependencyContainer.get<AuthUserUseCase>('AuthUserUseCase')).login(req, res, next);
 });
 
-router.post('/api/logout', async (req: RequestLogged, res: Response, next: NextFunction) => {
-    return await new AuthController(dependencyContainer.get<AuthUserUseCase>('AuthUserUseCase')).logout(req, res, next);
-});
+router.post(
+    '/api/logout',
+    new AuthMiddleware().authorize('ACCESS_TOKEN'),
+    async (req: RequestLogged, res: Response, next: NextFunction) => {
+        return await new AuthController(dependencyContainer.get<AuthUserUseCase>('AuthUserUseCase')).logout(
+            req,
+            res,
+            next,
+        );
+    },
+);
 
 router.get(
     '/api/refresh-token',
@@ -52,7 +60,5 @@ router.get(
         );
     },
 );
-
-router;
 
 export default router;

@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import debug from 'debug';
 import UserFactory from '../factories/userFactory';
+import AuthError from '../../../_common/domain/errors/authError';
 const logger = debug('tipsandtricks:authUserUseCase');
 
 export interface AuthUserUseCaseInterface {
@@ -29,7 +30,7 @@ export default class AuthUserUseCase implements AuthUserUseCaseInterface {
         }
 
         const userToSend = UserFactory.createWithoutPassword(user);
-        const jwtTokens = this._generateTokens(userToSend);
+        const jwtTokens = await this._generateTokens(userToSend);
 
         return new UserLogged(userToSend, jwtTokens);
     }
@@ -42,10 +43,20 @@ export default class AuthUserUseCase implements AuthUserUseCaseInterface {
         }
 
         const userToSend = UserFactory.createWithoutPassword(user);
-        return this._generateTokens(userToSend);
+        return await this._generateTokens(userToSend);
     }
 
-    private _generateTokens(user: User): JwtToken {
+    async checkRefreshToken(email: string, refreshToken: string): Promise<boolean> {
+        const user = await this._userRepository.getByEmail(email);
+        return user.refresh_token === refreshToken;
+    }
+
+    async revokeRefreshToken(email: string): Promise<void> {
+        const res = await this._userRepository.revokeToken(email);
+        if (!res) throw new AuthError('Authentification error');
+    }
+
+    private async _generateTokens(user: User): Promise<JwtToken> {
         const accessToken: string = jwt.sign(
             {
                 expiresIn: process.env.JWT_ACCESS_EXPIRATION,
@@ -61,6 +72,8 @@ export default class AuthUserUseCase implements AuthUserUseCaseInterface {
             },
             process.env.JWT_SECRET_REFRESH,
         );
+        const isStored = await this._userRepository.setRefreshToken(user.id, refreshToken);
+        if (!isStored) throw new AuthError('Auth error !');
 
         return new JwtToken(accessToken, refreshToken);
     }

@@ -1,7 +1,7 @@
 import dependencyContainer from '../../_dependencyContainer/dependencyContainer';
 import RegisterUserUseCase from '../../user/domain/use_cases/registerUserUseCase';
 import UserRepositoryInterface from '../../user/domain/ports/userRepositoryInterface';
-import UserRepositoryPostgres from '../../user/server-side/repositories/userRepositoryPostrges';
+import UserRepositoryPostgres from '../../user/server-side/repositories/userRepositoryPostgres';
 import postgres, { Sql } from 'postgres';
 import process from 'process';
 import AuthUserUseCase from '../../user/domain/use_cases/authUserUseCase';

@@ -18,7 +18,7 @@ export default class ErrorsHandler {
         logger(err.message);
         logger(err.stack);
         res.status(500).send({
-            status: err['statusCode'] ?? '',
+            status: 500,
             code: err['code'] ?? '',
             message: 'Server error',
         });
