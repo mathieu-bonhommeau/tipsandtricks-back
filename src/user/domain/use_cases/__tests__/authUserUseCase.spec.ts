@@ -72,7 +72,7 @@ describe('Login a user', () => {
     });
 
     describe('Check refresh token', () => {
-        test('return true if refresh token is in bdd for this user', async () => {
+        test('return true if the refresh_token used is the same as that recorded in bdd', async () => {
             const userLogged = await sut.givenALoggedUser();
             const res = await new AuthUserUseCase(userRepository).checkRefreshToken(
                 userLogged.user.email,
@@ -81,7 +81,7 @@ describe('Login a user', () => {
             expect(res).toBe(true);
         });
 
-        test('return false if refresh token is not in bdd for this user or if user does not exist', async () => {
+        test('return false if refresh_token used is not the same as that recorded in bdd', async () => {
             const userLogged = await sut.givenALoggedUser();
             const res = await new AuthUserUseCase(userRepository).checkRefreshToken(
                 userLogged.user.email,
