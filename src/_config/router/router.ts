@@ -6,6 +6,8 @@ import RegisterController from '../../user/client-side/controllers/registerContr
 import AuthController from '../../user/client-side/controllers/authController';
 import { RequestLogged } from '../../_common/client-side/types/requestLogged';
 import AuthMiddleware from '../../_common/client-side/middlewares/authMiddleware';
+import ListTipsController from "../../tips/client-side/controllers/listTipsController";
+import ListTipsUseCase from "../../tips/domain/use_cases/listTipsUseCase";
 
 const router = Router();
 
@@ -54,6 +56,18 @@ router.get(
     new AuthMiddleware().authorize('REFRESH_TOKEN'),
     async (req: RequestLogged, res: Response, next: NextFunction) => {
         return await new AuthController(dependencyContainer.get<AuthUserUseCase>('AuthUserUseCase')).refreshToken(
+            req,
+            res,
+            next,
+        );
+    },
+);
+
+router.get(
+    '/api/tips',
+    new AuthMiddleware().authorize('ACCESS_TOKEN'),
+    async (req: RequestLogged, res: Response, next: NextFunction) => {
+        return await new ListTipsController(dependencyContainer.get<ListTipsUseCase>('ListTipsUseCase')).tipsList(
             req,
             res,
             next,
