@@ -7,4 +7,6 @@ CREATE TABLE IF NOT EXISTS "tips" (
     "published_at" TIMESTAMPTZ DEFAULT current_timestamp NOT NULL,
     "created_at" TIMESTAMPTZ DEFAULT current_timestamp NOT NULL,
     "updated_at" TIMESTAMPTZ NULL
-)
+);
+
+ALTER TABLE "tips" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id")  ON DELETE CASCADE ON UPDATE CASCADE;

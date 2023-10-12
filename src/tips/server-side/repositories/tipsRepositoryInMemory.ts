@@ -1,20 +1,26 @@
-import TipsRepositoryInterface from '../../domain/ports/tipsRepositoryInterface';
+import TipsRepositoryInterface, {TipsList} from '../../domain/ports/tipsRepositoryInterface';
 import Tips from '../../domain/models/Tips';
 import * as dotenv from 'dotenv';
 import User from "../../../user/domain/models/User";
+import PaginatedResponse from "../../../_common/domain/models/paginatedResponse";
 dotenv.config();
 
 export default class TipsRepositoryInMemory implements TipsRepositoryInterface {
-    private _tipsInMemory: Array<Tips> = [];
+    public tipsInMemory: Array<Tips> = [];
     private _error: boolean = false;
 
-    setTips(tips: Tips): TipsRepositoryInMemory {
-        this._tipsInMemory.push(tips);
-        return this;
+    async getList(page: number, length: number): Promise<TipsList> {
+        const start = length * (page - 1)
+        const end = length * page
+        return {
+            tips: this.tipsInMemory.slice(start, end),
+            total: this.tipsInMemory.length,
+        }
     }
 
-    async getList(): Promise<Array<Tips>> {
-        return this._tipsInMemory;
+    setTips(tips: Tips): TipsRepositoryInMemory {
+        this.tipsInMemory.push(tips);
+        return this;
     }
 
     setError(): TipsRepositoryInMemory {
@@ -23,7 +29,7 @@ export default class TipsRepositoryInMemory implements TipsRepositoryInterface {
     }
 
     clear(): TipsRepositoryInMemory {
-        this._tipsInMemory = []
+        this.tipsInMemory = []
         return this
     }
 

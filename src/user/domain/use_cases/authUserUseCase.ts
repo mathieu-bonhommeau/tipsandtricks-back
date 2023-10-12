@@ -19,13 +19,13 @@ export default class AuthUserUseCase implements AuthUserUseCaseInterface {
         const user = (await this._userRepository.getByEmail(input.email)) as User & { password: string };
         if (!user) {
             logger('bad email');
-            throw new InputError('Login error !');
+            throw new InputError('Login errors !');
         }
 
         const isSamePassword = bcrypt.compareSync(input.password, user.password);
         if (!isSamePassword) {
             logger('bad password');
-            throw new InputError('Login error !');
+            throw new InputError('Login errors !');
         }
 
         const userToSend = UserFactory.createWithoutPassword(user);
@@ -38,7 +38,7 @@ export default class AuthUserUseCase implements AuthUserUseCaseInterface {
         const user = await this._userRepository.getByEmail(email);
         if (!user) {
             logger('user does not exist');
-            throw new InputError('Refresh token error !');
+            throw new InputError('Refresh token errors !');
         }
 
         const userToSend = UserFactory.createWithoutPassword(user);

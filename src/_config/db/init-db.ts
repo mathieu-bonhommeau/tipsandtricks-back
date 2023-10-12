@@ -3,6 +3,8 @@ import * as dotenv from 'dotenv';
 import * as process from 'process';
 import * as fs from 'fs';
 import * as path from 'path';
+import UsersFixtures from "./fixtures/01_usersFixture";
+import TipsFixtures from "./fixtures/02_tipsFixtures";
 dotenv.config();
 
 export class InitDb {
@@ -52,5 +54,7 @@ export class InitDb {
         .readFiles()
         .then(() => console.log('Migrations Success !'))
         .catch((err) => console.log('Migrations failed : ' + err.message));
+    await new UsersFixtures(init.pg).givenSomeUsers(5)
+    await new TipsFixtures(init.pg).givenSomeTips(35)
     await init.pg.end();
 })();

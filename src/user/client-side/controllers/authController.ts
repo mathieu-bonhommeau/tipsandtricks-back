@@ -43,7 +43,7 @@ export default class AuthController {
      *       401:
      *         description: Unauthorized
      *       500:
-     *         description: Some server error
+     *         description: Some server errors
      *
      */
     public async login(req: RequestLogged, res: Response, next: NextFunction) {
@@ -104,7 +104,7 @@ export default class AuthController {
      *       401:
      *         description: Unauthorized
      *       500:
-     *         description: Some server error
+     *         description: Some server errors
      *
      */
     public async refreshToken(req: RequestLogged, res: Response, next: NextFunction) {
@@ -153,7 +153,7 @@ export default class AuthController {
      *       401:
      *         description: Unauthorized
      *       500:
-     *         description: Some server error
+     *         description: Some server errors
      *
      */
     public async logout(_: RequestLogged, res: Response, next: NextFunction) {

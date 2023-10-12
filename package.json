@@ -8,7 +8,7 @@
     "build": "vite build",
     "start": "sudo pm2 start ./dist/index.mjs",
     "restart": "sudo pm2 restart ./dist/index.mjs",
-    "dev": "DEBUG=tipsandtricks:* nodemon ./src/index.ts",
+    "dev": "nodemon ./src/index.ts",
     "pretty-lint": "prettier src --check --write && eslint src --fix",
     "init-db": "ts-node ./src/_config/db/init-db.ts"
   },
