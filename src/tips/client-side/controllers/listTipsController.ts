@@ -21,12 +21,12 @@ export default class ListTipsController {
      *        name: page
      *        schema:
      *           type: integer
-     *           description: The page for which tips are retrieved.
+     *        description: The page for which tips are retrieved.
      *      - in: query
      *        name: length
      *        schema:
      *           type: integer
-     *           description: The page for which tips are retrieved.
+     *        description: Determines the number of tips to recover.
      *     tags: [Tips]
      *     responses:
      *       200:
