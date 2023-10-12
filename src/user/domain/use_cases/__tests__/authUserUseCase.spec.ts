@@ -22,25 +22,25 @@ describe('Login a user', () => {
             expect(userLogged.user).toEqual(UserFactory.createWithoutPassword(expectedUser));
         });
 
-        test("can throw an error if the email doesn't exists in database", async () => {
+        test("can throw an errors if the email doesn't exists in database", async () => {
             try {
                 const inputLoginUser = sut.givenAnInputLoginUser();
                 sut.givenAUserWithNotExistEmail();
                 await new AuthUserUseCase(userRepository).login(inputLoginUser);
                 expect(false).toEqual(true);
             } catch (err) {
-                expect(err.message).toEqual('Login error !');
+                expect(err.message).toEqual('Login errors !');
             }
         });
 
-        test('can throw an error if the password is not ok', async () => {
+        test('can throw an errors if the password is not ok', async () => {
             try {
                 const inputLoginUser = sut.givenAnInputLoginUser();
                 sut.givenAUserWithBadPassword();
                 await new AuthUserUseCase(userRepository).login(inputLoginUser);
                 expect(false).toEqual(true);
             } catch (err) {
-                expect(err.message).toEqual('Login error !');
+                expect(err.message).toEqual('Login errors !');
             }
         });
 

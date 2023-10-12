@@ -31,7 +31,7 @@ export default class RegisterController {
      *       400:
      *          description: Bad request
      *       500:
-     *         description: Some server error
+     *         description: Some server errors
      *
      */
     public async register(req: RequestLogged, res: Response, next: NextFunction) {

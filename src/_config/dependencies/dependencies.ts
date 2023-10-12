@@ -5,6 +5,9 @@ import UserRepositoryPostgres from '../../user/server-side/repositories/userRepo
 import postgres, { Sql } from 'postgres';
 import process from 'process';
 import AuthUserUseCase from '../../user/domain/use_cases/authUserUseCase';
+import TipsRepositoryInterface from '../../tips/domain/ports/tipsRepositoryInterface';
+import TipsRepositoryPostgres from '../../tips/server-side/repositories/tipsRepositoryPostgres';
+import ListTipsUseCase from '../../tips/domain/use_cases/listTipsUseCase';
 
 dependencyContainer.set<Sql>('sql', () => {
     return postgres({
@@ -16,14 +19,25 @@ dependencyContainer.set<Sql>('sql', () => {
         ssl: process.env.ENVIRONMENT === 'production',
     });
 });
+
 dependencyContainer.set<UserRepositoryInterface>('UserRepository', () => {
     return new UserRepositoryPostgres(dependencyContainer.get<Sql>('sql'));
 });
+
 dependencyContainer.set<RegisterUserUseCase>('RegisterUserUseCase', () => {
     return new RegisterUserUseCase(dependencyContainer.get<UserRepositoryInterface>('UserRepository'));
 });
+
 dependencyContainer.set<AuthUserUseCase>('AuthUserUseCase', () => {
     return new AuthUserUseCase(dependencyContainer.get<UserRepositoryInterface>('UserRepository'));
+});
+
+dependencyContainer.set<TipsRepositoryInterface>('TipsRepository', () => {
+    return new TipsRepositoryPostgres(dependencyContainer.get<Sql>('sql'));
+});
+
+dependencyContainer.set<ListTipsUseCase>('ListTipsUseCase', () => {
+    return new ListTipsUseCase(dependencyContainer.get<TipsRepositoryInterface>('TipsRepository'));
 });
 
 export default dependencyContainer;

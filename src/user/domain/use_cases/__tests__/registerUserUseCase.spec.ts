@@ -29,7 +29,7 @@ describe('Register a user', () => {
         expect(userJustCreated).toEqual(expectedUser);
     });
 
-    test('return an error message if persist user failed and return null', async () => {
+    test('return an errors message if persist user failed and return null', async () => {
         //TODO - use toThrow for check this test
         try {
             const inputRegisterUser = sut.givenAnInputRegisterUser();
@@ -41,7 +41,7 @@ describe('Register a user', () => {
         }
     });
 
-    test('return an error message if password is too weak', async () => {
+    test('return an errors message if password is too weak', async () => {
         try {
             const inputRegisterUser = sut.givenAnInputRegisterUserWithWeakPassword();
             await new RegisterUserUseCase(userRepository).register(inputRegisterUser);
@@ -81,7 +81,7 @@ describe('Register a user', () => {
         }
     });
 
-    test('returns an error if the email already exists in the database', async () => {
+    test('returns an errors if the email already exists in the database', async () => {
         try {
             const user = sut.givenAUser();
             const userWithAnExistingEmail = sut.givenAnInputRegisterUserWithSameEmail(user.email);
@@ -92,7 +92,7 @@ describe('Register a user', () => {
         }
     });
 
-    test('returns an error if the username already exists in the database', async () => {
+    test('returns an errors if the username already exists in the database', async () => {
         try {
             const user = sut.givenAUser();
             const userWithAnExistingUsername = sut.givenAnInputRegisterUserWithSameUsername(user.username);
