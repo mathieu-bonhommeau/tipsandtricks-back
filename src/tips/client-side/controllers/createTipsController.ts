@@ -2,8 +2,9 @@ import { NextFunction, Response } from 'express';
 import CreateTipsUseCase from '../../domain/use_cases/createTipsUseCase';
 import InputTips from '../../domain/models/inputTips';
 import { RequestLogged } from '../../../_common/client-side/types/requestLogged';
+import * as jwt from 'jsonwebtoken';
 
-export default class TipsController {
+export default class createTipsController {
     constructor(private readonly _createTipsUseCase: CreateTipsUseCase) {}
 
     /**
@@ -36,8 +37,7 @@ export default class TipsController {
      */
     public async create(req: RequestLogged, res: Response, next: NextFunction) {
         try {
-            const user_id = 2;
-            const inputTips = new InputTips(req.body.title, req.body.command, req.body.description, user_id);
+            const inputTips = new InputTips(req.body.title, req.body.command, req.body.description, req.user.id);
             const data = await this._createTipsUseCase.create(inputTips);
             return res.status(201).send({
                 data: data,

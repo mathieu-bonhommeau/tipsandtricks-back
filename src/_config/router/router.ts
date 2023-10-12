@@ -9,7 +9,7 @@ import AuthController from '../../user/client-side/controllers/authController';
 import { RequestLogged } from '../../_common/client-side/types/requestLogged';
 import AuthMiddleware from '../../_common/client-side/middlewares/authMiddleware';
 import ListTipsController from "../../tips/client-side/controllers/listTipsController";
-import TipsController from "../../tips/client-side/controllers/tipsController";
+import createTipsController from "../../tips/client-side/controllers/createTipsController";
 
 const router = Router();
 
@@ -81,7 +81,7 @@ router.post(
     '/api/tips',
     new AuthMiddleware().authorize('ACCESS_TOKEN'),
     async (req: RequestLogged, res: Response, next: NextFunction) => {
-        return await new TipsController(dependencyContainer.get<CreateTipsUseCase>('CreateTipsUseCase')).create(
+        return await new createTipsController(dependencyContainer.get<CreateTipsUseCase>('CreateTipsUseCase')).create(
             req,
             res,
             next,

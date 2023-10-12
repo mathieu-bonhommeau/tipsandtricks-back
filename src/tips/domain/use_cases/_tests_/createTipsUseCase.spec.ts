@@ -8,6 +8,9 @@ import PaginatedResponse from '../../../../_common/domain/models/paginatedRespon
 import InputRegisterUser from "../../../../user/domain/models/inputRegisterUser";
 import InputTips from "../../models/inputTips";
 import CreateTipsUseCase from "../../../../tips/domain/use_cases/createTipsUseCase";
+import RegisterUserUseCase from "../../../../user/domain/use_cases/registerUserUseCase";
+import UserRepositoryInMemory from "../../../../user/server-side/repositories/userRepositoryInMemory";
+import InputError from "../../../../_common/domain/errors/inputError";
 dotenv.config();
 
 describe('Return a tips', () => {
@@ -31,6 +34,31 @@ describe('Return a tips', () => {
 
         expect(tipsJustCreated).toEqual(expectedTips);
     });
+
+    test('return an errors message if persist tips failed and return null', async () => {
+        try {
+            const inputTips = sut.givenAnInputTips();
+            sut.givenAnError();
+            await new CreateTipsUseCase(tipsRepository).create(inputTips);
+
+            //This expect breaks the test because it must throw an error
+            expect(false).toEqual(true);
+        } catch (err) {
+            expect(err.message).toEqual('Create tips failed !');
+        }
+    });
+
+    test('an input must have the good format', async () => {
+        try {
+            const inputTips = sut.givenAnInputTipsWithBadInputFormat();
+            await new CreateTipsUseCase(tipsRepository).create(inputTips);
+
+            //This expect breaks the test because it must throw an error
+            expect(false).toEqual(true);
+        } catch (err) {
+            expect(err.message).toEqual('Create tips failed !');
+        }
+    });
 });
 
 class SUT {
@@ -51,5 +79,14 @@ class SUT {
             .buildTips();
         this._tipsRepositoryInMemory.setTips(tips);
         return tips;
+    }
+
+    givenAnError(): TipsRepositoryInMemory {
+        return this._tipsRepositoryInMemory.setError();
+    }
+
+    givenAnInputTipsWithBadInputFormat(): InputTips {
+        this._tipsTestBuilder.withTitle('');
+        return this._tipsTestBuilder.buildInputTips();
     }
 }
