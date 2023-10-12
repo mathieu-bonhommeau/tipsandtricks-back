@@ -8,6 +8,7 @@ import AuthUserUseCase from '../../user/domain/use_cases/authUserUseCase';
 import TipsRepositoryInterface from '../../tips/domain/ports/tipsRepositoryInterface';
 import TipsRepositoryPostgres from '../../tips/server-side/repositories/tipsRepositoryPostgres';
 import ListTipsUseCase from '../../tips/domain/use_cases/listTipsUseCase';
+import CreateTipsUseCase from '../../tips/domain/use_cases/createTipsUseCase';
 
 dependencyContainer.set<Sql>('sql', () => {
     return postgres({
@@ -39,5 +40,10 @@ dependencyContainer.set<TipsRepositoryInterface>('TipsRepository', () => {
 dependencyContainer.set<ListTipsUseCase>('ListTipsUseCase', () => {
     return new ListTipsUseCase(dependencyContainer.get<TipsRepositoryInterface>('TipsRepository'));
 });
+
+dependencyContainer.set<CreateTipsUseCase>('CreateTipsUseCase', () => {
+    return new CreateTipsUseCase(dependencyContainer.get<TipsRepositoryInterface>('TipsRepository'));
+});
+
 
 export default dependencyContainer;
