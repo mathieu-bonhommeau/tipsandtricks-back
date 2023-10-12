@@ -14,7 +14,16 @@ export default class TipsTestBuilder {
     private readonly _updated_at: Date | null = null;
 
     buildTips(): Tips {
-        return new Tips(this._id, this._user_id, this._title, this._command, this._description, this._published_at, this._created_at, this._updated_at);
+        return new Tips(
+            this._id,
+            this._user_id,
+            this._title,
+            this._command,
+            this._description,
+            this._published_at,
+            this._created_at,
+            this._updated_at,
+        );
     }
 
     withTitle(title: string): TipsTestBuilder {

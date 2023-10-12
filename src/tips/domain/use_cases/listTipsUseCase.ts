@@ -1,8 +1,8 @@
 import tipsRepositoryInterface from '../ports/tipsRepositoryInterface';
 import * as dotenv from 'dotenv';
-import Tips from "../models/Tips";
-import PaginatedResponse from "../../../_common/domain/models/paginatedResponse";
-import PaginatedInput from "../../../_common/domain/models/paginatedInput";
+import Tips from '../models/Tips';
+import PaginatedResponse from '../../../_common/domain/models/paginatedResponse';
+import PaginatedInput from '../../../_common/domain/models/paginatedInput';
 dotenv.config();
 
 export interface listTipsRepositoryInterface {
@@ -14,11 +14,6 @@ export default class ListTipsUseCase implements listTipsRepositoryInterface {
 
     async getList(input: PaginatedInput): Promise<PaginatedResponse<Tips>> {
         const tipsList = await this._tipsRepository.getList(input.page, input.length);
-        return new PaginatedResponse(
-            input.page,
-            input.length,
-            tipsList.total,
-            tipsList.tips
-        )
+        return new PaginatedResponse(input.page, input.length, tipsList.total, tipsList.tips);
     }
 }

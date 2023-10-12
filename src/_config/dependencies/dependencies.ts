@@ -5,9 +5,9 @@ import UserRepositoryPostgres from '../../user/server-side/repositories/userRepo
 import postgres, { Sql } from 'postgres';
 import process from 'process';
 import AuthUserUseCase from '../../user/domain/use_cases/authUserUseCase';
-import TipsRepositoryInterface from "../../tips/domain/ports/tipsRepositoryInterface";
-import TipsRepositoryPostgres from "../../tips/server-side/repositories/tipsRepositoryPostgres";
-import ListTipsUseCase from "../../tips/domain/use_cases/listTipsUseCase";
+import TipsRepositoryInterface from '../../tips/domain/ports/tipsRepositoryInterface';
+import TipsRepositoryPostgres from '../../tips/server-side/repositories/tipsRepositoryPostgres';
+import ListTipsUseCase from '../../tips/domain/use_cases/listTipsUseCase';
 
 dependencyContainer.set<Sql>('sql', () => {
     return postgres({
