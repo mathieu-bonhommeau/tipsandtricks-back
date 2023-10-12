@@ -3,8 +3,8 @@ import Tips from '../../models/Tips';
 import TipsRepositoryInMemory from '../../../server-side/repositories/tipsRepositoryInMemory';
 import TipsTestBuilder from './TipsTestBuilder';
 import * as dotenv from 'dotenv';
-import {faker} from "@faker-js/faker";
-import PaginatedResponse from "../../../../_common/domain/models/paginatedResponse";
+import { faker } from '@faker-js/faker';
+import PaginatedResponse from '../../../../_common/domain/models/paginatedResponse';
 dotenv.config();
 
 describe('Return tips list', () => {
@@ -17,33 +17,41 @@ describe('Return tips list', () => {
     });
 
     afterEach(() => {
-        tipsRepository.clear()
-    })
+        tipsRepository.clear();
+    });
 
     test('can return a list of tips in a paginated response', async () => {
         const expectedTips = sut.givenAListOfTips();
-        const expectedResponse = sut.buildAPaginatedResponse(1, 50, expectedTips)
+        const expectedResponse = sut.buildAPaginatedResponse(1, 50, expectedTips);
 
-        const listOfTip = await new ListTipsUseCase(tipsRepository).getList({page: 1, length: 50});
+        const listOfTip = await new ListTipsUseCase(tipsRepository).getList({ page: 1, length: 50 });
         expect(listOfTip).toEqual(expectedResponse);
-
     });
 
-    test('can return an errors if there is no tips in bdd', async ()     => {
-        const expectedResponse = sut.buildAPaginatedResponse(1, 50, [])
+    test('can return an errors if there is no tips in bdd', async () => {
+        const expectedResponse = sut.buildAPaginatedResponse(1, 50, []);
 
-        const listOfTips = await new ListTipsUseCase(tipsRepository).getList({page: 1, length: 50});
-        expect(listOfTips).toEqual(expectedResponse)
+        const listOfTips = await new ListTipsUseCase(tipsRepository).getList({ page: 1, length: 50 });
+        expect(listOfTips).toEqual(expectedResponse);
     });
 
-    test('can returns the first 10 tips when page = 1 and length = 10', async () => {
+    test.each`
+        page | length
+        ${1} | ${10}
+        ${2} | ${14}
+        ${4} | ${3}
+    `('can returns $length tips in the page $page', async ({ page, length }) => {
         const execptedlistOfTips = sut.givenAListOfTips();
-        const expectedResponse = sut.buildAPaginatedResponse(1, 10, execptedlistOfTips.slice(0, 10))
+        const expectedResponse = sut.buildAPaginatedResponse(
+            page,
+            length,
+            execptedlistOfTips.slice((page - 1) * length, length * page),
+        );
 
-        const listOfTips = await new ListTipsUseCase(tipsRepository).getList({page: 1, length: 10});
-        expect(listOfTips.data.length).toEqual(10)
-        expect(listOfTips).toEqual(expectedResponse)
-    })
+        const listOfTips = await new ListTipsUseCase(tipsRepository).getList({ page: page, length: length });
+        expect(listOfTips.data.length).toEqual(length);
+        expect(listOfTips).toEqual(expectedResponse);
+    });
 });
 
 class SUT {
@@ -54,12 +62,12 @@ class SUT {
 
     givenATips(): Tips {
         const tips = this._tipsTestBuilder
-            .withTitle(faker.lorem.words({ min: 2, max: 4  }))
-            .withCommand(faker.lorem.words({ min: 3, max: 9  }))
+            .withTitle(faker.lorem.words({ min: 2, max: 4 }))
+            .withCommand(faker.lorem.words({ min: 3, max: 9 }))
             .withDescription(faker.lorem.paragraph({ min: 1, max: 3 }))
             .buildTips();
         this._tipsRepositoryInMemory.setTips(tips);
-        return tips
+        return tips;
     }
 
     givenAListOfTips(): Array<Tips> {
@@ -68,15 +76,10 @@ class SUT {
             listOfTips.push(this.givenATips());
         }
 
-        return listOfTips
+        return listOfTips;
     }
 
     buildAPaginatedResponse(page: number, length: number, tips: Tips[]): PaginatedResponse<Tips> {
-        return new PaginatedResponse<Tips>(
-            page,
-            length,
-            this._tipsRepositoryInMemory.tipsInMemory.length,
-            tips
-        )
+        return new PaginatedResponse<Tips>(page, length, this._tipsRepositoryInMemory.tipsInMemory.length, tips);
     }
 }
