@@ -14,6 +14,7 @@ app.use(cookieParser());
 
 const corsOptions = {
     origin: process.env.WEBAPP_URL || 'http://localhost:3000',
+    credentials: true,
 };
 app.use(cors(corsOptions));
 

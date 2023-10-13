@@ -76,7 +76,7 @@ describe('Login a user', () => {
     describe('Check refresh token', () => {
         test('return true if the refresh_token used is the same as that recorded in bdd', async () => {
             const userLogged = await sut.givenALoggedUser();
-            const res = await new AuthUserUseCase(userRepository).checkRefreshToken(
+            const res = await new AuthUserUseCase(userRepository).checkValidityRefreshToken(
                 userLogged.user.email,
                 userLogged.tokens.refresh_token,
             );
@@ -85,7 +85,7 @@ describe('Login a user', () => {
 
         test('return false if refresh_token used is not the same as that recorded in bdd', async () => {
             const userLogged = await sut.givenALoggedUser();
-            const res = await new AuthUserUseCase(userRepository).checkRefreshToken(
+            const res = await new AuthUserUseCase(userRepository).checkValidityRefreshToken(
                 userLogged.user.email,
                 'invalid_token',
             );
@@ -109,11 +109,71 @@ describe('Login a user', () => {
         test('throw error if user does not exist', async () => {
             try {
                 await sut.givenALoggedUser();
-                await new AuthUserUseCase(userRepository).revokeRefreshToken(faker.internet.email())
+                await new AuthUserUseCase(userRepository).revokeRefreshToken(faker.internet.email());
                 //This expect breaks the test because it must throw an error
-                expect(true).toBe(false)
+                expect(true).toBe(false);
             } catch (err) {
                 expect(true).toBe(true);
+            }
+        });
+    });
+
+    describe('Verify tokens', () => {
+        test('return the user if the access token is ok', async () => {
+            const expectedUser = await sut.givenALoggedUser();
+            const user = new AuthUserUseCase(userRepository).verifyAccessToken(expectedUser.tokens.access_token);
+            expect(user.id).toEqual(expectedUser.user.id);
+        });
+
+        test('return undefined if the access token is not ok', async () => {
+            try {
+                await sut.givenALoggedUser();
+                new AuthUserUseCase(userRepository).verifyAccessToken(sut.getFakeAccessToken());
+                expect(true).toBe(false);
+            } catch (err) {
+                expect(true).toEqual(true);
+            }
+        });
+
+        test('return the email if the refresh token is ok', async () => {
+            const expectedUser = await sut.givenALoggedUser();
+            const email = await new AuthUserUseCase(userRepository).verifyRefreshToken(
+                expectedUser.tokens.refresh_token,
+            );
+            expect(email).toEqual(expectedUser.user.email);
+        });
+
+        test('return undefined if the access token is not ok', async () => {
+            try {
+                await sut.givenALoggedUser();
+                await new AuthUserUseCase(userRepository).verifyRefreshToken(sut.getFakeRefreshToken());
+                expect(true).toBe(false);
+            } catch (err) {
+                expect(true).toEqual(true);
+            }
+        });
+    });
+
+    describe('Reconnect the user', () => {
+        test('reconnect and return the user if the access token is ok, new tokens are created', async () => {
+            const expectedUser = await sut.givenALoggedUser();
+            const user = await new AuthUserUseCase(userRepository).tryReconnect(expectedUser.tokens);
+            expect(user.user.id).toEqual(expectedUser.user.id);
+        });
+
+        test('reconnect and return the user if the access token is not valid and the refresh token is ok, new tokens are created', async () => {
+            const expectedUser = await sut.givenALoggedUserWithBadAccessToken();
+            const user = await new AuthUserUseCase(userRepository).tryReconnect(expectedUser.tokens);
+            expect(user.user.id).toEqual(expectedUser.user.id);
+        });
+
+        test('throw an error if both access_token and refresh_token are invalid', async () => {
+            try {
+                const expectedUser = await sut.givenALoggedUserWithBadTokens();
+                await new AuthUserUseCase(userRepository).tryReconnect(expectedUser.tokens);
+                expect(true).toBe(false);
+            } catch (err) {
+                expect(true).toEqual(true);
             }
         });
     });
@@ -152,5 +212,34 @@ class SUT {
         const inputLoginUser = this.givenAnInputLoginUser();
         this.givenAUser();
         return (await new AuthUserUseCase(this._userRepositoryInMemory).login(inputLoginUser)) as UserLogged;
+    }
+
+    async givenALoggedUserWithBadAccessToken(): Promise<UserLogged> {
+        const inputLoginUser = this.givenAnInputLoginUser();
+        this.givenAUser();
+        const userLogged = (await new AuthUserUseCase(this._userRepositoryInMemory).login(
+            inputLoginUser,
+        )) as UserLogged;
+        userLogged.tokens.access_token = this.getFakeAccessToken();
+        return userLogged;
+    }
+
+    async givenALoggedUserWithBadTokens(): Promise<UserLogged> {
+        const inputLoginUser = this.givenAnInputLoginUser();
+        this.givenAUser();
+        const userLogged = (await new AuthUserUseCase(this._userRepositoryInMemory).login(
+            inputLoginUser,
+        )) as UserLogged;
+        userLogged.tokens.access_token = this.getFakeAccessToken();
+        userLogged.tokens.refresh_token = this.getFakeRefreshToken();
+        return userLogged;
+    }
+
+    getFakeAccessToken(): string {
+        return `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjo2LCJlbWFpbCI6InRlc3QxQHRlc3QuY29tIiwidXNlcm5hbWUiOiJ1c2VybmFtZXRlc3QiLCJyb2xlcyI6bnVsbCwiY3JlYXRlZF9hdCI6IjIwMjMtMTAtMTJUMTU6Mjk6MjYuMzcwWiIsInVwZGF0ZWRfYXQiOm51bGx9LCJpYXQiOjE2OTcxNDE1MzEsImV4cCI6MTY5NzE0MTU0MX0.34Iy0VivtR6VjQpLuiOGLrT2R0adXNfRbKW0dpEz3w4`;
+    }
+
+    getFakeRefreshToken(): string {
+        return `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoidGVzdDFAdGVzdC5jb20iLCJpYXQiOjE2OTcxNDE1MzEsImV4cCI6MTY5NzE0MTU0MX0.VL1pzoZM9MmBEE_uWn2NKABx5AkztoaHr768zUgZBdY`;
     }
 }

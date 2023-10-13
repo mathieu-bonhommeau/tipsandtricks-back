@@ -4,6 +4,7 @@ import AuthUserUseCase from '../../domain/use_cases/authUserUseCase';
 import { JwtToken, UserLogged } from '../../domain/models/User';
 import { RequestLogged } from '../../../_common/client-side/types/requestLogged';
 import * as dotenv from 'dotenv';
+import AuthError from '../../../_common/domain/errors/authError';
 dotenv.config();
 
 export default class AuthController {
@@ -51,21 +52,13 @@ export default class AuthController {
             const inputLoginUser = new InputLoginUser(req.body.email, req.body.password);
             const data = (await this._authUserUseCase.login(inputLoginUser)) as UserLogged;
 
-            const today = new Date();
-
-            res.cookie('ACCESS_TOKEN', `${data.tokens.access_token}`, {
-                httpOnly: true,
-                sameSite: true,
-                secure: process.env.ENVIRONNMENT === 'production',
-                expires: new Date(today.setHours(today.getHours() + 24)),
-            });
-            res.cookie('REFRESH_TOKEN', `${data.tokens.refresh_token}`, {
-                httpOnly: true,
-                sameSite: true,
-                secure: process.env.ENVIRONNMENT === 'production',
-                expires: new Date(today.setMonth(today.getMonth() + 1)),
-                path: '/api/refresh-token',
-            });
+            res.cookie('ACCESS_TOKEN', data.tokens.access_token, { ...this._authUserUseCase.generateCookies() })
+                .cookie('REFRESH_TOKEN', data.tokens.refresh_token, {
+                    ...this._authUserUseCase.generateCookies('/api/refresh-token'),
+                })
+                .cookie('REFRESH_TOKEN', data.tokens.refresh_token, {
+                    ...this._authUserUseCase.generateCookies('/api/reconnect'),
+                });
 
             return res.status(200).send({
                 data: data.user,
@@ -111,22 +104,13 @@ export default class AuthController {
         try {
             const tokens: JwtToken = await this._authUserUseCase.refreshToken(req.email);
 
-            const today = new Date();
-
-            res.cookie('ACCESS_TOKEN', `${tokens.access_token}`, {
-                httpOnly: true,
-                sameSite: true,
-                secure: process.env.ENVIRONNMENT === 'production',
-                expires: new Date(today.setHours(today.getHours() + 24)),
-            });
-
-            res.cookie('REFRESH_TOKEN', `${tokens.refresh_token}`, {
-                httpOnly: true,
-                sameSite: true,
-                secure: process.env.ENVIRONNMENT === 'production',
-                expires: new Date(today.setMonth(today.getMonth() + 1)),
-                path: '/api/refresh-token',
-            });
+            res.cookie('ACCESS_TOKEN', tokens.access_token, { ...this._authUserUseCase.generateCookies() })
+                .cookie('REFRESH_TOKEN', tokens.refresh_token, {
+                    ...this._authUserUseCase.generateCookies('/api/refresh-token'),
+                })
+                .cookie('REFRESH_TOKEN', tokens.refresh_token, {
+                    ...this._authUserUseCase.generateCookies('/api/reconnect'),
+                });
 
             return res.status(200).send({
                 data: 'Tokens regenerate with success',
@@ -190,11 +174,31 @@ export default class AuthController {
      */
     public async reconnect(req: RequestLogged, res: Response, next: NextFunction) {
         try {
+            const jwtTokens = new JwtToken(req.cookies['ACCESS_TOKEN'] || null, req.cookies['REFRESH_TOKEN'] || null);
+
+            const userLogged = await this._authUserUseCase.tryReconnect(jwtTokens);
+            if (userLogged) {
+                res.cookie('ACCESS_TOKEN', userLogged.tokens.access_token, {
+                    ...this._authUserUseCase.generateCookies(),
+                })
+                    .cookie('REFRESH_TOKEN', userLogged.tokens.refresh_token, {
+                        ...this._authUserUseCase.generateCookies('/api/refresh-token'),
+                    })
+                    .cookie('REFRESH_TOKEN', userLogged.tokens.refresh_token, {
+                        ...this._authUserUseCase.generateCookies('/api/reconnect'),
+                    });
+
+                return res.status(200).send({
+                    data: userLogged.user,
+                });
+            }
+
             res.status(200).send({
-                data: req.user,
+                data: null,
             });
+            next();
         } catch (err) {
-            next(err);
+            throw new AuthError('Authentification error');
         }
     }
 }
