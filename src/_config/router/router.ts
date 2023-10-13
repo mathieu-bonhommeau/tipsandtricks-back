@@ -13,17 +13,17 @@ router.get('/test', (_, res) => {
     res.send('Express running on test route !');
 });
 
-router.get(
-    '/api/reconnect',
-    new AuthMiddleware().authorize('ACCESS_TOKEN'),
-    async (req: RequestLogged, res: Response, next: NextFunction) => {
-        return await new AuthController(dependencyContainer.get<AuthUserUseCase>('AuthUserUseCase')).reconnect(
-            req,
-            res,
-            next,
-        );
-    },
-);
+router.get('/isConnected', new AuthMiddleware().authorize('ACCESS_TOKEN'), (_, res) => {
+    res.send('Express running on test route !');
+});
+
+router.get('/api/reconnect', async (req: RequestLogged, res: Response, next: NextFunction) => {
+    return await new AuthController(dependencyContainer.get<AuthUserUseCase>('AuthUserUseCase')).reconnect(
+        req,
+        res,
+        next,
+    );
+});
 
 router.post('/api/register', async (req: RequestLogged, res: Response, next: NextFunction) => {
     return await new RegisterController(dependencyContainer.get<RegisterUserUseCase>('RegisterUserUseCase')).register(

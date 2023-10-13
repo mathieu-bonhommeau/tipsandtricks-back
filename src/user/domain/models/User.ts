@@ -51,8 +51,8 @@ export default class User {
 
 export class JwtToken {
     constructor(
-        public access_token: string,
-        public refresh_token: string,
+        public access_token: string | null,
+        public refresh_token: string | null,
     ) {}
 }
 
