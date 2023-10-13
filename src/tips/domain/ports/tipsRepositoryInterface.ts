@@ -1,5 +1,5 @@
 import Tips from '../models/Tips';
-import InputTips from "../models/inputTips";
+import InputTips from '../models/inputTips';
 
 export type TipsList = {
     tips: Tips[];

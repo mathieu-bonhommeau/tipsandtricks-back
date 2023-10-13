@@ -45,5 +45,4 @@ dependencyContainer.set<CreateTipsUseCase>('CreateTipsUseCase', () => {
     return new CreateTipsUseCase(dependencyContainer.get<TipsRepositoryInterface>('TipsRepository'));
 });
 
-
 export default dependencyContainer;

@@ -1,7 +1,7 @@
 import Tips from '../../domain/models/Tips';
 import { Row, Sql } from 'postgres';
 import TipsRepositoryInterface, { TipsList } from '../../domain/ports/tipsRepositoryInterface';
-import InputTips from "../../domain/models/inputTips";
+import InputTips from '../../domain/models/inputTips';
 
 export default class TipsRepositoryPostgres implements TipsRepositoryInterface {
     constructor(private readonly _sql: Sql) {}

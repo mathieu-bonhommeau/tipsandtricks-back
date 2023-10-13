@@ -2,7 +2,6 @@ import { NextFunction, Response } from 'express';
 import CreateTipsUseCase from '../../domain/use_cases/createTipsUseCase';
 import InputTips from '../../domain/models/inputTips';
 import { RequestLogged } from '../../../_common/client-side/types/requestLogged';
-import * as jwt from 'jsonwebtoken';
 
 export default class createTipsController {
     constructor(private readonly _createTipsUseCase: CreateTipsUseCase) {}

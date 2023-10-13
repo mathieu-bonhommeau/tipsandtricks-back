@@ -109,9 +109,9 @@ describe('Login a user', () => {
         test('throw error if user does not exist', async () => {
             try {
                 await sut.givenALoggedUser();
-                await new AuthUserUseCase(userRepository).revokeRefreshToken(faker.internet.email())
+                await new AuthUserUseCase(userRepository).revokeRefreshToken(faker.internet.email());
                 //This expect breaks the test because it must throw an error
-                expect(true).toBe(false)
+                expect(true).toBe(false);
             } catch (err) {
                 expect(true).toBe(true);
             }

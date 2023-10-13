@@ -1,15 +1,15 @@
 import { NextFunction, Response, Router } from 'express';
 import RegisterUserUseCase from '../../user/domain/use_cases/registerUserUseCase';
-import ListTipsUseCase from "../../tips/domain/use_cases/listTipsUseCase";
-import CreateTipsUseCase from "../../tips/domain/use_cases/createTipsUseCase";
+import ListTipsUseCase from '../../tips/domain/use_cases/listTipsUseCase';
+import CreateTipsUseCase from '../../tips/domain/use_cases/createTipsUseCase';
 import dependencyContainer from '../dependencies/dependencies';
 import AuthUserUseCase from '../../user/domain/use_cases/authUserUseCase';
 import RegisterController from '../../user/client-side/controllers/registerController';
 import AuthController from '../../user/client-side/controllers/authController';
 import { RequestLogged } from '../../_common/client-side/types/requestLogged';
 import AuthMiddleware from '../../_common/client-side/middlewares/authMiddleware';
-import ListTipsController from "../../tips/client-side/controllers/listTipsController";
-import createTipsController from "../../tips/client-side/controllers/createTipsController";
+import ListTipsController from '../../tips/client-side/controllers/listTipsController';
+import createTipsController from '../../tips/client-side/controllers/createTipsController';
 
 const router = Router();
 

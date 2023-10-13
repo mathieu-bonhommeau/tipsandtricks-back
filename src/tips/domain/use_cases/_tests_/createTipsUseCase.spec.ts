@@ -1,16 +1,10 @@
-import ListTipsUseCase from '../listTipsUseCase';
 import Tips from '../../models/Tips';
 import TipsRepositoryInMemory from '../../../server-side/repositories/tipsRepositoryInMemory';
 import TipsTestBuilder from './TipsTestBuilder';
 import * as dotenv from 'dotenv';
 import { faker } from '@faker-js/faker';
-import PaginatedResponse from '../../../../_common/domain/models/paginatedResponse';
-import InputRegisterUser from "../../../../user/domain/models/inputRegisterUser";
-import InputTips from "../../models/inputTips";
-import CreateTipsUseCase from "../../../../tips/domain/use_cases/createTipsUseCase";
-import RegisterUserUseCase from "../../../../user/domain/use_cases/registerUserUseCase";
-import UserRepositoryInMemory from "../../../../user/server-side/repositories/userRepositoryInMemory";
-import InputError from "../../../../_common/domain/errors/inputError";
+import InputTips from '../../models/inputTips';
+import CreateTipsUseCase from '../../../../tips/domain/use_cases/createTipsUseCase';
 dotenv.config();
 
 describe('Return a tips', () => {

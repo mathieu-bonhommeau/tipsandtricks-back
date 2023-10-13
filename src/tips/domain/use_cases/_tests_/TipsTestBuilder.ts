@@ -1,7 +1,6 @@
 import Tips from '../../models/Tips';
 import * as dotenv from 'dotenv';
-import InputRegisterUser from "../../../../user/domain/models/inputRegisterUser";
-import InputTips from "../../models/inputTips";
+import InputTips from '../../models/inputTips';
 dotenv.config();
 
 export default class TipsTestBuilder {
