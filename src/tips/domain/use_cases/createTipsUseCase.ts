@@ -35,33 +35,18 @@ export default class ListTipsUseCase implements listTipsRepositoryInterface {
         for (const [inputKey, value] of Object.entries(inputTipsData)) {
             switch (inputKey) {
                 case 'title':
-                    isValid.push(this._checkTitleFormat(value));
-                    break;
-                case 'description':
-                    isValid.push(this._checkDescriptionFormat(value));
+                    isValid.push(this._checkFormat(value));
                     break;
                 case 'command':
-                    isValid.push(this._checkCommandFormat(value));
+                    isValid.push(this._checkFormat(value));
                     break;
             }
         }
-
         return isValid.every((item) => item);
     }
 
-    public _checkTitleFormat(description: string): boolean {
-        // A améliorer ?
+    public _checkFormat(value: string): boolean {
         const regex = /\w+/g;
-        return regex.test(description);
-    }
-
-    public _checkDescriptionFormat(description: string): boolean {
-        const regex = /\w+/g;
-        return regex.test(description);
-    }
-
-    public _checkCommandFormat(command: string): boolean {
-        const regex = /\w+/g;
-        return regex.test(command);
+        return regex.test(value);
     }
 }
