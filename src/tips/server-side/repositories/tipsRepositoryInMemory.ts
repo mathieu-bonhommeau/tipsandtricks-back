@@ -27,12 +27,13 @@ export default class TipsRepositoryInMemory implements TipsRepositoryInterface {
         return null;
     }
 
-    async getList(page: number, length: number): Promise<TipsList> {
+    async getList(userId: number, page: number, length: number): Promise<TipsList> {
         const start = length * (page - 1);
         const end = length * page;
+        const tips = this.tipsInMemory.filter((element) => element.user_id === userId);
         return {
-            tips: this.tipsInMemory.slice(start, end),
-            total: this.tipsInMemory.length,
+            tips: tips.slice(start, end),
+            total: tips.length,
         };
     }
 

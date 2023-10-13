@@ -5,15 +5,15 @@ import PaginatedResponse from '../../../_common/domain/models/paginatedResponse'
 import PaginatedInput from '../../../_common/domain/models/paginatedInput';
 dotenv.config();
 
-export interface listTipsRepositoryInterface {
-    getList(input: PaginatedInput): Promise<PaginatedResponse<Tips>>;
+export interface ListTipsUsecaseInterface {
+    getList(userId: number, input: PaginatedInput): Promise<PaginatedResponse<Tips>>;
 }
 
-export default class ListTipsUseCase implements listTipsRepositoryInterface {
+export default class ListTipsUseCase implements ListTipsUsecaseInterface {
     constructor(private readonly _tipsRepository: tipsRepositoryInterface) {}
 
-    async getList(input: PaginatedInput): Promise<PaginatedResponse<Tips>> {
-        const tipsList = await this._tipsRepository.getList(input.page, input.length);
+    async getList(userId: number, input: PaginatedInput): Promise<PaginatedResponse<Tips>> {
+        const tipsList = await this._tipsRepository.getList(userId, input.page, input.length);
         return new PaginatedResponse(input.page, input.length, tipsList.total, tipsList.tips);
     }
 }

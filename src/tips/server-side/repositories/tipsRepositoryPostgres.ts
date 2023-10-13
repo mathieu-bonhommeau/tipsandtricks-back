@@ -17,14 +17,15 @@ export default class TipsRepositoryPostgres implements TipsRepositoryInterface {
         });
     }
 
-    async getList(page: number, length: number): Promise<TipsList> {
+    async getList(userId: number, page: number, length: number): Promise<TipsList> {
         const start = length * (page - 1);
 
-        const total = await this._sql`select count(*) as total from "tips"`.then((rows) => {
+        const total = await this._sql`select count(*) as total from "tips" where "user_id" = ${userId}`.then((rows) => {
             return rows[0].total;
         });
 
-        const tips = await this._sql`select * from "tips" offset ${start} limit ${length}`.then((rows) => {
+        const tips = await this
+            ._sql`select * from "tips"  where "user_id" = ${userId} offset ${start} limit ${length}`.then((rows) => {
             if (rows.length > 0) {
                 return rows.map((row) => TipsRepositoryPostgresFactory.create(row));
             }
