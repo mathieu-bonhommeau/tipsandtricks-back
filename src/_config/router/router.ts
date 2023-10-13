@@ -8,10 +8,10 @@ import AuthController from '../../user/client-side/controllers/authController';
 import { RequestLogged } from '../../_common/client-side/types/requestLogged';
 import AuthMiddleware from '../../_common/client-side/middlewares/authMiddleware';
 import ListTipsController from '../../tips/client-side/controllers/listTipsController';
-import CreateTipsUseCase from "../../tips/domain/use_cases/createTipsUseCase";
-import createTipsController from "../../tips/client-side/controllers/createTipsController";
-import updateTipsController from "../../tips/client-side/controllers/updateTipsController";
-import UpdateTipsUseCase from "../../tips/domain/use_cases/updateTipsUseCase";
+import CreateTipsUseCase from '../../tips/domain/use_cases/createTipsUseCase';
+import createTipsController from '../../tips/client-side/controllers/createTipsController';
+import updateTipsController from '../../tips/client-side/controllers/updateTipsController';
+import UpdateTipsUseCase from '../../tips/domain/use_cases/updateTipsUseCase';
 
 const router = Router();
 

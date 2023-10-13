@@ -1,5 +1,3 @@
-import InputError from "./inputError";
-
 export default class AuthError extends Error {
     private _statusCode: number = 401;
     _code: string = 'AUTH_ERROR';

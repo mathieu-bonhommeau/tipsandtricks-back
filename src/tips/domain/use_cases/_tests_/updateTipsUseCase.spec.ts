@@ -2,10 +2,8 @@ import Tips from '../../models/Tips';
 import TipsRepositoryInMemory from '../../../server-side/repositories/tipsRepositoryInMemory';
 import TipsTestBuilder from './TipsTestBuilder';
 import * as dotenv from 'dotenv';
-import { faker } from '@faker-js/faker';
 import InputTips from '../../models/inputTips';
-import CreateTipsUseCase from '../../../../tips/domain/use_cases/createTipsUseCase';
-import UpdateTipsUseCase from "../updateTipsUseCase";
+import UpdateTipsUseCase from '../updateTipsUseCase';
 dotenv.config();
 
 describe('Return a modified tips', () => {
@@ -33,7 +31,7 @@ describe('Return a modified tips', () => {
         try {
             const inputTips = sut.givenAnInputTips();
             sut.givenAnError();
-            const tipsJustUpdated = await new UpdateTipsUseCase(tipsRepository).update(1, 1, inputTips);
+            await new UpdateTipsUseCase(tipsRepository).update(1, 1, inputTips);
 
             //This expect breaks the test because it must throw an error
             expect(false).toEqual(true);
@@ -46,7 +44,7 @@ describe('Return a modified tips', () => {
     test('an input must have the good format', async () => {
         try {
             const inputTips = sut.givenAnInputTipsWithBadInputFormat();
-            const tipsJustUpdated = await new UpdateTipsUseCase(tipsRepository).update(1, 1, inputTips);
+            await new UpdateTipsUseCase(tipsRepository).update(1, 1, inputTips);
 
             //This expect breaks the test because it must throw an error
             expect(false).toEqual(true);
@@ -59,9 +57,9 @@ describe('Return a modified tips', () => {
     test('return an error message if user doesnt match', async () => {
         try {
             const inputTips = sut.givenAnInputTips();
-            const expectedTips = sut.givenATips(inputTips);
+            sut.givenATips(inputTips);
 
-            const tipsJustUpdated = await new UpdateTipsUseCase(tipsRepository).update(1, 2, inputTips);
+            await new UpdateTipsUseCase(tipsRepository).update(1, 2, inputTips);
 
             //This expect breaks the test because it must throw an error
             expect(false).toEqual(true);

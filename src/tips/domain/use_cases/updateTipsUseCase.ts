@@ -4,18 +4,18 @@ import Tips from '../models/Tips';
 import InputTips from '../models/inputTips';
 import InputError from '../../../_common/domain/errors/inputError';
 import debug from 'debug';
-import AuthError from "../../../_common/domain/errors/authError";
+import AuthError from '../../../_common/domain/errors/authError';
 dotenv.config();
 const logger = debug('tipsandtricks:registerUserUseCase');
 
 export interface updateTipsRepositoryInterface {
-    update(tipsId : number, userId: number, input: InputTips): Promise<Tips | number>;
+    update(tipsId: number, userId: number, input: InputTips): Promise<Tips | number>;
 }
 
 export default class UpdateTipsUseCase implements updateTipsRepositoryInterface {
     constructor(private readonly _tipsRepository: tipsRepositoryInterface) {}
 
-    async update(tipsId : number, userId: number, input: InputTips): Promise<Tips | number> {
+    async update(tipsId: number, userId: number, input: InputTips): Promise<Tips | number> {
         if (!tipsId) {
             logger('tipsId invalid');
             throw new InputError('Updated tips failed !');

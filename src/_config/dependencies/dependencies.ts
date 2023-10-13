@@ -9,7 +9,7 @@ import TipsRepositoryInterface from '../../tips/domain/ports/tipsRepositoryInter
 import TipsRepositoryPostgres from '../../tips/server-side/repositories/tipsRepositoryPostgres';
 import ListTipsUseCase from '../../tips/domain/use_cases/listTipsUseCase';
 import CreateTipsUseCase from '../../tips/domain/use_cases/createTipsUseCase';
-import UpdateTipsUseCase from "../../tips/domain/use_cases/updateTipsUseCase";
+import UpdateTipsUseCase from '../../tips/domain/use_cases/updateTipsUseCase';
 
 dependencyContainer.set<Sql>('sql', () => {
     return postgres({

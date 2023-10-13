@@ -4,7 +4,7 @@ import TipsTestBuilder from './TipsTestBuilder';
 import * as dotenv from 'dotenv';
 import { faker } from '@faker-js/faker';
 import InputTips from '../../models/inputTips';
-import CreateTipsUseCase from "../createTipsUseCase";
+import CreateTipsUseCase from '../createTipsUseCase';
 dotenv.config();
 
 describe('Return a tips', () => {

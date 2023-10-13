@@ -2,8 +2,6 @@ import Tips from '../../domain/models/Tips';
 import { Row, Sql } from 'postgres';
 import TipsRepositoryInterface, { TipsList } from '../../domain/ports/tipsRepositoryInterface';
 import InputTips from '../../domain/models/inputTips';
-import debug from "debug";
-const logger = debug('tipsandtricks:registerUserUseCase');
 
 export default class TipsRepositoryPostgres implements TipsRepositoryInterface {
     constructor(private readonly _sql: Sql) {}
@@ -19,17 +17,14 @@ export default class TipsRepositoryPostgres implements TipsRepositoryInterface {
         });
     }
 
-    async update(tipsId : number, userId: number, input: InputTips): Promise<Tips | number> {
-
+    async update(tipsId: number, userId: number, input: InputTips): Promise<Tips | number> {
         const tips_userId = await this._sql`select user_id from "tips" where "id" = ${tipsId}`.then((rows) => {
             return rows[0].user_id;
         });
 
-        if(userId !== tips_userId) return 401;
+        if (userId !== tips_userId) return 401;
 
-        return this._sql`update "tips" set ${this._sql(
-            input,
-        )}  where "id" = ${tipsId} and "user_id" = ${userId}
+        return this._sql`update "tips" set ${this._sql(input)}  where "id" = ${tipsId} and "user_id" = ${userId}
             returning id, user_id, title, command, description, published_at, created_at, updated_at`.then((rows) => {
             if (rows.length > 0) {
                 return TipsRepositoryPostgresFactory.create(rows[0]);

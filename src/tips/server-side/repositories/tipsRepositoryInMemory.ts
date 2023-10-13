@@ -29,7 +29,7 @@ export default class TipsRepositoryInMemory implements TipsRepositoryInterface {
 
     async update(tipsId: number, userId: number, input: InputTips): Promise<Tips | number> {
         if (!this._error) {
-            if(this.tipsInMemory[tipsId - 1].user_id !== userId) return 401
+            if (this.tipsInMemory[tipsId - 1].user_id !== userId) return 401;
 
             this.tipsInMemory[tipsId - 1] = new Tips(
                 1,
@@ -40,7 +40,7 @@ export default class TipsRepositoryInMemory implements TipsRepositoryInterface {
                 new Date('2022-12-17T03:24:00'),
                 new Date('2022-12-17T03:24:00'),
                 null,
-            )
+            );
             return this.tipsInMemory[0];
         }
         return 400;
