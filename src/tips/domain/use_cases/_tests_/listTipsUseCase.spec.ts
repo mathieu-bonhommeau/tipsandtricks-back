@@ -20,18 +20,27 @@ describe('Return tips list', () => {
         tipsRepository.clear();
     });
 
-    test('can return a list of tips in a paginated response', async () => {
+    test('can return all user tips in a paginated response', async () => {
         const expectedTips = sut.givenAListOfTips();
-        const expectedResponse = sut.buildAPaginatedResponse(1, 50, expectedTips);
+        const expectedResponse = sut.buildAPaginatedResponse(1, sut.nbOfTips, expectedTips);
 
-        const listOfTip = await new ListTipsUseCase(tipsRepository).getList({ page: 1, length: 50 });
+        const listOfTip = await new ListTipsUseCase(tipsRepository).getList(1, { page: 1, length: sut.nbOfTips });
         expect(listOfTip).toEqual(expectedResponse);
     });
 
-    test('can return an errors if there is no tips in bdd', async () => {
-        const expectedResponse = sut.buildAPaginatedResponse(1, 50, []);
+    test('not returns another user tips in a paginated response', async () => {
+        const expectedTips = sut.givenAListOfTips();
+        sut.buildAPaginatedResponse(1, sut.nbOfTips, expectedTips);
 
-        const listOfTips = await new ListTipsUseCase(tipsRepository).getList({ page: 1, length: 50 });
+        const listOfTip = await new ListTipsUseCase(tipsRepository).getList(1, { page: 1, length: sut.nbOfTips });
+        const anotherUserTipsNb = listOfTip.data.filter((element) => element.user_id !== 1);
+        expect(anotherUserTipsNb.length).toEqual(0);
+    });
+
+    test('can return an errors if there is no tips in bdd', async () => {
+        const expectedResponse = sut.buildAPaginatedResponse(1, sut.nbOfTips, []);
+
+        const listOfTips = await new ListTipsUseCase(tipsRepository).getList(1, { page: 1, length: sut.nbOfTips });
         expect(listOfTips).toEqual(expectedResponse);
     });
 
@@ -48,7 +57,7 @@ describe('Return tips list', () => {
             execptedlistOfTips.slice((page - 1) * length, length * page),
         );
 
-        const listOfTips = await new ListTipsUseCase(tipsRepository).getList({ page: page, length: length });
+        const listOfTips = await new ListTipsUseCase(tipsRepository).getList(1, { page: page, length: length });
         expect(listOfTips.data.length).toEqual(length);
         expect(listOfTips).toEqual(expectedResponse);
     });
@@ -56,6 +65,7 @@ describe('Return tips list', () => {
 
 class SUT {
     private _tipsTestBuilder: TipsTestBuilder;
+    public nbOfTips: number = 100;
     constructor(private readonly _tipsRepositoryInMemory: TipsRepositoryInMemory) {
         this._tipsTestBuilder = new TipsTestBuilder();
     }
@@ -72,7 +82,7 @@ class SUT {
 
     givenAListOfTips(): Array<Tips> {
         const listOfTips = [];
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < this.nbOfTips; i++) {
             listOfTips.push(this.givenATips());
         }
 

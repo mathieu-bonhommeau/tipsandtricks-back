@@ -20,7 +20,7 @@ export default class AuthMiddleware {
                         request.user = dependencyContainer
                             .get<AuthUserUseCase>('AuthUserUseCase')
                             .verifyAccessToken(authCookies['ACCESS_TOKEN']);
-                        console.log(request.user);
+
                         if (!request.user) throw new AuthError('Access token not valid !');
                         return next();
                     }

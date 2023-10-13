@@ -7,6 +7,6 @@ export type TipsList = {
 };
 
 export default interface TipsRepositoryInterface {
-    getList(page: number, length: number): Promise<TipsList>;
+    getList(userId: number, page: number, length: number): Promise<TipsList>;
     create(input: InputTips): Promise<Tips>;
 }
