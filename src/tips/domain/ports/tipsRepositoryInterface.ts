@@ -9,4 +9,5 @@ export type TipsList = {
 export default interface TipsRepositoryInterface {
     getList(userId: number, page: number, length: number): Promise<TipsList>;
     create(input: InputTips): Promise<Tips>;
+    update(tipsId : number, userId: number, input: InputTips): Promise<Tips | number>;
 }

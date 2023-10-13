@@ -4,10 +4,11 @@ import TipsTestBuilder from './TipsTestBuilder';
 import * as dotenv from 'dotenv';
 import { faker } from '@faker-js/faker';
 import InputTips from '../../models/inputTips';
-import CreateTipsUseCase from "../createTipsUseCase";
+import CreateTipsUseCase from '../../../../tips/domain/use_cases/createTipsUseCase';
+import UpdateTipsUseCase from "../updateTipsUseCase";
 dotenv.config();
 
-describe('Return a tips', () => {
+describe('Return a modified tips', () => {
     let tipsRepository: TipsRepositoryInMemory;
     let sut: SUT;
 
@@ -20,37 +21,53 @@ describe('Return a tips', () => {
         tipsRepository.clear();
     });
 
-    test('can create a new tips', async () => {
+    test('can update a tips', async () => {
         const inputTips = sut.givenAnInputTips();
-        const expectedTips = sut.givenATips();
+        const expectedTips = sut.givenATips(inputTips);
 
-        const tipsJustCreated = await new CreateTipsUseCase(tipsRepository).create(inputTips);
-
-        expect(tipsJustCreated).toEqual(expectedTips);
+        const tipsJustUpdated = await new UpdateTipsUseCase(tipsRepository).update(1, 1, inputTips);
+        expect(tipsJustUpdated).toEqual(expectedTips);
     });
 
-    test('return an errors message if persist tips failed and return null', async () => {
+    test('return an error message if persist tips failed and return null', async () => {
         try {
             const inputTips = sut.givenAnInputTips();
             sut.givenAnError();
-            await new CreateTipsUseCase(tipsRepository).create(inputTips);
+            const tipsJustUpdated = await new UpdateTipsUseCase(tipsRepository).update(1, 1, inputTips);
 
             //This expect breaks the test because it must throw an error
             expect(false).toEqual(true);
         } catch (err) {
-            expect(err.message).toEqual('Create tips failed !');
+            expect(err._statusCode).toEqual(400);
+            expect(err.message).toEqual('Updated tips failed !');
         }
     });
 
     test('an input must have the good format', async () => {
         try {
             const inputTips = sut.givenAnInputTipsWithBadInputFormat();
-            await new CreateTipsUseCase(tipsRepository).create(inputTips);
+            const tipsJustUpdated = await new UpdateTipsUseCase(tipsRepository).update(1, 1, inputTips);
 
             //This expect breaks the test because it must throw an error
             expect(false).toEqual(true);
         } catch (err) {
-            expect(err.message).toEqual('Create tips failed !');
+            expect(err._statusCode).toEqual(400);
+            expect(err.message).toEqual('Updated tips failed !');
+        }
+    });
+
+    test('return an error message if user doesnt match', async () => {
+        try {
+            const inputTips = sut.givenAnInputTips();
+            const expectedTips = sut.givenATips(inputTips);
+
+            const tipsJustUpdated = await new UpdateTipsUseCase(tipsRepository).update(1, 2, inputTips);
+
+            //This expect breaks the test because it must throw an error
+            expect(false).toEqual(true);
+        } catch (err) {
+            expect(err._statusCode).toEqual(401);
+            expect(err.message).toEqual('Updated tips failed !');
         }
     });
 });
@@ -65,11 +82,11 @@ class SUT {
         return this._tipsTestBuilder.buildInputTips();
     }
 
-    givenATips(): Tips {
+    givenATips(input: InputTips): Tips {
         const tips = this._tipsTestBuilder
-            .withTitle(faker.lorem.words({ min: 2, max: 4 }))
-            .withCommand(faker.lorem.words({ min: 3, max: 9 }))
-            .withDescription(faker.lorem.paragraph({ min: 1, max: 3 }))
+            .withTitle(input.title)
+            .withCommand(input.command)
+            .withDescription(input.description)
             .buildTips();
         this._tipsRepositoryInMemory.setTips(tips);
         return tips;

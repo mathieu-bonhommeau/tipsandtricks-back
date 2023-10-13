@@ -1,7 +1,6 @@
 import { NextFunction, Response, Router } from 'express';
 import RegisterUserUseCase from '../../user/domain/use_cases/registerUserUseCase';
 import ListTipsUseCase from '../../tips/domain/use_cases/listTipsUseCase';
-import CreateTipsUseCase from '../../tips/domain/use_cases/createTipsUseCase';
 import dependencyContainer from '../dependencies/dependencies';
 import AuthUserUseCase from '../../user/domain/use_cases/authUserUseCase';
 import RegisterController from '../../user/client-side/controllers/registerController';
@@ -9,7 +8,10 @@ import AuthController from '../../user/client-side/controllers/authController';
 import { RequestLogged } from '../../_common/client-side/types/requestLogged';
 import AuthMiddleware from '../../_common/client-side/middlewares/authMiddleware';
 import ListTipsController from '../../tips/client-side/controllers/listTipsController';
-import createTipsController from '../../tips/client-side/controllers/createTipsController';
+import CreateTipsUseCase from "../../tips/domain/use_cases/createTipsUseCase";
+import createTipsController from "../../tips/client-side/controllers/createTipsController";
+import updateTipsController from "../../tips/client-side/controllers/updateTipsController";
+import UpdateTipsUseCase from "../../tips/domain/use_cases/updateTipsUseCase";
 
 const router = Router();
 
@@ -82,6 +84,18 @@ router.post(
     new AuthMiddleware().authorize('ACCESS_TOKEN'),
     async (req: RequestLogged, res: Response, next: NextFunction) => {
         return await new createTipsController(dependencyContainer.get<CreateTipsUseCase>('CreateTipsUseCase')).create(
+            req,
+            res,
+            next,
+        );
+    },
+);
+
+router.put(
+    '/api/tips/:tipsId',
+    new AuthMiddleware().authorize('ACCESS_TOKEN'),
+    async (req: RequestLogged, res: Response, next: NextFunction) => {
+        return await new updateTipsController(dependencyContainer.get<UpdateTipsUseCase>('UpdateTipsUseCase')).update(
             req,
             res,
             next,
