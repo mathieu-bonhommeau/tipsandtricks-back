@@ -1,5 +1,6 @@
 import Tips from '../../models/Tips';
 import * as dotenv from 'dotenv';
+import InputTips from '../../models/inputTips';
 dotenv.config();
 
 export default class TipsTestBuilder {
@@ -24,6 +25,10 @@ export default class TipsTestBuilder {
             this._created_at,
             this._updated_at,
         );
+    }
+
+    buildInputTips(): InputTips {
+        return new InputTips(this._title, this._command, this._description, this._user_id);
     }
 
     withTitle(title: string): TipsTestBuilder {
