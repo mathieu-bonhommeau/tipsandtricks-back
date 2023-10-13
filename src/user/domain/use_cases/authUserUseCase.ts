@@ -134,7 +134,7 @@ export default class AuthUserUseCase implements AuthUserUseCaseInterface {
             },
             process.env.JWT_SECRET_ACCESS,
             {
-                expiresIn: +process.env.JWT_ACCESS_EXPIRATION,
+                expiresIn: +process.env.JWT_ACCESS_EXPIRATION || 300,
             },
         );
 
@@ -144,7 +144,7 @@ export default class AuthUserUseCase implements AuthUserUseCaseInterface {
             },
             process.env.JWT_SECRET_REFRESH,
             {
-                expiresIn: +process.env.JWT_REFRESH_EXPIRATION,
+                expiresIn: +process.env.JWT_REFRESH_EXPIRATION || 86400,
             },
         );
         const isStored = await this._userRepository.setRefreshToken(user.id, refreshToken);
