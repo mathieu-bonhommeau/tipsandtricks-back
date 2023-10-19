@@ -12,11 +12,9 @@ export default class ErrorsHandler {
                 message: err.message,
             });
             logger(err.message);
-            logger(err.stack);
             return;
         }
         logger(err.message);
-        logger(err.stack);
         res.status(500).send({
             status: 500,
             code: err['code'] ?? '',
