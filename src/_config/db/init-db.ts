@@ -55,6 +55,6 @@ export class InitDb {
         .then(() => console.log('Migrations Success !'))
         .catch((err) => console.log('Migrations failed : ' + err.message));
     await new UsersFixtures(init.pg).givenSomeUsers(5);
-    await new TipsFixtures(init.pg).givenSomeTips(35);
+    await new TipsFixtures(init.pg).givenSomeTips(500);
     await init.pg.end();
 })();
