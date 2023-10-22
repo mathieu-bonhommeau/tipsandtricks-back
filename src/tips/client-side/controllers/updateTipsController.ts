@@ -1,7 +1,10 @@
 import { NextFunction, Response } from 'express';
-import InputTips from '../../domain/models/inputTips';
 import { RequestLogged } from '../../../_common/client-side/types/requestLogged';
 import UpdateTipsUseCase from '../../domain/use_cases/updateTipsUseCase';
+import InputUpdateTips from '../../domain/models/InputUpdateTips';
+import ParamError from '../../../_common/domain/errors/paramError';
+import debug from 'debug';
+const logger = debug('tipsandtricks:registerUserUseCase');
 
 export default class updateTipsController {
     constructor(private readonly _updateTipsUseCase: UpdateTipsUseCase) {}
@@ -20,7 +23,7 @@ export default class updateTipsController {
      *       content:
      *         application/json:
      *           schema:
-     *             $ref: '#/components/schemas/InputTips'
+     *             $ref: '#/components/schemas/InputCreateTips'
      *     responses:
      *       201:
      *         description: The updated tips.
@@ -41,8 +44,20 @@ export default class updateTipsController {
             const tipsId: number | null = req.params.tipsId ? +req.params.tipsId : null;
             const description: string | null = req.body.description === '' ? null : req.body.description;
 
-            const inputTips = new InputTips(req.body.title, req.body.command, description, req.user.id);
-            const data = await this._updateTipsUseCase.update(tipsId, req.user.id, inputTips);
+            if (!tipsId) {
+                logger('tipsId invalid');
+                throw new ParamError('Updated tips failed !');
+            }
+
+            const inputUpdateTips = new InputUpdateTips(
+                tipsId,
+                req.body.title,
+                req.body.command,
+                description,
+                req.user.id,
+            );
+
+            const data = await this._updateTipsUseCase.update(inputUpdateTips);
             return res.status(200).send({
                 data: data,
             });

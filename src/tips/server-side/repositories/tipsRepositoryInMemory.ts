@@ -1,14 +1,15 @@
 import TipsRepositoryInterface, { TipsList } from '../../domain/ports/tipsRepositoryInterface';
 import Tips from '../../domain/models/Tips';
 import * as dotenv from 'dotenv';
-import InputTips from '../../domain/models/inputTips';
+import InputCreateTips from '../../domain/models/inputCreateTips';
+import InputUpdateTips from '../../domain/models/InputUpdateTips';
 dotenv.config();
 
 export default class TipsRepositoryInMemory implements TipsRepositoryInterface {
     public tipsInMemory: Array<Tips> = [];
     private _error: boolean = false;
 
-    async create(input: InputTips): Promise<Tips | null> {
+    async create(input: InputCreateTips): Promise<Tips | null> {
         if (!this._error) {
             this.tipsInMemory.push(
                 new Tips(
@@ -27,11 +28,9 @@ export default class TipsRepositoryInMemory implements TipsRepositoryInterface {
         return null;
     }
 
-    async update(tipsId: number, userId: number, input: InputTips): Promise<Tips | number> {
+    async update(input: InputUpdateTips): Promise<Tips> {
         if (!this._error) {
-            if (this.tipsInMemory[tipsId - 1].user_id !== userId) return 401;
-
-            this.tipsInMemory[tipsId - 1] = new Tips(
+            this.tipsInMemory[input.id - 1] = new Tips(
                 1,
                 input.user_id,
                 input.title,
@@ -43,7 +42,7 @@ export default class TipsRepositoryInMemory implements TipsRepositoryInterface {
             );
             return this.tipsInMemory[0];
         }
-        return 400;
+        return null;
     }
 
     async getList(userId: number, page: number, length: number): Promise<TipsList> {

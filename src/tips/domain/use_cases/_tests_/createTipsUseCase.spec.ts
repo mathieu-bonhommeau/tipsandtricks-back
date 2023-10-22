@@ -3,7 +3,7 @@ import TipsRepositoryInMemory from '../../../server-side/repositories/tipsReposi
 import TipsTestBuilder from './TipsTestBuilder';
 import * as dotenv from 'dotenv';
 import { faker } from '@faker-js/faker';
-import InputTips from '../../models/inputTips';
+import InputCreateTips from '../../models/inputCreateTips';
 import CreateTipsUseCase from '../createTipsUseCase';
 dotenv.config();
 
@@ -61,8 +61,8 @@ class SUT {
         this._tipsTestBuilder = new TipsTestBuilder();
     }
 
-    givenAnInputTips(): InputTips {
-        return this._tipsTestBuilder.buildInputTips();
+    givenAnInputTips(): InputCreateTips {
+        return this._tipsTestBuilder.buildInputCreateTips();
     }
 
     givenATips(): Tips {
@@ -79,8 +79,8 @@ class SUT {
         return this._tipsRepositoryInMemory.setError();
     }
 
-    givenAnInputTipsWithBadInputFormat(): InputTips {
+    givenAnInputTipsWithBadInputFormat(): InputCreateTips {
         this._tipsTestBuilder.withTitle('');
-        return this._tipsTestBuilder.buildInputTips();
+        return this._tipsTestBuilder.buildInputCreateTips();
     }
 }

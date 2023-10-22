@@ -1,39 +1,29 @@
 import tipsRepositoryInterface from '../ports/tipsRepositoryInterface';
 import * as dotenv from 'dotenv';
 import Tips from '../models/Tips';
-import InputTips from '../models/inputTips';
+import InputCreateTips from '../models/inputCreateTips';
 import InputError from '../../../_common/domain/errors/inputError';
 import debug from 'debug';
-import AuthError from '../../../_common/domain/errors/authError';
+import InputUpdateTips from '../models/InputUpdateTips';
 dotenv.config();
 const logger = debug('tipsandtricks:registerUserUseCase');
 
 export interface updateTipsRepositoryInterface {
-    update(tipsId: number, userId: number, input: InputTips): Promise<Tips | number>;
+    update(input: InputUpdateTips): Promise<Tips>;
 }
 
 export default class UpdateTipsUseCase implements updateTipsRepositoryInterface {
     constructor(private readonly _tipsRepository: tipsRepositoryInterface) {}
 
-    async update(tipsId: number, userId: number, input: InputTips): Promise<Tips | number> {
-        if (!tipsId) {
-            logger('tipsId invalid');
-            throw new InputError('Updated tips failed !');
-        }
-
+    async update(input: InputUpdateTips): Promise<Tips> {
         if (!this.inputTipsValidateFormat(input)) {
             logger('format invalid');
             throw new InputError('Updated tips failed !');
         }
 
-        const tipsJustUpdated = await this._tipsRepository.update(tipsId, userId, input);
+        const tipsJustUpdated = await this._tipsRepository.update(input);
 
-        if (tipsJustUpdated === 401) {
-            logger('user invalid');
-            throw new AuthError('Updated tips failed !');
-        }
-
-        if (tipsJustUpdated === 400) {
+        if (!tipsJustUpdated) {
             logger('bdd error');
             throw new InputError('Updated tips failed !');
         }
@@ -41,7 +31,7 @@ export default class UpdateTipsUseCase implements updateTipsRepositoryInterface 
         return tipsJustUpdated;
     }
 
-    private inputTipsValidateFormat(inputTipsData: InputTips): boolean {
+    private inputTipsValidateFormat(inputTipsData: InputCreateTips): boolean {
         const isValid: boolean[] = [];
 
         for (const [inputKey, value] of Object.entries(inputTipsData)) {

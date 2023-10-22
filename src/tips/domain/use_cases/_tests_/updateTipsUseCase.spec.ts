@@ -2,8 +2,9 @@ import Tips from '../../models/Tips';
 import TipsRepositoryInMemory from '../../../server-side/repositories/tipsRepositoryInMemory';
 import TipsTestBuilder from './TipsTestBuilder';
 import * as dotenv from 'dotenv';
-import InputTips from '../../models/inputTips';
+import InputCreateTips from '../../models/inputCreateTips';
 import UpdateTipsUseCase from '../updateTipsUseCase';
+import InputUpdateTips from '../../models/InputUpdateTips';
 dotenv.config();
 
 describe('Return a modified tips', () => {
@@ -20,18 +21,21 @@ describe('Return a modified tips', () => {
     });
 
     test('can update a tips', async () => {
-        const inputTips = sut.givenAnInputTips();
-        const expectedTips = sut.givenATips(inputTips);
+        const inputCreateTips = sut.givenAnInputCreateTips();
+        sut.givenATips(inputCreateTips);
 
-        const tipsJustUpdated = await new UpdateTipsUseCase(tipsRepository).update(1, 1, inputTips);
+        const inputUpdateTips = sut.givenAnInputUpdateTips();
+        const expectedTips = sut.givenATips(inputUpdateTips);
+
+        const tipsJustUpdated = await new UpdateTipsUseCase(tipsRepository).update(inputUpdateTips);
         expect(tipsJustUpdated).toEqual(expectedTips);
     });
 
     test('return an error message if persist tips failed and return null', async () => {
         try {
-            const inputTips = sut.givenAnInputTips();
+            const inputUpdateTips = sut.givenAnInputUpdateTips();
             sut.givenAnError();
-            await new UpdateTipsUseCase(tipsRepository).update(1, 1, inputTips);
+            await new UpdateTipsUseCase(tipsRepository).update(inputUpdateTips);
 
             //This expect breaks the test because it must throw an error
             expect(false).toEqual(true);
@@ -43,28 +47,13 @@ describe('Return a modified tips', () => {
 
     test('an input must have the good format', async () => {
         try {
-            const inputTips = sut.givenAnInputTipsWithBadInputFormat();
-            await new UpdateTipsUseCase(tipsRepository).update(1, 1, inputTips);
+            const inputUpdateTips = sut.givenAnInputTipsWithBadInputFormat();
+            await new UpdateTipsUseCase(tipsRepository).update(inputUpdateTips);
 
             //This expect breaks the test because it must throw an error
             expect(false).toEqual(true);
         } catch (err) {
             expect(err._statusCode).toEqual(400);
-            expect(err.message).toEqual('Updated tips failed !');
-        }
-    });
-
-    test('return an error message if user doesnt match', async () => {
-        try {
-            const inputTips = sut.givenAnInputTips();
-            sut.givenATips(inputTips);
-
-            await new UpdateTipsUseCase(tipsRepository).update(1, 2, inputTips);
-
-            //This expect breaks the test because it must throw an error
-            expect(false).toEqual(true);
-        } catch (err) {
-            expect(err._statusCode).toEqual(401);
             expect(err.message).toEqual('Updated tips failed !');
         }
     });
@@ -76,11 +65,15 @@ class SUT {
         this._tipsTestBuilder = new TipsTestBuilder();
     }
 
-    givenAnInputTips(): InputTips {
-        return this._tipsTestBuilder.buildInputTips();
+    givenAnInputCreateTips(): InputCreateTips {
+        return this._tipsTestBuilder.buildInputCreateTips();
     }
 
-    givenATips(input: InputTips): Tips {
+    givenAnInputUpdateTips(): InputUpdateTips {
+        return this._tipsTestBuilder.buildInputUpdateTips();
+    }
+
+    givenATips(input: InputCreateTips): Tips {
         const tips = this._tipsTestBuilder
             .withTitle(input.title)
             .withCommand(input.command)
@@ -94,8 +87,8 @@ class SUT {
         return this._tipsRepositoryInMemory.setError();
     }
 
-    givenAnInputTipsWithBadInputFormat(): InputTips {
+    givenAnInputTipsWithBadInputFormat(): InputUpdateTips {
         this._tipsTestBuilder.withTitle('');
-        return this._tipsTestBuilder.buildInputTips();
+        return this._tipsTestBuilder.buildInputUpdateTips();
     }
 }

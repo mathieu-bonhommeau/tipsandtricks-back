@@ -1,20 +1,20 @@
 import tipsRepositoryInterface from '../ports/tipsRepositoryInterface';
 import * as dotenv from 'dotenv';
 import Tips from '../models/Tips';
-import InputTips from '../models/inputTips';
+import InputCreateTips from '../models/inputCreateTips';
 import InputError from '../../../_common/domain/errors/inputError';
 import debug from 'debug';
 dotenv.config();
 const logger = debug('tipsandtricks:registerUserUseCase');
 
 export interface createTipsRepositoryInterface {
-    create(input: InputTips): Promise<Tips>;
+    create(input: InputCreateTips): Promise<Tips>;
 }
 
 export default class CreateTipsUseCase implements createTipsRepositoryInterface {
     constructor(private readonly _tipsRepository: tipsRepositoryInterface) {}
 
-    async create(input: InputTips): Promise<Tips> {
+    async create(input: InputCreateTips): Promise<Tips> {
         if (!this.inputTipsValidateFormat(input)) {
             logger('format invalid');
             throw new InputError('Create tips failed !');
@@ -29,7 +29,7 @@ export default class CreateTipsUseCase implements createTipsRepositoryInterface 
         return tipsJustCreated;
     }
 
-    private inputTipsValidateFormat(inputTipsData: InputTips): boolean {
+    private inputTipsValidateFormat(inputTipsData: InputCreateTips): boolean {
         const isValid: boolean[] = [];
 
         for (const [inputKey, value] of Object.entries(inputTipsData)) {
