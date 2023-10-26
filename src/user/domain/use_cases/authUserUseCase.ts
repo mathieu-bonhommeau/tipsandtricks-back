@@ -3,7 +3,7 @@ import User, { JwtToken, UserLogged } from '../models/User';
 import InputLoginUser from '../models/inputLoginUser';
 import UserRepositoryInterface from '../ports/userRepositoryInterface';
 import bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import debug from 'debug';
 import UserFactory from '../factories/userFactory';
 import AuthError from '../../../_common/domain/errors/authError';

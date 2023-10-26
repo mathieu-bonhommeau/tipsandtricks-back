@@ -8,6 +8,7 @@
     "build": "vite build",
     "start": "sudo pm2 start ./dist/index.mjs",
     "restart": "sudo pm2 restart ./dist/index.mjs",
+    "stop": "sudo pm2 stop ./dist/index.mjs",
     "dev": "DEBUG=tipsandtricks:* nodemon ./src/index.ts",
     "dev:windows": "SET DEBUG=tipsandtricks:* && nodemon ./src/index.ts",
 
