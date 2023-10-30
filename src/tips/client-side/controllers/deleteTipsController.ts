@@ -53,7 +53,4 @@ export default class DeleteTipsController {
         }
     }
 }
-function logger(arg0: string) {
-    throw new Error('Function not implemented.');
-}
 
