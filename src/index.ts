@@ -7,10 +7,10 @@ import swaggerConfig from '../swagger.config';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { errorsMiddleware } from './_common/client-side/middlewares/errorsMiddleware';
-import process from "process";
+import process from 'process';
 dotenv.config();
 
-let app = express();
+const app = express();
 
 app.use(cookieParser());
 

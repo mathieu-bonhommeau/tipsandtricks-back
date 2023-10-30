@@ -50,4 +50,9 @@ export default class TipsTestBuilder {
         this._description = description;
         return this;
     }
+
+    withUserId(userId: number): TipsTestBuilder {
+        this._user_id = userId;
+        return this;
+    }
 }

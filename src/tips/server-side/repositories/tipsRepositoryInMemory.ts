@@ -55,6 +55,14 @@ export default class TipsRepositoryInMemory implements TipsRepositoryInterface {
         };
     }
 
+    async delete(tipsId: number, userId: number): Promise<boolean> {
+        const initialLength = this.tipsInMemory.length;
+
+        this.tipsInMemory = this.tipsInMemory.filter((tip) => !(tip.id === tipsId && tip.user_id === userId));
+
+        return this.tipsInMemory.length !== initialLength;
+    }
+
     setTips(tips: Tips): TipsRepositoryInMemory {
         this.tipsInMemory.push(tips);
         return this;

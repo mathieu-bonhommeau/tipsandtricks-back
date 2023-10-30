@@ -37,8 +37,8 @@ export default class TipsRepositoryPostgres implements TipsRepositoryInterface {
             return rows[0].total;
         });
 
-        const tips = await this
-            ._sql`select * from "tips"  where "user_id" = ${userId} order by "id" offset ${start} limit ${length}`.then((rows) => {
+        const tips = await this._sql`
+            select * from "tips"  where "user_id" = ${userId} order by "id" offset ${start} limit ${length}`.then((rows) => {
             if (rows.length > 0) {
                 return rows.map((row) => TipsRepositoryPostgresFactory.create(row));
             }
@@ -46,6 +46,16 @@ export default class TipsRepositoryPostgres implements TipsRepositoryInterface {
         });
 
         return { tips, total } as TipsList;
+    }
+
+    async delete(userId: number, tipsId: number): Promise<boolean> {
+        return this._sql`DELETE FROM "tips" WHERE "id" = ${tipsId} AND "user_id" = ${userId}`
+            .then((rows) => {
+                if (rows.count === 0) {
+                    return false;
+                }
+                return true;
+            });
     }
 }
 
