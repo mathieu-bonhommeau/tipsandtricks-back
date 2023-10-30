@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 import { RequestLogged } from '../../../_common/client-side/types/requestLogged';
 import DeleteTipsUseCase from '../../../tips/domain/use_cases/deleteUseCase';
-import InputError from 'src/_common/domain/errors/inputError';
+import InputError from "../../../_common/domain/errors/inputError";
 
 export default class DeleteTipsController {
     constructor(private readonly _deleteTipsUseCase: DeleteTipsUseCase) { }
