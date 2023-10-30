@@ -7,11 +7,11 @@ import debug from 'debug';
 dotenv.config();
 const logger = debug('tipsandtricks:registerUserUseCase');
 
-export interface createTipsRepositoryInterface {
+export interface CreateTipsRepositoryInterface {
     create(input: InputCreateTips): Promise<Tips>;
 }
 
-export default class CreateTipsUseCase implements createTipsRepositoryInterface {
+export default class CreateTipsUseCase implements CreateTipsRepositoryInterface {
     constructor(private readonly _tipsRepository: tipsRepositoryInterface) {}
 
     async create(input: InputCreateTips): Promise<Tips> {

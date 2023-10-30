@@ -38,7 +38,7 @@ export default class TipsRepositoryPostgres implements TipsRepositoryInterface {
         });
 
         const tips = await this
-            ._sql`select * from "tips"  where "user_id" = ${userId} offset ${start} limit ${length}`.then((rows) => {
+            ._sql`select * from "tips"  where "user_id" = ${userId} order by "id" offset ${start} limit ${length}`.then((rows) => {
             if (rows.length > 0) {
                 return rows.map((row) => TipsRepositoryPostgresFactory.create(row));
             }

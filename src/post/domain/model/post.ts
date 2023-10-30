@@ -2,11 +2,14 @@
  * @swagger
  * components:
  *   schemas:
- *     Tips:
+ *     Post:
  *       type: object
  *       required:
  *         - id
  *         - user_id
+ *         - description
+ *         - slug
+ *         - message
  *         - title
  *         - command
  *         - published_at
@@ -19,9 +22,13 @@
  *           type: number
  *         title:
  *           type: string
+ *         slug:
+ *           type: string
  *         command:
  *           type: string
  *         description:
+ *           type: string
+ *         message:
  *           type: string
  *         published_at:
  *           type: string
@@ -38,17 +45,22 @@
  *         title: Un test super utile !
  *         command: npm run dev
  *         description: A voir enfaite...
+ *         slug: un-test-super-utile
+ *         message: Mon super post !
  *         published_at: 2022-12-17T03:24:00
  *         created_at: 2022-12-17T03:24:00
  *         updated_at: 2022-12-18T03:24:00
  */
-export default class Tips {
+export default class Post {
     constructor(
         public id: number,
         public user_id: number,
         public title: string,
-        public command: string,
+        public slug: string,
         public description: string | null,
+        public message: string,
+        public command: string,
+        public username: string,
         public published_at: Date,
         public created_at: Date,
         public updated_at: Date | null,
