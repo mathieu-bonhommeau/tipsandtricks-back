@@ -13,30 +13,28 @@ export default class ListPostsController {
      * tags:
      *   name: Posts
      *   description: Manages tips app
-     * /tips?page=&length=:
+     *   /posts?start=&length=:
      *   get:
-     *     summary: Retrieve tips list
+     *     summary: Retrieve posts list
      *     parameters:
      *      - in: query
-     *        name: page
+     *        name: start
      *        schema:
      *           type: integer
-     *        description: The page for which tips are retrieved.
+     *        description: The point which is use for start posts list.
      *      - in: query
      *        name: length
      *        schema:
      *           type: integer
-     *        description: Determines the number of tips to recover.
-     *     tags: [Tips]
+     *        description: Determines the number of posts to recover.
+     *     tags: [Post]
      *     responses:
      *       200:
-     *         description: Tips recovered.
+     *         description: Post recovered.
      *         content:
      *          application/json:
      *              schema:
-     *                  $ref: '#/components/schemas/Tips'
-     *       401:
-     *         description: Unauthorized
+     *                  $ref: '#/components/schemas/Post'
      *       500:
      *         description: Some server errors
      *
