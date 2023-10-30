@@ -116,4 +116,15 @@ router.put(
     },
 );
 
+router.get(
+    '/api/posts',
+    async (req: RequestLogged, res: Response, next: NextFunction) => {
+        return await new ListPostsController(dependencyContainer.get<ListPostUseCase>('ListPostUseCase')).postsList(
+            req,
+            res,
+            next,
+        );
+    },
+);
+
 export default router;
