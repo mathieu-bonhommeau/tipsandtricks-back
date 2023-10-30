@@ -12,8 +12,8 @@ import ListTipsController from '../../tips/client-side/controllers/listTipsContr
 import createTipsController from '../../tips/client-side/controllers/createTipsController';
 import DeleteTipsController from '../../tips/client-side/controllers/deleteTipsController';
 import DeleteTipsUseCase from 'src/tips/domain/use_cases/deleteUseCase';
-import ListPostsController from "../../post/client-side/controllers/listPostsController";
-import ListPostUseCase from "../../post/domain/use_cases/listPostsUseCase";
+import ListPostsController from '../../post/client-side/controllers/listPostsController';
+import ListPostUseCase from '../../post/domain/use_cases/listPostsUseCase';
 import updateTipsController from '../../tips/client-side/controllers/updateTipsController';
 import UpdateTipsUseCase from '../../tips/domain/use_cases/updateTipsUseCase';
 
@@ -95,16 +95,13 @@ router.post(
     },
 );
 
-router.get(
-    '/api/posts',
-    async (req: RequestLogged, res: Response, next: NextFunction) => {
-        return await new ListPostsController(dependencyContainer.get<ListPostUseCase>('ListPostUseCase')).postsList(
-            req,
-            res,
-            next,
-        );
-    },
-);
+router.get('/api/posts', async (req: RequestLogged, res: Response, next: NextFunction) => {
+    return await new ListPostsController(dependencyContainer.get<ListPostUseCase>('ListPostUseCase')).postsList(
+        req,
+        res,
+        next,
+    );
+});
 
 router.put(
     '/api/tips/:tipsId',
@@ -118,16 +115,13 @@ router.put(
     },
 );
 
-router.get(
-    '/api/posts',
-    async (req: RequestLogged, res: Response, next: NextFunction) => {
-        return await new ListPostsController(dependencyContainer.get<ListPostUseCase>('ListPostUseCase')).postsList(
-            req,
-            res,
-            next,
-        );
-    },
-);
+router.get('/api/posts', async (req: RequestLogged, res: Response, next: NextFunction) => {
+    return await new ListPostsController(dependencyContainer.get<ListPostUseCase>('ListPostUseCase')).postsList(
+        req,
+        res,
+        next,
+    );
+});
 
 router.delete(
     '/api/tips/:tipsId',

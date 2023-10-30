@@ -5,6 +5,7 @@ import * as dotenv from 'dotenv';
 import InputCreateTips from '../../models/inputCreateTips';
 import UpdateTipsUseCase from '../updateTipsUseCase';
 import InputUpdateTips from '../../models/InputUpdateTips';
+import { faker } from '@faker-js/faker';
 dotenv.config();
 
 describe('Return a modified tips', () => {
@@ -66,11 +67,22 @@ class SUT {
     }
 
     givenAnInputCreateTips(): InputCreateTips {
-        return this._tipsTestBuilder.buildInputCreateTips();
+        return {
+            title: faker.lorem.words(3),
+            command: faker.lorem.words(5),
+            description: faker.lorem.words(10),
+            user_id: 1,
+        };
     }
 
     givenAnInputUpdateTips(): InputUpdateTips {
-        return this._tipsTestBuilder.buildInputUpdateTips();
+        return {
+            id: 1,
+            title: faker.lorem.words(3),
+            command: faker.lorem.words(5),
+            description: faker.lorem.words(10),
+            user_id: 1,
+        };
     }
 
     givenATips(input: InputCreateTips): Tips {
@@ -88,7 +100,12 @@ class SUT {
     }
 
     givenAnInputTipsWithBadInputFormat(): InputUpdateTips {
-        this._tipsTestBuilder.withTitle('');
-        return this._tipsTestBuilder.buildInputUpdateTips();
+        return {
+            id: 1,
+            title: '',
+            command: faker.lorem.words(5),
+            description: faker.lorem.words(10),
+            user_id: 4,
+        };
     }
 }

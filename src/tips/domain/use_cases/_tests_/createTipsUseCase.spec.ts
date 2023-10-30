@@ -22,8 +22,7 @@ describe('Return a tips', () => {
 
     test('can create a new tips', async () => {
         const inputTips = sut.givenAnInputTips();
-        const expectedTips = sut.givenATips();
-
+        const expectedTips = sut.givenAJustCreatedTips(inputTips);
         const tipsJustCreated = await new CreateTipsUseCase(tipsRepository).create(inputTips);
 
         expect(tipsJustCreated).toEqual(expectedTips);
@@ -62,17 +61,22 @@ class SUT {
     }
 
     givenAnInputTips(): InputCreateTips {
-        return this._tipsTestBuilder.buildInputCreateTips();
+        return {
+            title: faker.lorem.words(3),
+            command: faker.lorem.words(5),
+            description: faker.lorem.words(10),
+            user_id: 4,
+        };
     }
 
-    givenATips(): Tips {
-        const tips = this._tipsTestBuilder
-            .withTitle(faker.lorem.words({ min: 2, max: 4 }))
-            .withCommand(faker.lorem.words({ min: 3, max: 9 }))
-            .withDescription(faker.lorem.paragraph({ min: 1, max: 3 }))
+    givenAJustCreatedTips(inputTips: InputCreateTips): Tips {
+        return this._tipsTestBuilder
+            .withId(1)
+            .withUserId(inputTips.user_id)
+            .withTitle(inputTips.title)
+            .withCommand(inputTips.command)
+            .withDescription(inputTips.description)
             .buildTips();
-        this._tipsRepositoryInMemory.setTips(tips);
-        return tips;
     }
 
     givenAnError(): TipsRepositoryInMemory {
@@ -80,7 +84,11 @@ class SUT {
     }
 
     givenAnInputTipsWithBadInputFormat(): InputCreateTips {
-        this._tipsTestBuilder.withTitle('');
-        return this._tipsTestBuilder.buildInputCreateTips();
+        return {
+            title: '',
+            command: faker.lorem.words(5),
+            description: faker.lorem.words(10),
+            user_id: 4,
+        };
     }
 }

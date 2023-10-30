@@ -5,7 +5,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import UsersFixtures from './fixtures/01_usersFixture';
 import TipsFixtures from './fixtures/02_tipsFixtures';
-import PostsFixtures from "./fixtures/03_postsFixtures";
+import PostsFixtures from './fixtures/03_postsFixtures';
 dotenv.config();
 
 export class InitDb {
