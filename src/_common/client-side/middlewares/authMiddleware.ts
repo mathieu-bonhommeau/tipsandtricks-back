@@ -5,7 +5,7 @@ import { RequestLogged } from '../types/requestLogged';
 import AuthError from '../../domain/errors/authError';
 import dependencyContainer from '../../../_dependencyContainer/dependencyContainer';
 import AuthUserUseCase from '../../../user/domain/use_cases/authUserUseCase';
-const { isEmpty} = pkg;
+const { isEmpty } = pkg;
 dotenv.config();
 
 export default class AuthMiddleware {
