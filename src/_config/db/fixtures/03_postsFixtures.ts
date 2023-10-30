@@ -1,6 +1,6 @@
 import { Sql } from 'postgres';
 import { faker } from '@faker-js/faker';
-import InputPost from "../../../post/domain/model/inputPost";
+import InputPost from '../../../post/domain/model/inputPost';
 
 export default class PostsFixtures {
     constructor(private readonly _sql: Sql) {}

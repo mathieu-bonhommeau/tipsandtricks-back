@@ -1,6 +1,6 @@
-import PostRepositoryInterface from "../domain/ports/postRepositoryInterface";
-import Post from "../domain/model/post";
-import {Row, Sql} from "postgres";
+import PostRepositoryInterface from '../domain/ports/postRepositoryInterface';
+import Post from '../domain/model/post';
+import { Row, Sql } from 'postgres';
 
 export default class PostRepositoryPostgres implements PostRepositoryInterface {
     constructor(private readonly _sql: Sql) {}
@@ -12,20 +12,18 @@ export default class PostRepositoryPostgres implements PostRepositoryInterface {
                      join "user" u on u."id" = p."user_id"
             order by p."id"
             offset ${start}
-            limit ${length}`
-            .then(rows => {
-                console.log(rows)
-                if (rows.length > 0) {
-                    return rows.map(row => PostRepositoryPostgresFactory.create(row))
-                }
-                return []
-            })
+            limit ${length}`.then((rows) => {
+            console.log(rows);
+            if (rows.length > 0) {
+                return rows.map((row) => PostRepositoryPostgresFactory.create(row));
+            }
+            return [];
+        });
     }
-
 }
 
 export class PostRepositoryPostgresFactory {
-    static create (row: Row): Post {
+    static create(row: Row): Post {
         return new Post(
             row.id,
             row.user_id,
@@ -38,6 +36,6 @@ export class PostRepositoryPostgresFactory {
             row.published_at,
             row.created_at,
             row.updated_at,
-        )
+        );
     }
 }

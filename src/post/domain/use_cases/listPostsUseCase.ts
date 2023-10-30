@@ -1,7 +1,7 @@
-import InfiniteInput from "../../../_common/domain/models/infiniteInput";
-import InfiniteResponse from "../../../_common/domain/models/infiniteResponse";
-import Post from "../model/post";
-import PostRepositoryInterface from "../ports/postRepositoryInterface";
+import InfiniteInput from '../../../_common/domain/models/infiniteInput';
+import InfiniteResponse from '../../../_common/domain/models/infiniteResponse';
+import Post from '../model/post';
+import PostRepositoryInterface from '../ports/postRepositoryInterface';
 
 export interface ListPostUseCaseInterface {
     getList(input: InfiniteInput): Promise<InfiniteResponse<Post>>;

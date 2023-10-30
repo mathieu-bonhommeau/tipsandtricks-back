@@ -10,10 +10,10 @@ import TipsRepositoryPostgres from '../../tips/server-side/repositories/tipsRepo
 import ListTipsUseCase from '../../tips/domain/use_cases/listTipsUseCase';
 import CreateTipsUseCase from '../../tips/domain/use_cases/createTipsUseCase';
 import DeleteTipsUseCase from '../../tips/domain/use_cases/deleteUseCase';
-import PostRepositoryPostgres from "../../post/server-side/postRepositoryPostgres";
-import UpdateTipsUseCase from "../../tips/domain/use_cases/updateTipsUseCase";
-import ListPostUseCase from "../../post/domain/use_cases/listPostsUseCase";
-import PostRepositoryInterface from "../../post/domain/ports/postRepositoryInterface";
+import PostRepositoryPostgres from '../../post/server-side/postRepositoryPostgres';
+import UpdateTipsUseCase from '../../tips/domain/use_cases/updateTipsUseCase';
+import ListPostUseCase from '../../post/domain/use_cases/listPostsUseCase';
+import PostRepositoryInterface from '../../post/domain/ports/postRepositoryInterface';
 
 dependencyContainer.set<Sql>('sql', () => {
     return postgres({
@@ -52,7 +52,7 @@ dependencyContainer.set<CreateTipsUseCase>('CreateTipsUseCase', () => {
 
 dependencyContainer.set<PostRepositoryInterface>('PostRepository', () => {
     return new PostRepositoryPostgres(dependencyContainer.get<Sql>('sql'));
-})
+});
 
 dependencyContainer.set<ListPostUseCase>('ListPostUseCase', () => {
     return new ListPostUseCase(dependencyContainer.get<PostRepositoryInterface>('PostRepository'));
@@ -60,7 +60,7 @@ dependencyContainer.set<ListPostUseCase>('ListPostUseCase', () => {
 
 dependencyContainer.set<PostRepositoryInterface>('PostRepository', () => {
     return new PostRepositoryPostgres(dependencyContainer.get<Sql>('sql'));
-})
+});
 
 dependencyContainer.set<ListPostUseCase>('ListPostUseCase', () => {
     return new ListPostUseCase(dependencyContainer.get<PostRepositoryInterface>('PostRepository'));
