@@ -1,9 +1,10 @@
 import { NextFunction, Response } from 'express';
 import { RequestLogged } from '../../../_common/client-side/types/requestLogged';
 import DeleteTipsUseCase from '../../../tips/domain/use_cases/deleteUseCase';
+import InputError from 'src/_common/domain/errors/inputError';
 
 export default class DeleteTipsController {
-    constructor(private readonly _deleteTipsUseCase: DeleteTipsUseCase) {}
+    constructor(private readonly _deleteTipsUseCase: DeleteTipsUseCase) { }
 
     /**
      * @openapi
@@ -35,7 +36,7 @@ export default class DeleteTipsController {
             const tipsId = parseInt(req.params.tipsId);
             const userId = req.user.id;
             if (isNaN(tipsId)) {
-                return res.status(400).send({ message: 'Invalid tip ID' });
+                throw new InputError('Delete tips failed !');
             }
 
             const deletedSuccessfully = await this._deleteTipsUseCase.delete(userId, tipsId);
@@ -45,10 +46,14 @@ export default class DeleteTipsController {
                     message: 'Tips deleted successfully.',
                 });
             } else {
-                return res.status(400).send({ message: 'Tips not found' });
+                throw new InputError('Delete tips failed !');
             }
         } catch (err) {
             next(err);
         }
     }
 }
+function logger(arg0: string) {
+    throw new Error('Function not implemented.');
+}
+
