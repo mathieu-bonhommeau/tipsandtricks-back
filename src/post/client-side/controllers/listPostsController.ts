@@ -1,17 +1,17 @@
-import ListTipsUseCase from '../../domain/use_cases/listTipsUseCase';
+import ListPostUseCase from "../../domain/use_cases/listPostsUseCase";
+import InfiniteInput from "../../../_common/domain/models/infiniteInput";
 import { RequestLogged } from '../../../_common/client-side/types/requestLogged';
 import { NextFunction, Response } from 'express';
-import PaginatedInput from '../../../_common/domain/models/paginatedInput';
-import PaginatedResponse from '../../../_common/domain/models/paginatedResponse';
-import Tips from '../../domain/models/Tips';
+import InfiniteResponse from "../../../_common/domain/models/infiniteResponse";
+import Post from "../../domain/model/post";
 
-export default class ListTipsController {
-    constructor(private readonly _listTipsUseCase: ListTipsUseCase) {}
+export default class ListPostsController {
+    constructor(private readonly _listPostsUseCase: ListPostUseCase) {}
 
     /**
      * @openapi
      * tags:
-     *   name: Tips
+     *   name: Posts
      *   description: Manages tips app
      * /tips?page=&length=:
      *   get:
@@ -41,19 +41,18 @@ export default class ListTipsController {
      *         description: Some server errors
      *
      */
-    public async tipsList(req: RequestLogged, res: Response, next: NextFunction) {
+    public async postsList(req: RequestLogged, res: Response, next: NextFunction) {
         try {
-            const paginatedInput = new PaginatedInput(
-                req.query.page ? +req.query.page : 1,
-                req.query.length ? +req.query.length : 14,
+            const infiniteInput = new InfiniteInput(
+                req.query.start ? +req.query.start : 0,
+                req.query.length ? +req.query.length : 20,
             );
 
-            const paginatedResponse: PaginatedResponse<Tips> = await this._listTipsUseCase.getList(
-                +req.user.id,
-                paginatedInput,
+            const infiniteResponse: InfiniteResponse<Post> = await this._listPostsUseCase.getList(
+                infiniteInput,
             );
 
-            return res.status(200).send(paginatedResponse);
+            return res.status(200).send(infiniteResponse);
         } catch (err) {
             next(err);
         }

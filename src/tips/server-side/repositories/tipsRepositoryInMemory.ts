@@ -1,14 +1,15 @@
 import TipsRepositoryInterface, { TipsList } from '../../domain/ports/tipsRepositoryInterface';
 import Tips from '../../domain/models/Tips';
 import * as dotenv from 'dotenv';
-import InputTips from '../../domain/models/inputTips';
+import InputCreateTips from '../../domain/models/inputCreateTips';
+import InputUpdateTips from '../../domain/models/InputUpdateTips';
 dotenv.config();
 
 export default class TipsRepositoryInMemory implements TipsRepositoryInterface {
     public tipsInMemory: Array<Tips> = [];
     private _error: boolean = false;
 
-    async create(input: InputTips): Promise<Tips | null> {
+    async create(input: InputCreateTips): Promise<Tips | null> {
         if (!this._error) {
             this.tipsInMemory.push(
                 new Tips(
@@ -21,6 +22,23 @@ export default class TipsRepositoryInMemory implements TipsRepositoryInterface {
                     new Date('2022-12-17T03:24:00'),
                     null,
                 ),
+            );
+            return this.tipsInMemory[0];
+        }
+        return null;
+    }
+
+    async update(input: InputUpdateTips): Promise<Tips> {
+        if (!this._error) {
+            this.tipsInMemory[input.id - 1] = new Tips(
+                1,
+                input.user_id,
+                input.title,
+                input.command,
+                input.description,
+                new Date('2022-12-17T03:24:00'),
+                new Date('2022-12-17T03:24:00'),
+                null,
             );
             return this.tipsInMemory[0];
         }

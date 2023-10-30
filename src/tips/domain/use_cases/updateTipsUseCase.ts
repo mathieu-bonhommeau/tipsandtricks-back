@@ -4,29 +4,31 @@ import Tips from '../models/Tips';
 import InputCreateTips from '../models/inputCreateTips';
 import InputError from '../../../_common/domain/errors/inputError';
 import debug from 'debug';
+import InputUpdateTips from '../models/InputUpdateTips';
 dotenv.config();
 const logger = debug('tipsandtricks:registerUserUseCase');
 
-export interface CreateTipsRepositoryInterface {
-    create(input: InputCreateTips): Promise<Tips>;
+export interface updateTipsRepositoryInterface {
+    update(input: InputUpdateTips): Promise<Tips>;
 }
 
-export default class CreateTipsUseCase implements CreateTipsRepositoryInterface {
+export default class UpdateTipsUseCase implements updateTipsRepositoryInterface {
     constructor(private readonly _tipsRepository: tipsRepositoryInterface) {}
 
-    async create(input: InputCreateTips): Promise<Tips> {
+    async update(input: InputUpdateTips): Promise<Tips> {
         if (!this.inputTipsValidateFormat(input)) {
             logger('format invalid');
-            throw new InputError('Create tips failed !');
+            throw new InputError('Updated tips failed !');
         }
 
-        const tipsJustCreated = await this._tipsRepository.create(input);
+        const tipsJustUpdated = await this._tipsRepository.update(input);
 
-        if (!tipsJustCreated) {
+        if (!tipsJustUpdated) {
             logger('bdd error');
-            throw new InputError('Create tips failed !');
+            throw new InputError('Updated tips failed !');
         }
-        return tipsJustCreated;
+
+        return tipsJustUpdated;
     }
 
     private inputTipsValidateFormat(inputTipsData: InputCreateTips): boolean {

@@ -2,7 +2,7 @@
  * @swagger
  * components:
  *   schemas:
- *     InputTips:
+ *     InputCreateTips:
  *       type: object
  *       required:
  *         - title
@@ -23,7 +23,7 @@
  *         description: Tips incroyable.
  *         user_id: 2
  */
-export default class InputTips {
+export default class InputCreateTips {
     constructor(
         public title: string,
         public command: string,

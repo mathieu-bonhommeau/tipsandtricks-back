@@ -1,6 +1,6 @@
 import { NextFunction, Response } from 'express';
 import CreateTipsUseCase from '../../domain/use_cases/createTipsUseCase';
-import InputTips from '../../domain/models/inputTips';
+import InputCreateTips from '../../domain/models/inputCreateTips';
 import { RequestLogged } from '../../../_common/client-side/types/requestLogged';
 
 export default class createTipsController {
@@ -20,7 +20,7 @@ export default class createTipsController {
      *       content:
      *         application/json:
      *           schema:
-     *             $ref: '#/components/schemas/InputTips'
+     *             $ref: '#/components/schemas/InputCreateTips'
      *     responses:
      *       201:
      *         description: The created tips.
@@ -37,7 +37,7 @@ export default class createTipsController {
     public async create(req: RequestLogged, res: Response, next: NextFunction) {
         try {
             const desription: string = req.body.description === '' ? null : req.body.description;
-            const inputTips = new InputTips(req.body.title, req.body.command, desription, req.user.id);
+            const inputTips = new InputCreateTips(req.body.title, req.body.command, desription, req.user.id);
             const data = await this._createTipsUseCase.create(inputTips);
             return res.status(201).send({
                 data: data,

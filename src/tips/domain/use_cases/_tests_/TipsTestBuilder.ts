@@ -1,6 +1,7 @@
 import Tips from '../../models/Tips';
 import * as dotenv from 'dotenv';
-import InputTips from '../../models/inputTips';
+import InputCreateTips from '../../models/inputCreateTips';
+import InputUpdateTips from '../../models/InputUpdateTips';
 dotenv.config();
 
 export default class TipsTestBuilder {
@@ -27,8 +28,12 @@ export default class TipsTestBuilder {
         );
     }
 
-    buildInputTips(): InputTips {
-        return new InputTips(this._title, this._command, this._description, this._user_id);
+    buildInputCreateTips(): InputCreateTips {
+        return new InputCreateTips(this._title, this._command, this._description, this._user_id);
+    }
+
+    buildInputUpdateTips(): InputUpdateTips {
+        return new InputUpdateTips(this._id, this._title, this._command, this._description, this._user_id);
     }
 
     withTitle(title: string): TipsTestBuilder {

@@ -37,7 +37,7 @@ describe('Return tips list', () => {
         expect(anotherUserTipsNb.length).toEqual(0);
     });
 
-    test('can return an errors if there is no tips in bdd', async () => {
+    test('can return an PaginatedResponse with empty data if there is no tips in bdd', async () => {
         const expectedResponse = sut.buildAPaginatedResponse(1, sut.nbOfTips, []);
 
         const listOfTips = await new ListTipsUseCase(tipsRepository).getList(1, { page: 1, length: sut.nbOfTips });

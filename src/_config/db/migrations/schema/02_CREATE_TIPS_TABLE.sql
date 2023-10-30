@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS "tips" (
     "id" SERIAL PRIMARY KEY,
-    "user_id" INTEGER REFERENCES "user",
+    "user_id" INTEGER NOT NULL,
     "title" VARCHAR NOT NULL,
     "command" TEXT NOT NULL,
     "description" TEXT NULL,

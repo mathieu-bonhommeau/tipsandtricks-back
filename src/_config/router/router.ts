@@ -10,6 +10,10 @@ import { RequestLogged } from '../../_common/client-side/types/requestLogged';
 import AuthMiddleware from '../../_common/client-side/middlewares/authMiddleware';
 import ListTipsController from '../../tips/client-side/controllers/listTipsController';
 import createTipsController from '../../tips/client-side/controllers/createTipsController';
+import ListPostsController from "../../post/client-side/controllers/listPostsController";
+import ListPostUseCase from "../../post/domain/use_cases/listPostsUseCase";
+import updateTipsController from '../../tips/client-side/controllers/updateTipsController';
+import UpdateTipsUseCase from '../../tips/domain/use_cases/updateTipsUseCase';
 
 const router = Router();
 
@@ -82,6 +86,29 @@ router.post(
     new AuthMiddleware().authorize('ACCESS_TOKEN'),
     async (req: RequestLogged, res: Response, next: NextFunction) => {
         return await new createTipsController(dependencyContainer.get<CreateTipsUseCase>('CreateTipsUseCase')).create(
+            req,
+            res,
+            next,
+        );
+    },
+);
+
+router.get(
+    '/api/posts',
+    async (req: RequestLogged, res: Response, next: NextFunction) => {
+        return await new ListPostsController(dependencyContainer.get<ListPostUseCase>('ListPostUseCase')).postsList(
+            req,
+            res,
+            next,
+        );
+    },
+);
+
+router.put(
+    '/api/tips/:tipsId',
+    new AuthMiddleware().authorize('ACCESS_TOKEN'),
+    async (req: RequestLogged, res: Response, next: NextFunction) => {
+        return await new updateTipsController(dependencyContainer.get<UpdateTipsUseCase>('UpdateTipsUseCase')).update(
             req,
             res,
             next,

@@ -1,15 +1,28 @@
 import Tips from '../../domain/models/Tips';
 import { Row, Sql } from 'postgres';
 import TipsRepositoryInterface, { TipsList } from '../../domain/ports/tipsRepositoryInterface';
-import InputTips from '../../domain/models/inputTips';
+import InputCreateTips from '../../domain/models/inputCreateTips';
+import InputUpdateTips from '../../domain/models/InputUpdateTips';
 
 export default class TipsRepositoryPostgres implements TipsRepositoryInterface {
     constructor(private readonly _sql: Sql) {}
 
-    async create(input: InputTips): Promise<Tips | null> {
+    async create(input: InputCreateTips): Promise<Tips | null> {
         return this._sql`insert into "tips" ${this._sql(
             input,
         )} returning id, user_id, title, command, description, published_at, created_at, updated_at`.then((rows) => {
+            if (rows.length > 0) {
+                return TipsRepositoryPostgresFactory.create(rows[0]);
+            }
+            return null;
+        });
+    }
+
+    async update(input: InputUpdateTips): Promise<Tips> {
+        return this._sql`update "tips" set ${this._sql(input)}  where "id" = ${input.id} and "user_id" = ${
+            input.user_id
+        }
+            returning id, user_id, title, command, description, published_at, created_at, updated_at`.then((rows) => {
             if (rows.length > 0) {
                 return TipsRepositoryPostgresFactory.create(rows[0]);
             }
@@ -25,7 +38,7 @@ export default class TipsRepositoryPostgres implements TipsRepositoryInterface {
         });
 
         const tips = await this
-            ._sql`select * from "tips"  where "user_id" = ${userId} offset ${start} limit ${length}`.then((rows) => {
+            ._sql`select * from "tips"  where "user_id" = ${userId} order by "id" offset ${start} limit ${length}`.then((rows) => {
             if (rows.length > 0) {
                 return rows.map((row) => TipsRepositoryPostgresFactory.create(row));
             }

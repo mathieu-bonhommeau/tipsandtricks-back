@@ -1,5 +1,6 @@
 import Tips from '../models/Tips';
-import InputTips from '../models/inputTips';
+import InputCreateTips from '../models/inputCreateTips';
+import InputUpdateTips from '../models/InputUpdateTips';
 
 export type TipsList = {
     tips: Tips[];
@@ -8,5 +9,6 @@ export type TipsList = {
 
 export default interface TipsRepositoryInterface {
     getList(userId: number, page: number, length: number): Promise<TipsList>;
-    create(input: InputTips): Promise<Tips>;
+    create(input: InputCreateTips): Promise<Tips>;
+    update(input: InputUpdateTips): Promise<Tips>;
 }
