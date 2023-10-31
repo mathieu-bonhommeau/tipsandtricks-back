@@ -70,5 +70,4 @@ export default class Post {
     ) {}
 }
 
-export type PostFullData = Post & {username: string}
-
+export type PostFullData = Post & { username: string };

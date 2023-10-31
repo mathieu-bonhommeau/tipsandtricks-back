@@ -1,6 +1,6 @@
 import PostRepositoryInterface from '../domain/ports/postRepositoryInterface';
-import Post, {PostFullData} from '../domain/model/post';
-import InputCreatePost from "../domain/model/inputCreatePost";
+import Post, { PostFullData } from '../domain/model/post';
+import InputCreatePost from '../domain/model/inputCreatePost';
 
 export default class PostRepositoryInMemory implements PostRepositoryInterface {
     public postInMemory: Array<PostFullData> = [];
@@ -23,7 +23,7 @@ export default class PostRepositoryInMemory implements PostRepositoryInterface {
                 new Date('2022-12-17T03:24:00'),
                 new Date('2022-12-17T03:24:00'),
                 null,
-            )
+            );
         }
         return null;
     }

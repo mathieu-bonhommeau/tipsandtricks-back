@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 import { RequestLogged } from '../../../_common/client-side/types/requestLogged';
-import CreatePostUseCase from "../../domain/use_cases/createPostsUseCase";
-import InputCreatePost from "../../domain/model/inputCreatePost";
+import CreatePostUseCase from '../../domain/use_cases/createPostsUseCase';
+import InputCreatePost from '../../domain/model/inputCreatePost';
 
 export default class createPostController {
     constructor(private readonly _createPostUseCase: CreatePostUseCase) {}
@@ -38,7 +38,13 @@ export default class createPostController {
         try {
             const message: string = req.body.message === '' ? null : req.body.message;
             const desription: string = req.body.description === '' ? null : req.body.description;
-            const inputCreatePost = new InputCreatePost(req.body.title, message, desription, req.body.command, req.user.id);
+            const inputCreatePost = new InputCreatePost(
+                req.body.title,
+                message,
+                desription,
+                req.body.command,
+                req.user.id,
+            );
             const data = await this._createPostUseCase.create(inputCreatePost);
             return res.status(201).send({
                 data: data,

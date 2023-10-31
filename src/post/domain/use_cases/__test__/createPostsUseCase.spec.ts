@@ -1,9 +1,9 @@
-import {faker} from "@faker-js/faker";
-import InputCreatePost from "../../model/inputCreatePost";
-import PostTestBuilder from "./PostTestBuilder";
-import PostRepositoryInMemory from "../../../server-side/postRespositoryInMemory";
-import Post from "../../model/post";
-import CreatePostUseCase from "../createPostsUseCase";
+import { faker } from '@faker-js/faker';
+import InputCreatePost from '../../model/inputCreatePost';
+import PostTestBuilder from './PostTestBuilder';
+import PostRepositoryInMemory from '../../../server-side/postRespositoryInMemory';
+import Post from '../../model/post';
+import CreatePostUseCase from '../createPostsUseCase';
 import urlSlug from 'url-slug';
 
 describe('Create a post', () => {
@@ -35,7 +35,7 @@ describe('Create a post', () => {
 
             await new CreatePostUseCase(postRepository).create(inputCreatePost);
 
-            expect(false).toEqual(true);  //This expect breaks the test because it must throw an error
+            expect(false).toEqual(true); //This expect breaks the test because it must throw an error
         } catch (err) {
             expect(err.message).toEqual('Create post failed !');
         }
@@ -51,16 +51,15 @@ class SUT {
     givenAnInputCreatePost(): InputCreatePost {
         return {
             user_id: 3,
-            message: faker.lorem.paragraph({min: 1, max: 2}),
-            title: faker.lorem.words({min:1, max: 3}),
-            description: faker.lorem.paragraph({min: 1, max: 2}),
-            command: faker.lorem.words({min:1, max: 3}),
+            message: faker.lorem.paragraph({ min: 1, max: 2 }),
+            title: faker.lorem.words({ min: 1, max: 3 }),
+            description: faker.lorem.paragraph({ min: 1, max: 2 }),
+            command: faker.lorem.words({ min: 1, max: 3 }),
         };
-
     }
 
     givenACreatedPost(input: InputCreatePost): Post {
-       return this._postTestBuilder
+        return this._postTestBuilder
             .withId(1)
             .withTitle(input.title)
             .withSlug(urlSlug(input.title))

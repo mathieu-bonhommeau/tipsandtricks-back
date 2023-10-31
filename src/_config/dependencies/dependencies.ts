@@ -14,7 +14,7 @@ import PostRepositoryPostgres from '../../post/server-side/postRepositoryPostgre
 import UpdateTipsUseCase from '../../tips/domain/use_cases/updateTipsUseCase';
 import ListPostUseCase from '../../post/domain/use_cases/listPostsUseCase';
 import PostRepositoryInterface from '../../post/domain/ports/postRepositoryInterface';
-import CreatePostUseCase from "../../post/domain/use_cases/createPostsUseCase";
+import CreatePostUseCase from '../../post/domain/use_cases/createPostsUseCase';
 import ReactionOnPostUseCase from '../../reaction/domain/uses_case/reactionOnPostUseCase';
 import ReactionRepositoryInterface from '../../reaction/domain/port/ReactionRepositoryInterface';
 import ReactionRepositoryPostgres from '../../reaction/server-side/reactionRepositoryPostgres';

@@ -1,21 +1,20 @@
 import PostRepositoryInterface from '../domain/ports/postRepositoryInterface';
-import Post, {PostFullData} from '../domain/model/post';
+import Post, { PostFullData } from '../domain/model/post';
 import { Row, Sql } from 'postgres';
 import InputCreatePost from '../domain/model/inputCreatePost';
 import User from '../../user/domain/models/User';
 
 export default class PostRepositoryPostgres implements PostRepositoryInterface {
-    constructor(private readonly _sql: Sql) {
-    }
+    constructor(private readonly _sql: Sql) {}
 
     async create(input: InputCreatePost & { slug: string }): Promise<Post> {
         return await this._sql`
-            insert into "post" ${this._sql(input)} returning *`.then(rows => {
-                if (rows.length > 0) {
-                    return PostRepositoryPostgresFactory.create(rows[0])
-                }
-                return null
-        })
+            insert into "post" ${this._sql(input)} returning *`.then((rows) => {
+            if (rows.length > 0) {
+                return PostRepositoryPostgresFactory.create(rows[0]);
+            }
+            return null;
+        });
     }
 
     async getList(start: number, length: number, userLogged: User | null = null): Promise<PostFullData[]> {
@@ -28,18 +27,17 @@ export default class PostRepositoryPostgres implements PostRepositoryInterface {
             join "user" u on u."id" = p."user_id"
             order by p."id"
             offset ${start}
-            limit ${length}`
-            .then((rows) => {
-                if (rows.length > 0) {
-                    return rows.map((row) => {
-                        return {
-                            ...PostRepositoryPostgresFactory.create(row),
-                            username: row.username
-                        }
-                    });
-                }
-                return [];
-            });
+            limit ${length}`.then((rows) => {
+            if (rows.length > 0) {
+                return rows.map((row) => {
+                    return {
+                        ...PostRepositoryPostgresFactory.create(row),
+                        username: row.username,
+                    };
+                });
+            }
+            return [];
+        });
     }
 }
 
