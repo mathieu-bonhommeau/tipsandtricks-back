@@ -6,6 +6,5 @@ export default class InputCreatePost {
         public description: string | null,
         public command: string,
         public user_id: number,
-        public username: string
     ) {}
 }

@@ -55,7 +55,6 @@ class SUT {
             slug: faker.lorem.slug({min:1, max: 3}),
             description: faker.lorem.paragraph({min: 1, max: 2}),
             command: faker.lorem.words({min:1, max: 3}),
-            username: faker.internet.userName()
         };
 
     }
@@ -69,7 +68,7 @@ class SUT {
             .withCommand(input.command)
             .withDescription(input.description)
             .withMessage(input.message)
-            .withUsername(input.username)
+            .withUsername('Pseudo')
             .buildPost();
     }
 

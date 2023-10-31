@@ -1,14 +1,19 @@
 import PostRepositoryInterface from '../domain/ports/postRepositoryInterface';
 import Post from '../domain/model/post';
 import { Row, Sql } from 'postgres';
+import InputCreatePost from '../domain/model/inputCreatePost';
 import User from '../../user/domain/models/User';
 
 export default class PostRepositoryPostgres implements PostRepositoryInterface {
-    constructor(private readonly _sql: Sql) {}
+    constructor(private readonly _sql: Sql) {
+    }
+
+    create(input: InputCreatePost): Promise<Post> {
+        throw new Error('Method not implemented.');
+    }
 
     async getList(start: number, length: number, userLogged: User | null = null): Promise<Post[]> {
-        console.log(userLogged);
-        return await this._sql`
+            return await this._sql`
             select p.*,
                    u.username,
                    (select count(*) from "reaction" r where r."post_id" = p."id" and r."reaction" = 'like') as "like",

@@ -18,7 +18,6 @@ export default class PostsFixtures {
                     faker.lorem.text(),
                     faker.lorem.text(),
                     usersIds[Math.floor(Math.random() * usersIds.length)].id,
-                    faker.internet.userName()
                 ),
             );
         }

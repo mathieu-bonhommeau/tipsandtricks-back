@@ -20,7 +20,7 @@ export default class PostRepositoryInMemory implements PostRepositoryInterface {
                 input.description,
                 input.message,
                 input.command,
-                input.username,
+                'Pseudo',
                 new Date('2022-12-17T03:24:00'),
                 new Date('2022-12-17T03:24:00'),
                 null
