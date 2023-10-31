@@ -27,6 +27,18 @@ describe('Create a post', () => {
         expect(postCreated).toEqual(expectedPost);
     });
 
+    test('returns an error message if save failed', async () => {
+        try {
+            const inputCreatePost = sut.givenAnInputCreatePost();
+            sut.givenAnError();
+
+            await new CreatePostUseCase(postRepository).create(inputCreatePost);
+
+            expect(false).toEqual(true);  //This expect breaks the test because it must throw an error
+        } catch (err) {
+            expect(err.message).toEqual('Create post failed !');
+        }
+    });
 });
 
 class SUT {
@@ -61,12 +73,7 @@ class SUT {
             .buildPost();
     }
 
-/*    givenAnError(): PostRepositoryInMemory {
+    givenAnError(): PostRepositoryInMemory {
         return this._postRepositoryInMemory.setError();
-    }*/
-
-/*    givenAnInputTipsWithBadInputFormat(): InputCreateTips {
-        this._tipsTestBuilder.withTitle('');
-        return this._tipsTestBuilder.buildInputCreateTips();
-    }*/
+    }
 }

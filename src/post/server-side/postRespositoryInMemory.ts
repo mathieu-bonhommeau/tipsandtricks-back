@@ -11,19 +11,22 @@ export default class PostRepositoryInMemory implements PostRepositoryInterface {
     }
 
     async create(input: InputCreatePost): Promise<Post> {
-        return new Post(
-            1,
-            input.user_id,
-            input.title,
-            input.slug,
-            input.description,
-            input.message,
-            input.command,
-            input.username,
-            new Date('2022-12-17T03:24:00'),
-            new Date('2022-12-17T03:24:00'),
-            null
-        )
+        if (!this._error) {
+            return new Post(
+                1,
+                input.user_id,
+                input.title,
+                input.slug,
+                input.description,
+                input.message,
+                input.command,
+                input.username,
+                new Date('2022-12-17T03:24:00'),
+                new Date('2022-12-17T03:24:00'),
+                null
+            )
+        }
+        throw new Error('Server error')
     }
 
     setPost(post: Post): PostRepositoryInMemory {
