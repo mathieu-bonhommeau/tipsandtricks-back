@@ -1,6 +1,7 @@
 import PostRepositoryInterface from '../domain/ports/postRepositoryInterface';
 import Post, { PostFullData } from '../domain/model/post';
 import { Row, Sql } from 'postgres';
+import {UserRepositoryPostgresFactory} from "../../user/server-side/repositories/userRepositoryPostgres";
 import InputCreatePost from '../domain/model/inputCreatePost';
 
 export default class PostRepositoryPostgres implements PostRepositoryInterface {
@@ -36,6 +37,17 @@ export default class PostRepositoryPostgres implements PostRepositoryInterface {
                 });
             }
             return [];
+        });
+    }
+
+    async getPost(postId: number): Promise<Post | null> {
+        return this._sql`select p.*, u.username from "post" p
+        join "user" u on u."id" = p."user_id"
+        where p."id" = ${postId}`.then((rows) => {
+            if (rows.length > 0) {
+                return PostRepositoryPostgresFactory.create(rows[0]);
+            }
+            return null;
         });
     }
 }
