@@ -8,7 +8,7 @@ export default class PostRepositoryPostgres implements PostRepositoryInterface {
     constructor(private readonly _sql: Sql) {
     }
 
-    async create(input: InputCreatePost): Promise<Post> {
+    async create(input: InputCreatePost & { slug: string }): Promise<Post> {
         return await this._sql`
             insert into "post" ${this._sql(input)} returning *`.then(rows => {
                 if (rows.length > 0) {

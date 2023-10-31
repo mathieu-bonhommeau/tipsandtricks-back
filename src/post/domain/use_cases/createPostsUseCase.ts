@@ -4,6 +4,7 @@ import debug from 'debug';
 import InputCreatePost from "../model/inputCreatePost";
 import Post from "../model/post";
 import PostRepositoryInterface from "../ports/postRepositoryInterface";
+import urlSlug from "url-slug";
 dotenv.config();
 const logger = debug('tipsandtricks:CreatePostUseCase');
 

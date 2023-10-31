@@ -10,7 +10,7 @@ export default class PostRepositoryInMemory implements PostRepositoryInterface {
         return this.postInMemory.slice(start, start + length);
     }
 
-    async create(input: InputCreatePost): Promise<Post | null> {
+    async create(input: InputCreatePost & { slug: string }): Promise<Post | null> {
         if (!this._error) {
             return new Post(
                 1,
