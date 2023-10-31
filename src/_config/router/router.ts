@@ -16,7 +16,7 @@ import ListPostsController from '../../post/client-side/controllers/listPostsCon
 import ListPostUseCase from '../../post/domain/use_cases/listPostsUseCase';
 import updateTipsController from '../../tips/client-side/controllers/updateTipsController';
 import UpdateTipsUseCase from '../../tips/domain/use_cases/updateTipsUseCase';
-import GetPostUseCase from "../../post/domain/use_cases/getPostUseCase";
+import GetPostUseCase from '../../post/domain/use_cases/getPostUseCase';
 import GetPostController from "../../post/client-side/controllers/getPostController";
 import createPostController from '../../post/client-side/controllers/createPostsController';
 import CreatePostUseCase from '../../post/domain/use_cases/createPostsUseCase';
@@ -151,7 +151,6 @@ router.get('/api/posts', async (req: RequestLogged, res: Response, next: NextFun
         next,
     );
 });
-
 
 router.get('/api/posts/:postId', async (req: RequestLogged, res: Response, next: NextFunction) => {
     return await new GetPostController(dependencyContainer.get<GetPostUseCase>('GetPostUseCase')).getPost(

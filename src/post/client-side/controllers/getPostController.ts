@@ -2,7 +2,6 @@ import GetPostUseCase from '../../domain/use_cases/getPostUseCase';
 import { RequestLogged } from '../../../_common/client-side/types/requestLogged';
 import { NextFunction, Response } from 'express';
 import Post from '../../domain/model/post';
-import ParamError from "../../../_common/domain/errors/paramError";
 
 export default class GetPostController {
     constructor(private readonly _getPostUseCase: GetPostUseCase) {}
@@ -41,8 +40,7 @@ export default class GetPostController {
     public async getPost(req: RequestLogged, res: Response, next: NextFunction) {
         try {
             const postId = +req.params.postId;
-            const post: Post | any[] = await this._getPostUseCase.getPost(postId);
-
+            const post: Post | null = await this._getPostUseCase.getPost(postId);
             return res.status(200).send(post);
         } catch (err) {
             next(err);

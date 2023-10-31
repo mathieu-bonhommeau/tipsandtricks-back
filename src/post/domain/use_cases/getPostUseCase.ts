@@ -1,8 +1,6 @@
-import InfiniteInput from '../../../_common/domain/models/infiniteInput';
-import InfiniteResponse from '../../../_common/domain/models/infiniteResponse';
 import Post from '../model/post';
 import PostRepositoryInterface from '../ports/postRepositoryInterface';
-import ParamError from "../../../_common/domain/errors/paramError";
+import ParamError from '../../../_common/domain/errors/paramError';
 
 export interface GetPostUseCaseInterface {
     getPost(postId: number): Promise<Post | null>;
@@ -14,7 +12,7 @@ export default class GetPostUseCase implements GetPostUseCaseInterface {
     async getPost(postId: number): Promise<Post | null> {
         const post = await this._postRepository.getPost(postId);
 
-        if(!post) throw new ParamError('Get post failed !');
+        if (!post) throw new ParamError('Get post failed !');
 
         return post;
     }

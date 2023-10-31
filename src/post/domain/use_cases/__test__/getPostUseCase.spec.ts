@@ -2,10 +2,7 @@ import Post from '../../model/post';
 import PostRepositoryInMemory from '../../../server-side/postRespositoryInMemory';
 import PostTestBuilder from './PostTestBuilder';
 import { faker } from '@faker-js/faker';
-import InfiniteResponse from '../../../../_common/domain/models/infiniteResponse';
-import ListPostUseCase from '../listPostsUseCase';
-import GetPostUseCase from "../getPostUseCase";
-import CreateTipsUseCase from "../../../../tips/domain/use_cases/createTipsUseCase";
+import GetPostUseCase from '../getPostUseCase';
 
 describe('Return one post', () => {
     let postRepository: PostRepositoryInMemory;
