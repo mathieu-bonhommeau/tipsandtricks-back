@@ -1,4 +1,4 @@
-export default class InputPost {
+export default class InputCreatePost {
     constructor(
         public title: string,
         public slug: string,
@@ -6,5 +6,6 @@ export default class InputPost {
         public description: string | null,
         public command: string,
         public user_id: number,
+        public username: string
     ) {}
 }
