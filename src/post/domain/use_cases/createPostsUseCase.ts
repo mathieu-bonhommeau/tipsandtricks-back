@@ -16,11 +16,10 @@ export default class CreatePostUseCase implements CreatePostRepositoryInterface 
     constructor(private readonly _postRepository: PostRepositoryInterface) {}
 
     async create(input: InputCreatePost): Promise<Post> {
-        try {
-            return await this._postRepository.create(input);
-        } catch (error) {
-            logger('post creation error');
-            throw new InputError('Create post failed !');
-        }
+           const newPost = await this._postRepository.create({...input, slug: urlSlug(input.title)});
+           if (!newPost) {
+               throw new InputError('Create post failed !');
+           }
+           return newPost;
     }
 }

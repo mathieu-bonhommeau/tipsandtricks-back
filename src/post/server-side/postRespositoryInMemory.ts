@@ -1,12 +1,12 @@
 import PostRepositoryInterface from '../domain/ports/postRepositoryInterface';
-import Post from '../domain/model/post';
+import Post, {PostFullData} from '../domain/model/post';
 import InputCreatePost from "../domain/model/inputCreatePost";
 
 export default class PostRepositoryInMemory implements PostRepositoryInterface {
-    public postInMemory: Array<Post> = [];
+    public postInMemory: Array<PostFullData> = [];
     private _error: boolean = false;
 
-    async getList(start: number, length: number): Promise<Post[]> {
+    async getList(start: number, length: number): Promise<PostFullData[]> {
         return this.postInMemory.slice(start, start + length);
     }
 
@@ -28,7 +28,7 @@ export default class PostRepositoryInMemory implements PostRepositoryInterface {
         return null;
     }
 
-    setPost(post: Post): PostRepositoryInMemory {
+    setPost(post: PostFullData): PostRepositoryInMemory {
         this.postInMemory.push(post);
         return this;
     }

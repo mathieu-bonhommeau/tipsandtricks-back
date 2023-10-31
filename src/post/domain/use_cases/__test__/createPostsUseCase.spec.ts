@@ -68,7 +68,6 @@ class SUT {
             .withCommand(input.command)
             .withDescription(input.description)
             .withMessage(input.message)
-            .withUsername('Pseudo')
             .buildPost();
     }
 
