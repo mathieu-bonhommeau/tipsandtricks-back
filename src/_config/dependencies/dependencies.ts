@@ -14,6 +14,7 @@ import PostRepositoryPostgres from '../../post/server-side/postRepositoryPostgre
 import UpdateTipsUseCase from '../../tips/domain/use_cases/updateTipsUseCase';
 import ListPostUseCase from '../../post/domain/use_cases/listPostsUseCase';
 import PostRepositoryInterface from '../../post/domain/ports/postRepositoryInterface';
+import CreatePostUseCase from "../../post/domain/use_cases/createPostsUseCase";
 import ReactionOnPostUseCase from '../../reaction/domain/uses_case/reactionOnPostUseCase';
 import ReactionRepositoryInterface from '../../reaction/domain/port/ReactionRepositoryInterface';
 import ReactionRepositoryPostgres from '../../reaction/server-side/reactionRepositoryPostgres';
@@ -53,28 +54,32 @@ dependencyContainer.set<CreateTipsUseCase>('CreateTipsUseCase', () => {
     return new CreateTipsUseCase(dependencyContainer.get<TipsRepositoryInterface>('TipsRepository'));
 });
 
-dependencyContainer.set<PostRepositoryInterface>('PostRepository', () => {
-    return new PostRepositoryPostgres(dependencyContainer.get<Sql>('sql'));
-});
-
-dependencyContainer.set<ListPostUseCase>('ListPostUseCase', () => {
-    return new ListPostUseCase(dependencyContainer.get<PostRepositoryInterface>('PostRepository'));
-});
-
-dependencyContainer.set<PostRepositoryInterface>('PostRepository', () => {
-    return new PostRepositoryPostgres(dependencyContainer.get<Sql>('sql'));
-});
-
-dependencyContainer.set<ListPostUseCase>('ListPostUseCase', () => {
-    return new ListPostUseCase(dependencyContainer.get<PostRepositoryInterface>('PostRepository'));
-});
-
 dependencyContainer.set<UpdateTipsUseCase>('UpdateTipsUseCase', () => {
     return new UpdateTipsUseCase(dependencyContainer.get<TipsRepositoryInterface>('TipsRepository'));
 });
 
 dependencyContainer.set<DeleteTipsUseCase>('DeleteTipsUseCase', () => {
     return new DeleteTipsUseCase(dependencyContainer.get<TipsRepositoryInterface>('TipsRepository'));
+});
+
+dependencyContainer.set<PostRepositoryInterface>('PostRepository', () => {
+    return new PostRepositoryPostgres(dependencyContainer.get<Sql>('sql'));
+});
+
+dependencyContainer.set<ListPostUseCase>('ListPostUseCase', () => {
+    return new ListPostUseCase(dependencyContainer.get<PostRepositoryInterface>('PostRepository'));
+});
+
+dependencyContainer.set<PostRepositoryInterface>('PostRepository', () => {
+    return new PostRepositoryPostgres(dependencyContainer.get<Sql>('sql'));
+});
+
+dependencyContainer.set<ListPostUseCase>('ListPostUseCase', () => {
+    return new ListPostUseCase(dependencyContainer.get<PostRepositoryInterface>('PostRepository'));
+});
+
+dependencyContainer.set<CreatePostUseCase>('CreatePostUseCase', () => {
+    return new CreatePostUseCase(dependencyContainer.get<PostRepositoryInterface>('PostRepository'));
 });
 
 dependencyContainer.set<ReactionRepositoryInterface>('ReactionRepository', () => {

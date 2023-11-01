@@ -16,6 +16,8 @@ import ListPostsController from '../../post/client-side/controllers/listPostsCon
 import ListPostUseCase from '../../post/domain/use_cases/listPostsUseCase';
 import updateTipsController from '../../tips/client-side/controllers/updateTipsController';
 import UpdateTipsUseCase from '../../tips/domain/use_cases/updateTipsUseCase';
+import createPostController from "../../post/client-side/controllers/createPostsController";
+import CreatePostUseCase from "../../post/domain/use_cases/createPostsUseCase";
 import ReactionController from '../../reaction/client-side/controllers/reactionController';
 import ReactionOnPostUseCase from '../../reaction/domain/uses_case/reactionOnPostUseCase';
 
@@ -99,6 +101,16 @@ router.post(
 
 router.get('/api/posts', async (req: RequestLogged, res: Response, next: NextFunction) => {
     return await new ListPostsController(dependencyContainer.get<ListPostUseCase>('ListPostUseCase')).postsList(
+        req,
+        res,
+        next,
+    );
+});
+
+router.post('/api/post',
+    new AuthMiddleware().authorize('ACCESS_TOKEN'),
+    async (req: RequestLogged, res: Response, next: NextFunction) => {
+    return await new createPostController(dependencyContainer.get<CreatePostUseCase>('CreatePostUseCase')).create(
         req,
         res,
         next,

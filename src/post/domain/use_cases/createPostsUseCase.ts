@@ -5,7 +5,7 @@ import InputCreatePost from "../model/inputCreatePost";
 import Post from "../model/post";
 import PostRepositoryInterface from "../ports/postRepositoryInterface";
 dotenv.config();
-const logger = debug('tipsandtricks:registerUserUseCase');
+const logger = debug('tipsandtricks:CreatePostUseCase');
 
 export interface CreatePostRepositoryInterface {
     create(input: InputCreatePost): Promise<Post>;
