@@ -11,7 +11,6 @@
     "stop": "sudo pm2 stop ./dist/index.mjs",
     "dev": "DEBUG=tipsandtricks:* nodemon ./src/index.ts",
     "dev:windows": "SET DEBUG=tipsandtricks:* && nodemon ./src/index.ts",
-
     "pretty-lint": "prettier src --check --write && eslint src --fix",
     "init-db": "ts-node ./src/_config/db/init-db.ts"
   },
@@ -41,6 +40,7 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
     "ts-node": "^10.9.1",
+    "url-slug": "^4.0.1",
     "vite-node": "^0.34.4"
   },
   "devDependencies": {

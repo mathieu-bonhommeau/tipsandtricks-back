@@ -1,6 +1,5 @@
 import * as dotenv from 'dotenv';
-import Post from '../../model/post';
-import InputPost from '../../model/inputPost';
+import Post, { PostFullData } from '../../model/post';
 dotenv.config();
 
 export default class PostTestBuilder {
@@ -22,11 +21,10 @@ export default class PostTestBuilder {
             this._id,
             this._user_id,
             this._title,
-            this._command,
-            this._description,
             this._slug,
+            this._description,
             this._message,
-            this._username,
+            this._command,
             this._reactions,
             this._published_at,
             this._created_at,
@@ -34,8 +32,16 @@ export default class PostTestBuilder {
         );
     }
 
-    buildInputPost(): InputPost {
-        return new InputPost(this._title, this._slug, this._message, this._command, this._description, this._user_id);
+    buildPostFullData(): PostFullData {
+        return {
+            ...this.buildPost(),
+            username: this._username,
+        };
+    }
+
+    withId(id: number): PostTestBuilder {
+        this._id = id;
+        return this;
     }
 
     withTitle(title: string): PostTestBuilder {

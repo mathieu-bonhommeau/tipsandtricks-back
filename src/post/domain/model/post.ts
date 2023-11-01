@@ -60,7 +60,6 @@ export default class Post {
         public description: string | null,
         public message: string,
         public command: string,
-        public username: string,
         public reactions: {
             like: number;
             dislike: number;
@@ -70,3 +69,5 @@ export default class Post {
         public updated_at: Date | null,
     ) {}
 }
+
+export type PostFullData = Post & { username: string };

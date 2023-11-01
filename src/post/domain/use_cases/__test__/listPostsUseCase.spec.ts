@@ -1,4 +1,4 @@
-import Post from '../../model/post';
+import Post, { PostFullData } from '../../model/post';
 import PostRepositoryInMemory from '../../../server-side/postRespositoryInMemory';
 import PostTestBuilder from './PostTestBuilder';
 import { faker } from '@faker-js/faker';
@@ -47,7 +47,7 @@ class SUT {
         this._postTestBuilder = new PostTestBuilder();
     }
 
-    givenAPost(): Post {
+    givenAPost(): PostFullData {
         const post = this._postTestBuilder
             .withTitle(faker.lorem.words(3))
             .withCommand(faker.lorem.words({ min: 3, max: 9 }))
@@ -56,12 +56,12 @@ class SUT {
             .withSlug(faker.lorem.words(3))
             .withUserId(faker.number.int({ min: 1, max: 10 }))
             .withUsername(faker.internet.userName())
-            .buildPost();
+            .buildPostFullData();
         this._postRepository.setPost(post);
         return post;
     }
 
-    givenAListOfPosts(count: number): Array<Post> {
+    givenAListOfPosts(count: number): Array<PostFullData> {
         const postList = [];
         for (let i = 0; i < count; i++) {
             postList.push(this.givenAPost());

@@ -1,13 +1,22 @@
 import PostRepositoryInterface from '../domain/ports/postRepositoryInterface';
-import Post from '../domain/model/post';
+import Post, { PostFullData } from '../domain/model/post';
 import { Row, Sql } from 'postgres';
-import User from '../../user/domain/models/User';
+import InputCreatePost from '../domain/model/inputCreatePost';
 
 export default class PostRepositoryPostgres implements PostRepositoryInterface {
     constructor(private readonly _sql: Sql) {}
 
-    async getList(start: number, length: number, userLogged: User | null = null): Promise<Post[]> {
-        console.log(userLogged);
+    async create(input: InputCreatePost & { slug: string }): Promise<Post> {
+        return await this._sql`
+            insert into "post" ${this._sql(input)} returning *`.then((rows) => {
+            if (rows.length > 0) {
+                return PostRepositoryPostgresFactory.create(rows[0]);
+            }
+            return null;
+        });
+    }
+
+    async getList(start: number, length: number): Promise<PostFullData[]> {
         return await this._sql`
             select p.*,
                    u.username,
@@ -19,7 +28,12 @@ export default class PostRepositoryPostgres implements PostRepositoryInterface {
             offset ${start}
             limit ${length}`.then((rows) => {
             if (rows.length > 0) {
-                return rows.map((row) => PostRepositoryPostgresFactory.create(row));
+                return rows.map((row) => {
+                    return {
+                        ...PostRepositoryPostgresFactory.create(row),
+                        username: row.username,
+                    };
+                });
             }
             return [];
         });
@@ -36,7 +50,6 @@ export class PostRepositoryPostgresFactory {
             row.description,
             row.message,
             row.command,
-            row.username,
             {
                 like: row.like,
                 dislike: row.dislike,
