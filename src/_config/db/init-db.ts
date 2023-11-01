@@ -6,6 +6,7 @@ import * as path from 'path';
 import UsersFixtures from './fixtures/01_usersFixture';
 import TipsFixtures from './fixtures/02_tipsFixtures';
 import PostsFixtures from './fixtures/03_postsFixtures';
+import ReactionsFixtures from './fixtures/04_reactionsFixtures';
 dotenv.config();
 
 export class InitDb {
@@ -58,5 +59,6 @@ export class InitDb {
     await new UsersFixtures(init.pg).givenSomeUsers(5);
     await new TipsFixtures(init.pg).givenSomeTips(500);
     await new PostsFixtures(init.pg).givenSomePosts(500);
+    await new ReactionsFixtures(init.pg).givenSomeReactions();
     await init.pg.end();
 })();

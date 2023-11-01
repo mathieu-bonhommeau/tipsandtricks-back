@@ -61,6 +61,10 @@ export default class Post {
         public message: string,
         public command: string,
         public username: string,
+        public reactions: {
+            like: number;
+            dislike: number;
+        },
         public published_at: Date,
         public created_at: Date,
         public updated_at: Date | null,

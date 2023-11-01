@@ -11,7 +11,8 @@ export default class ListPostUseCase implements ListPostUseCaseInterface {
     constructor(private readonly _postRepository: PostRepositoryInterface) {}
 
     async getList(input: InfiniteInput): Promise<InfiniteResponse<Post>> {
-        const posts = await this._postRepository.getList(input.start, input.length);
+        const posts = await this._postRepository.getList(input.start, input.length, input.user || null);
+
         return new InfiniteResponse(input.start, input.length, posts);
     }
 }

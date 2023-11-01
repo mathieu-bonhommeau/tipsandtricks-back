@@ -14,6 +14,9 @@ import PostRepositoryPostgres from '../../post/server-side/postRepositoryPostgre
 import UpdateTipsUseCase from '../../tips/domain/use_cases/updateTipsUseCase';
 import ListPostUseCase from '../../post/domain/use_cases/listPostsUseCase';
 import PostRepositoryInterface from '../../post/domain/ports/postRepositoryInterface';
+import ReactionOnPostUseCase from '../../reaction/domain/uses_case/reactionOnPostUseCase';
+import ReactionRepositoryInterface from '../../reaction/domain/port/ReactionRepositoryInterface';
+import ReactionRepositoryPostgres from '../../reaction/server-side/reactionRepositoryPostgres';
 
 dependencyContainer.set<Sql>('sql', () => {
     return postgres({
@@ -72,6 +75,14 @@ dependencyContainer.set<UpdateTipsUseCase>('UpdateTipsUseCase', () => {
 
 dependencyContainer.set<DeleteTipsUseCase>('DeleteTipsUseCase', () => {
     return new DeleteTipsUseCase(dependencyContainer.get<TipsRepositoryInterface>('TipsRepository'));
+});
+
+dependencyContainer.set<ReactionRepositoryInterface>('ReactionRepository', () => {
+    return new ReactionRepositoryPostgres(dependencyContainer.get<Sql>('sql'));
+});
+
+dependencyContainer.set<ReactionOnPostUseCase>('ReactionOnPostUseCase', () => {
+    return new ReactionOnPostUseCase(dependencyContainer.get<ReactionRepositoryInterface>('ReactionRepository'));
 });
 
 export default dependencyContainer;

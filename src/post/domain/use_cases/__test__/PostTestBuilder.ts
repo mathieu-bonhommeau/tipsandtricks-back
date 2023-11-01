@@ -12,7 +12,7 @@ export default class PostTestBuilder {
     private _message: string = 'mon message !';
     private _description: string = 'Vraiment super !';
     private _username: string = 'username';
-
+    private _reactions: { like: number; dislike: number } = { like: 10, dislike: 10 };
     private readonly _published_at: Date = new Date('2022-12-17T03:24:00');
     private readonly _created_at: Date = new Date('2022-12-17T03:24:00');
     private readonly _updated_at: Date | null = null;
@@ -27,6 +27,7 @@ export default class PostTestBuilder {
             this._slug,
             this._message,
             this._username,
+            this._reactions,
             this._published_at,
             this._created_at,
             this._updated_at,
@@ -64,6 +65,16 @@ export default class PostTestBuilder {
 
     withUserId(userId: number): PostTestBuilder {
         this._user_id = userId;
+        return this;
+    }
+
+    withLikes(likes: number): PostTestBuilder {
+        this._reactions.like = likes;
+        return this;
+    }
+
+    withDislikes(dislikes: number): PostTestBuilder {
+        this._reactions.dislike = dislikes;
         return this;
     }
 
