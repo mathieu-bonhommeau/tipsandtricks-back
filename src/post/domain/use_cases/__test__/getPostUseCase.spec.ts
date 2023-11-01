@@ -52,7 +52,7 @@ class SUT {
             .withSlug(faker.lorem.words(3))
             .withUserId(faker.number.int({ min: 1, max: 10 }))
             .withUsername(faker.internet.userName())
-            .buildPost();
+            .buildPostFullData();
         this._postRepository.setPost(post);
         return post;
     }
