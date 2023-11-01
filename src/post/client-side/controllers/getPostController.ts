@@ -11,23 +11,18 @@ export default class GetPostController {
      * tags:
      *   name: Posts
      *   description: Manages post app
-     *   /posts?start=&length=:
+     *   /posts/{postId}:
      *   get:
-     *     summary: Retrieve posts list
+     *     summary: Retrieve one post
      *     parameters:
      *      - in: query
-     *        name: start
+     *        name: postId
      *        schema:
      *           type: integer
-     *        description: The point which is use for start posts list.
-     *      - in: query
-     *        name: length
-     *        schema:
-     *           type: integer
-     *        description: Determines the number of posts to recover.
+     *        description: The id of the post to retrieve
      *     tags: [Post]
      *     responses:
-     *       200:
+     *       201:
      *         description: Post recovered.
      *         content:
      *          application/json:
