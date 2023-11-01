@@ -16,6 +16,8 @@ import ListPostsController from '../../post/client-side/controllers/listPostsCon
 import ListPostUseCase from '../../post/domain/use_cases/listPostsUseCase';
 import updateTipsController from '../../tips/client-side/controllers/updateTipsController';
 import UpdateTipsUseCase from '../../tips/domain/use_cases/updateTipsUseCase';
+import GetPostUseCase from '../../post/domain/use_cases/getPostUseCase';
+import GetPostController from '../../post/client-side/controllers/getPostController';
 import createPostController from '../../post/client-side/controllers/createPostsController';
 import CreatePostUseCase from '../../post/domain/use_cases/createPostsUseCase';
 import ReactionController from '../../reaction/client-side/controllers/reactionController';
@@ -99,13 +101,17 @@ router.post(
     },
 );
 
-router.get('/api/posts', async (req: RequestLogged, res: Response, next: NextFunction) => {
-    return await new ListPostsController(dependencyContainer.get<ListPostUseCase>('ListPostUseCase')).postsList(
-        req,
-        res,
-        next,
-    );
-});
+router.put(
+    '/api/tips/:tipsId',
+    new AuthMiddleware().authorize('ACCESS_TOKEN'),
+    async (req: RequestLogged, res: Response, next: NextFunction) => {
+        return await new updateTipsController(dependencyContainer.get<UpdateTipsUseCase>('UpdateTipsUseCase')).update(
+            req,
+            res,
+            next,
+        );
+    },
+);
 
 router.post(
     '/api/post',
@@ -119,11 +125,11 @@ router.post(
     },
 );
 
-router.put(
+router.delete(
     '/api/tips/:tipsId',
     new AuthMiddleware().authorize('ACCESS_TOKEN'),
     async (req: RequestLogged, res: Response, next: NextFunction) => {
-        return await new updateTipsController(dependencyContainer.get<UpdateTipsUseCase>('UpdateTipsUseCase')).update(
+        return await new DeleteTipsController(dependencyContainer.get<DeleteTipsUseCase>('DeleteTipsUseCase')).delete(
             req,
             res,
             next,
@@ -139,17 +145,13 @@ router.get('/api/posts', async (req: RequestLogged, res: Response, next: NextFun
     );
 });
 
-router.delete(
-    '/api/tips/:tipsId',
-    new AuthMiddleware().authorize('ACCESS_TOKEN'),
-    async (req: RequestLogged, res: Response, next: NextFunction) => {
-        return await new DeleteTipsController(dependencyContainer.get<DeleteTipsUseCase>('DeleteTipsUseCase')).delete(
-            req,
-            res,
-            next,
-        );
-    },
-);
+router.get('/api/post/:postId', async (req: RequestLogged, res: Response, next: NextFunction) => {
+    return await new GetPostController(dependencyContainer.get<GetPostUseCase>('GetPostUseCase')).getPost(
+        req,
+        res,
+        next,
+    );
+});
 
 router.post(
     '/api/reaction/post/:postId',

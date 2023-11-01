@@ -14,6 +14,7 @@ import PostRepositoryPostgres from '../../post/server-side/postRepositoryPostgre
 import UpdateTipsUseCase from '../../tips/domain/use_cases/updateTipsUseCase';
 import ListPostUseCase from '../../post/domain/use_cases/listPostsUseCase';
 import PostRepositoryInterface from '../../post/domain/ports/postRepositoryInterface';
+import GetPostUseCase from '../../post/domain/use_cases/getPostUseCase';
 import CreatePostUseCase from '../../post/domain/use_cases/createPostsUseCase';
 import ReactionOnPostUseCase from '../../reaction/domain/uses_case/reactionOnPostUseCase';
 import ReactionRepositoryInterface from '../../reaction/domain/port/ReactionRepositoryInterface';
@@ -88,6 +89,10 @@ dependencyContainer.set<ReactionRepositoryInterface>('ReactionRepository', () =>
 
 dependencyContainer.set<ReactionOnPostUseCase>('ReactionOnPostUseCase', () => {
     return new ReactionOnPostUseCase(dependencyContainer.get<ReactionRepositoryInterface>('ReactionRepository'));
+});
+
+dependencyContainer.set<GetPostUseCase>('GetPostUseCase', () => {
+    return new GetPostUseCase(dependencyContainer.get<PostRepositoryInterface>('PostRepository'));
 });
 
 export default dependencyContainer;

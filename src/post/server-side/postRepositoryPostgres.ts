@@ -23,7 +23,7 @@ export default class PostRepositoryPostgres implements PostRepositoryInterface {
                    (select count(*) from "reaction" r where r."post_id" = p."id" and r."reaction" = 'like') as "like",
                    (select count(*) from "reaction" r where r."post_id" = p."id" and r."reaction" = 'dislike') as "dislike"
             from "post" p
-            join "user" u on u."id" = p."user_id"
+                     join "user" u on u."id" = p."user_id"
             order by p."id"
             offset ${start}
             limit ${length}`.then((rows) => {
@@ -36,6 +36,25 @@ export default class PostRepositoryPostgres implements PostRepositoryInterface {
                 });
             }
             return [];
+        });
+    }
+
+    async getPost(postId: number): Promise<PostFullData | null> {
+        return this._sql`
+                select p.*, 
+                u.username,
+               (select count(*) from "reaction" r where r."post_id" = p."id" and r."reaction" = 'like') as "like",
+               (select count(*) from "reaction" r where r."post_id" = p."id" and r."reaction" = 'dislike') as "dislike"
+                from "post" p
+        join "user" u on u."id" = p."user_id"
+        where p."id" = ${postId}`.then((rows) => {
+            if (rows.length > 0) {
+                return {
+                    ...PostRepositoryPostgresFactory.create(rows[0]),
+                    username: rows[0].username,
+                };
+            }
+            return null;
         });
     }
 }

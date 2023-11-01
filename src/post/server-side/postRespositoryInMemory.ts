@@ -32,6 +32,15 @@ export default class PostRepositoryInMemory implements PostRepositoryInterface {
         return null;
     }
 
+    async getPost(postId: number): Promise<PostFullData | null> {
+        const post = this.postInMemory.splice(postId - 1, 1);
+
+        if (!post) return null;
+        if (!post) return null;
+
+        return post.shift();
+    }
+
     setPost(post: PostFullData): PostRepositoryInMemory {
         this.postInMemory.push(post);
         return this;
