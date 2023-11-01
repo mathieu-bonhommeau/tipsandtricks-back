@@ -17,7 +17,7 @@ import ListPostUseCase from '../../post/domain/use_cases/listPostsUseCase';
 import updateTipsController from '../../tips/client-side/controllers/updateTipsController';
 import UpdateTipsUseCase from '../../tips/domain/use_cases/updateTipsUseCase';
 import createPostController from '../../post/client-side/controllers/createPostsController';
-import CreatePostUseCase from "../../post/domain/use_cases/createPostsUseCase";
+import CreatePostUseCase from '../../post/domain/use_cases/createPostsUseCase';
 import ReactionController from '../../reaction/client-side/controllers/reactionController';
 import ReactionOnPostUseCase from '../../reaction/domain/uses_case/reactionOnPostUseCase';
 

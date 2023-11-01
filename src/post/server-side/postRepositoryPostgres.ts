@@ -2,7 +2,6 @@ import PostRepositoryInterface from '../domain/ports/postRepositoryInterface';
 import Post, { PostFullData } from '../domain/model/post';
 import { Row, Sql } from 'postgres';
 import InputCreatePost from '../domain/model/inputCreatePost';
-import User from '../../user/domain/models/User';
 
 export default class PostRepositoryPostgres implements PostRepositoryInterface {
     constructor(private readonly _sql: Sql) {}
@@ -17,8 +16,8 @@ export default class PostRepositoryPostgres implements PostRepositoryInterface {
         });
     }
 
-    async getList(start: number, length: number, userLogged: User | null = null): Promise<PostFullData[]> {
-            return await this._sql`
+    async getList(start: number, length: number): Promise<PostFullData[]> {
+        return await this._sql`
             select p.*,
                    u.username,
                    (select count(*) from "reaction" r where r."post_id" = p."id" and r."reaction" = 'like') as "like",
