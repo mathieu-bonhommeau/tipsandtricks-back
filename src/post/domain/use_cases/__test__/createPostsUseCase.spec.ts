@@ -4,7 +4,7 @@ import PostTestBuilder from './PostTestBuilder';
 import PostRepositoryInMemory from '../../../server-side/postRespositoryInMemory';
 import Post from '../../model/post';
 import CreatePostUseCase from '../createPostsUseCase';
-import urlSlug from 'url-slug';
+import * as urlSlug from 'url-slug';
 
 describe('Create a post', () => {
     let postRepository: PostRepositoryInMemory;
@@ -62,7 +62,10 @@ class SUT {
         return this._postTestBuilder
             .withId(1)
             .withTitle(input.title)
-            .withSlug(urlSlug(input.title))
+            .withSlug(urlSlug.convert(input.title, {
+                separator: '-',
+                transformer: urlSlug.LOWERCASE_TRANSFORMER,
+            }))
             .withUserId(3)
             .withCommand(input.command)
             .withDescription(input.description)

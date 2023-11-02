@@ -13,7 +13,6 @@ export default class AuthMiddleware {
         return async (request: RequestLogged, _: Response, next: NextFunction) => {
             try {
                 const authCookies = request.cookies;
-                console.log(authCookies);
                 if (isEmpty(authCookies)) tokenName = null;
 
                 switch (tokenName) {
@@ -32,7 +31,6 @@ export default class AuthMiddleware {
                         return next();
                     }
                     default: {
-                        console.log(tokenName);
                         throw new AuthError('Unauthorized');
                     }
                 }
