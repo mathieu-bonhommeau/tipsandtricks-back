@@ -10,10 +10,9 @@ export default class DeleteTipsController {
      * @openapi
      * tags:
      *   name: Tips
-     *   description: Delete a tip
-     * /tips/{tipId}:
+     * /tips/{tipsId}:
      *   delete:
-     *     summary: Delete a tip
+     *     summary: Delete a tips
      *     tags: [Tips]
      *     parameters:
      *       - in: path

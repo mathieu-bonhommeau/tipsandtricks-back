@@ -13,9 +13,8 @@ export default class updateTipsController {
      * @openapi
      * tags:
      *   name: Tips
-     *   description: Update an existing tip
      * /tips/{tipsId}:
-     *   post:
+     *   put:
      *     summary: Update an existing tip
      *     tags: [Tips]
      *     requestBody:
@@ -23,7 +22,7 @@ export default class updateTipsController {
      *       content:
      *         application/json:
      *           schema:
-     *             $ref: '#/components/schemas/InputCreateTips'
+     *             $ref: '#/components/schemas/InputUpdateTips'
      *     responses:
      *       201:
      *         description: The updated tips.

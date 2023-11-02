@@ -12,8 +12,7 @@ export default class ListTipsController {
      * @openapi
      * tags:
      *   name: Tips
-     *   description: Manages tips app
-     * /tips?page=&length=:
+     * /tips:
      *   get:
      *     summary: Retrieve tips list
      *     parameters:

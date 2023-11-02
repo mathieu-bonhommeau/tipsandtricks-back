@@ -14,7 +14,7 @@ export default class PostsFixtures {
                 {
                     ...new InputCreatePost(
                         faker.lorem.words(3),
-                        faker.lorem.slug(),
+                        faker.lorem.text(),
                         faker.lorem.text(),
                         faker.lorem.text(),
                         usersIds[Math.floor(Math.random() * usersIds.length)].id,

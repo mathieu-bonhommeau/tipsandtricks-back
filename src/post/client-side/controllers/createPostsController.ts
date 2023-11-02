@@ -9,25 +9,25 @@ export default class createPostController {
     /**
      * @openapi
      * tags:
-     *   name: Tips
-     *   description: Register a tips
-     * /tips:
+     *   name: Post
+     *   description: Register a post
+     * /post:
      *   post:
-     *     summary: Create a new tips
-     *     tags: [Tips]
+     *     summary: Create a new post
+     *     tags: [Post]
      *     requestBody:
      *       required: true
      *       content:
      *         application/json:
      *           schema:
-     *             $ref: '#/components/schemas/InputCreateTips'
+     *             $ref: '#/components/schemas/InputCreatePost'
      *     responses:
      *       201:
-     *         description: The created tips.
+     *         description: The created post.
      *         content:
      *           application/json:
      *             schema:
-     *               $ref: '#/components/schemas/Tips'
+     *               $ref: '#/components/schemas/InputCreatePost'
      *       400:
      *          description: Bad request
      *       500:
@@ -37,11 +37,11 @@ export default class createPostController {
     public async create(req: RequestLogged, res: Response, next: NextFunction) {
         try {
             const message: string = req.body.message === '' ? null : req.body.message;
-            const desription: string = req.body.description === '' ? null : req.body.description;
+            const description: string = req.body.description === '' ? null : req.body.description;
             const inputCreatePost = new InputCreatePost(
                 req.body.title,
                 message,
-                desription,
+                description,
                 req.body.command,
                 req.user.id,
             );

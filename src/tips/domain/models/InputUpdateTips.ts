@@ -2,14 +2,17 @@
  * @swagger
  * components:
  *   schemas:
- *     InputCreateTips:
+ *     InputUpdateTips:
  *       type: object
  *       required:
  *         - id
  *         - title
  *         - command
+ *         - description
  *         - user_id
  *       properties:
+ *         id:
+ *           type: number
  *         title:
  *           type: string
  *         command:

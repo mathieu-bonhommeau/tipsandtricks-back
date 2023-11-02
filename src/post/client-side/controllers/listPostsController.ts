@@ -11,9 +11,8 @@ export default class ListPostsController {
     /**
      * @openapi
      * tags:
-     *   name: Posts
-     *   description: Manages tips app
-     *   /posts?start=&length=:
+     *   name: Post
+     * /posts:
      *   get:
      *     summary: Retrieve posts list
      *     parameters:

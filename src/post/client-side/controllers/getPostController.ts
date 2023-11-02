@@ -9,9 +9,8 @@ export default class GetPostController {
     /**
      * @openapi
      * tags:
-     *   name: Posts
-     *   description: Manages post app
-     *   /posts/{postId}:
+     *   name: Post
+     * /post/{postId}:
      *   get:
      *     summary: Retrieve one post
      *     parameters:

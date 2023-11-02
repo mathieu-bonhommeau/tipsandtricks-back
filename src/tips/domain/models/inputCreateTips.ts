@@ -7,6 +7,7 @@
  *       required:
  *         - title
  *         - command
+ *         - description
  *         - user_id
  *       properties:
  *         title:

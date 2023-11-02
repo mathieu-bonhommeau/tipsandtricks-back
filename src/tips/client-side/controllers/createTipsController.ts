@@ -10,7 +10,6 @@ export default class createTipsController {
      * @openapi
      * tags:
      *   name: Tips
-     *   description: Register a tips
      * /tips:
      *   post:
      *     summary: Create a new tips
