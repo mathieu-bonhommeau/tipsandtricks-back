@@ -56,6 +56,10 @@ export class InitDb {
         .readFiles()
         .then(() => console.log('Migrations Success !'))
         .catch((err) => console.log('Migrations failed : ' + err.message));
+    if (process.env.NODE_ENV === 'production') {
+        await init.pg.end();
+        return;
+    }
     await new UsersFixtures(init.pg).givenSomeUsers(5);
     await new TipsFixtures(init.pg).givenSomeTips(500);
     await new PostsFixtures(init.pg).givenSomePosts(500);
