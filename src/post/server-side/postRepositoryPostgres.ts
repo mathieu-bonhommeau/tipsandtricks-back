@@ -24,7 +24,7 @@ export default class PostRepositoryPostgres implements PostRepositoryInterface {
                    (select count(*) from "reaction" r where r."post_id" = p."id" and r."reaction" = 'dislike') as "dislike"
             from "post" p
                      join "user" u on u."id" = p."user_id"
-            order by p."id"
+            order by p."created_at" desc, p."id"
             offset ${start}
             limit ${length}`.then((rows) => {
             if (rows.length > 0) {

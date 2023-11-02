@@ -46,9 +46,7 @@ export default class createPostController {
                 req.user.id,
             );
             const data = await this._createPostUseCase.create(inputCreatePost);
-            return res.status(201).send({
-                data: data,
-            });
+            return res.status(201).send(data);
         } catch (err) {
             next(err);
         }
