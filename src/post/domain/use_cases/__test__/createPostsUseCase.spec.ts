@@ -62,10 +62,12 @@ class SUT {
         return this._postTestBuilder
             .withId(1)
             .withTitle(input.title)
-            .withSlug(urlSlug.convert(input.title, {
-                separator: '-',
-                transformer: urlSlug.LOWERCASE_TRANSFORMER,
-            }))
+            .withSlug(
+                urlSlug.convert(input.title, {
+                    separator: '-',
+                    transformer: urlSlug.LOWERCASE_TRANSFORMER,
+                }),
+            )
             .withUserId(3)
             .withCommand(input.command)
             .withDescription(input.description)

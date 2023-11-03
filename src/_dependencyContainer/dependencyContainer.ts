@@ -1,8 +1,8 @@
 export type Service<T> = {
-    service: unknown,
+    service: unknown;
     callback: () => T;
     singleton: boolean;
-}
+};
 
 export interface DependencyContainerInterface {
     get<T>(name: string): Service<T>;
@@ -10,11 +10,14 @@ export interface DependencyContainerInterface {
 }
 
 export class DependencyContainer implements DependencyContainerInterface {
-    private _services: Map<string, {
-        service: unknown,
-        callback: () => {},
-        singleton: boolean
-    }> = new Map();
+    private _services: Map<
+        string,
+        {
+            service: unknown;
+            callback: () => unknown;
+            singleton: boolean;
+        }
+    > = new Map();
 
     static init(): DependencyContainer {
         return new DependencyContainer();
@@ -29,20 +32,20 @@ export class DependencyContainer implements DependencyContainerInterface {
         }
 
         if (this._services.get(name).singleton) {
-            return this._services.get(name).service as T
+            return this._services.get(name).service as T;
         }
 
         return this._services.get(name).callback() as T;
     }
 
     set<T>(name: string, callback: () => T, singleton: boolean = false): void {
-        let service = undefined
-        if (singleton) service = callback()
+        let service = undefined;
+        if (singleton) service = callback();
 
         this._services.set(name, {
             service,
             callback,
-            singleton
+            singleton,
         });
     }
 }
