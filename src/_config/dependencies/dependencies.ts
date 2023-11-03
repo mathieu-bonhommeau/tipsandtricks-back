@@ -28,8 +28,8 @@ dependencyContainer.set<Sql>('sql', () => {
         username: process.env.PGUSER || 'ttuser', // Username of database user
         password: process.env.PGPASSWORD || 'changeme', // Username of database user
         ssl: process.env.ENVIRONMENT === 'production',
-    });
-});
+    }, );
+}, true);
 
 dependencyContainer.set<UserRepositoryInterface>('UserRepository', () => {
     return new UserRepositoryPostgres(dependencyContainer.get<Sql>('sql'));
