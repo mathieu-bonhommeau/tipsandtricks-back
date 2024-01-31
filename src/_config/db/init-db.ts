@@ -3,6 +3,10 @@ import * as dotenv from 'dotenv';
 import * as process from 'process';
 import * as fs from 'fs';
 import * as path from 'path';
+import UsersFixtures from './fixtures/01_usersFixture';
+import TipsFixtures from './fixtures/02_tipsFixtures';
+import PostsFixtures from './fixtures/03_postsFixtures';
+import ReactionsFixtures from './fixtures/04_reactionsFixtures';
 dotenv.config();
 
 export class InitDb {
@@ -19,7 +23,7 @@ export class InitDb {
             database: process.env.PGDB || 'tipsandtricks', // Name of database to connect to
             username: process.env.PGUSER || 'ttuser', // Username of database user
             password: process.env.PGPASSWORD || 'changeme', // Username of database
-            ssl: process.env.ENVIRONMENT === 'production'
+            ssl: process.env.ENVIRONMENT === 'production',
         });
     }
 
@@ -52,5 +56,13 @@ export class InitDb {
         .readFiles()
         .then(() => console.log('Migrations Success !'))
         .catch((err) => console.log('Migrations failed : ' + err.message));
+    if (process.env.NODE_ENV === 'production') {
+        await init.pg.end();
+        return;
+    }
+    await new UsersFixtures(init.pg).givenSomeUsers(5);
+    await new TipsFixtures(init.pg).givenSomeTips(500);
+    await new PostsFixtures(init.pg).givenSomePosts(500);
+    await new ReactionsFixtures(init.pg).givenSomeReactions();
     await init.pg.end();
 })();

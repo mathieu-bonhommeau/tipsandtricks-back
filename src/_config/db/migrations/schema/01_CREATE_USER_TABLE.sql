@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS "user" (
     "username" VARCHAR UNIQUE NOT NULL,
     "password" VARCHAR NOT NULL,
     "roles" roles NULL,
+    "refresh_token" VARCHAR UNIQUE NULL,
     "created_at" TIMESTAMPTZ DEFAULT current_timestamp NOT NULL,
     "updated_at" TIMESTAMPTZ NULL
 )

@@ -16,12 +16,13 @@ export default class UserRepositoryPostgres implements UserRepositoryInterface {
         });
     }
 
-    async getByEmail(email: string): Promise<User & { password: string }> {
+    async getByEmail(email: string): Promise<User & { password: string; refresh_token?: string | null }> {
         return this._sql`select * from "user" where "email" = ${email}`.then((rows) => {
             if (rows.length > 0) {
                 return {
                     ...UserRepositoryPostgresFactory.create(rows[0]),
                     password: rows[0].password as string,
+                    refresh_token: rows[0].refresh_token as string,
                 };
             }
             return null;
@@ -34,6 +35,19 @@ export default class UserRepositoryPostgres implements UserRepositoryInterface {
             return UserRepositoryPostgresFactory.create(rows[0]);
         }
         return null;
+    }
+
+    async revokeToken(email: string): Promise<boolean> {
+        return await this._sql`update "user" u set "refresh_token" = null where u.email = ${email} returning id`.then(
+            (rows) => rows.length > 0,
+        );
+    }
+
+    async setRefreshToken(userId: number, refreshToken: string): Promise<boolean> {
+        return await this
+            ._sql`update "user" u set "refresh_token" = ${refreshToken} where u.id = ${userId} returning id`.then(
+            (rows) => rows.length > 0,
+        );
     }
 }
 

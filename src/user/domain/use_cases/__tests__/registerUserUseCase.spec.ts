@@ -5,7 +5,7 @@ import UserRepositoryInMemory from '../../../server-side/repositories/userReposi
 import UserTestBuilder from './UserTestBuilder';
 import bcrypt from 'bcrypt';
 import * as dotenv from 'dotenv';
-import {faker} from "@faker-js/faker";
+import { faker } from '@faker-js/faker';
 dotenv.config();
 
 describe('Register a user', () => {
@@ -18,8 +18,8 @@ describe('Register a user', () => {
     });
 
     afterEach(() => {
-        userRepository.clear()
-    })
+        userRepository.clear();
+    });
 
     test('can register a user', async () => {
         const inputRegisterUser = sut.givenAnInputRegisterUser();
@@ -29,22 +29,24 @@ describe('Register a user', () => {
         expect(userJustCreated).toEqual(expectedUser);
     });
 
-    test('return an error message if persist user failed and return null', async () => {
+    test('return an errors message if persist user failed and return null', async () => {
         //TODO - use toThrow for check this test
         try {
             const inputRegisterUser = sut.givenAnInputRegisterUser();
             sut.givenAnError();
             await new RegisterUserUseCase(userRepository).register(inputRegisterUser);
+            //This expect breaks the test because it must throw an error
             expect(false).toEqual(true);
         } catch (err) {
             expect(err.message).toEqual('Register failed !');
         }
     });
 
-    test('return an error message if password is too weak', async () => {
+    test('return an errors message if password is too weak', async () => {
         try {
             const inputRegisterUser = sut.givenAnInputRegisterUserWithWeakPassword();
             await new RegisterUserUseCase(userRepository).register(inputRegisterUser);
+            //This expect breaks the test because it must throw an error
             expect(false).toEqual(true);
         } catch (err) {
             expect(err.message).toEqual('Register failed !');
@@ -65,6 +67,7 @@ describe('Register a user', () => {
         try {
             const inputRegisterUser = sut.givenAnInputRegisterUserWithATooLittleUsername();
             await new RegisterUserUseCase(userRepository).register(inputRegisterUser);
+            //This expect breaks the test because it must throw an error
             expect(false).toEqual(true);
         } catch (err) {
             expect(err.message).toEqual('Register failed !');
@@ -75,33 +78,36 @@ describe('Register a user', () => {
         try {
             const inputRegisterUser = sut.givenAnInputRegisterUserWithABadEmailFormat();
             await new RegisterUserUseCase(userRepository).register(inputRegisterUser);
+            //This expect breaks the test because it must throw an error
             expect(false).toEqual(true);
         } catch (err) {
             expect(err.message).toEqual('Register failed !');
         }
     });
 
-    test('returns an error if the email already exists in the database', async () => {
+    test('returns an errors if the email already exists in the database', async () => {
         try {
-            const user = sut.givenAUser()
-            const userWithAnExistingEmail = sut.givenAnInputRegisterUserWithSameEmail(user.email)
-            await new RegisterUserUseCase(userRepository).register(userWithAnExistingEmail)
+            const user = sut.givenAUser();
+            const userWithAnExistingEmail = sut.givenAnInputRegisterUserWithSameEmail(user.email);
+            await new RegisterUserUseCase(userRepository).register(userWithAnExistingEmail);
+            //This expect breaks the test because it must throw an error
             expect(false).toEqual(true);
         } catch (err) {
             expect(err.message).toEqual('This email already exists in database !');
         }
-    })
+    });
 
-    test('returns an error if the username already exists in the database', async () => {
+    test('returns an errors if the username already exists in the database', async () => {
         try {
-            const user = sut.givenAUser()
-            const userWithAnExistingUsername = sut.givenAnInputRegisterUserWithSameUsername(user.username)
-            await new RegisterUserUseCase(userRepository).register(userWithAnExistingUsername)
+            const user = sut.givenAUser();
+            const userWithAnExistingUsername = sut.givenAnInputRegisterUserWithSameUsername(user.username);
+            await new RegisterUserUseCase(userRepository).register(userWithAnExistingUsername);
+            //This expect breaks the test because it must throw an error
             expect(false).toEqual(true);
         } catch (err) {
             expect(err.message).toEqual('This username already exists in database !');
         }
-    })
+    });
 });
 
 class SUT {
@@ -118,7 +124,7 @@ class SUT {
             .withUsername(faker.internet.userName())
             .buildUser();
         this._userRepositoryInMemory.setUser(user);
-        return user
+        return user;
     }
 
     givenAnError(): UserRepositoryInMemory {
@@ -141,14 +147,12 @@ class SUT {
     }
 
     givenAnInputRegisterUserWithSameEmail(existingEmail: string): InputRegisterUser {
-        this._userTestBuilder.withEmail(existingEmail)
+        this._userTestBuilder.withEmail(existingEmail);
         return this._userTestBuilder.buildInputRegisterUser();
     }
 
     givenAnInputRegisterUserWithSameUsername(existingUsername: string): InputRegisterUser {
-        this._userTestBuilder
-            .withEmail(faker.internet.email())
-            .withUsername(existingUsername)
+        this._userTestBuilder.withEmail(faker.internet.email()).withUsername(existingUsername);
         return this._userTestBuilder.buildInputRegisterUser();
     }
 }
