@@ -1,4 +1,5 @@
 import express from 'express';
+<<<<<<< Updated upstream
 import cors from 'cors';
 import * as dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
@@ -30,6 +31,16 @@ app.use(router);
 app.use(errorsMiddleware);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerJsdoc(swaggerConfig), { explorer: true }));
+=======
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+const app = express();
+const port = process.env.NODE_PORT;
+app.get('/', (_, res) => {
+    res.send('Express + TypeScript Server');
+});
+>>>>>>> Stashed changes
 
 app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`);

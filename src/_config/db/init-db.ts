@@ -3,10 +3,13 @@ import * as dotenv from 'dotenv';
 import * as process from 'process';
 import * as fs from 'fs';
 import * as path from 'path';
+<<<<<<< Updated upstream
 import UsersFixtures from './fixtures/01_usersFixture';
 import TipsFixtures from './fixtures/02_tipsFixtures';
 import PostsFixtures from './fixtures/03_postsFixtures';
 import ReactionsFixtures from './fixtures/04_reactionsFixtures';
+=======
+>>>>>>> Stashed changes
 dotenv.config();
 
 export class InitDb {
@@ -22,8 +25,12 @@ export class InitDb {
             port: process.env.PGPORT ? parseInt(process.env.PGPORT) : 5433, // Postgres server port[s]
             database: process.env.PGDB || 'tipsandtricks', // Name of database to connect to
             username: process.env.PGUSER || 'ttuser', // Username of database user
+<<<<<<< Updated upstream
             password: process.env.PGPASSWORD || 'changeme', // Username of database
             ssl: process.env.ENVIRONMENT === 'production',
+=======
+            password: process.env.PGPASSWORD || 'changeme', // Username of database user
+>>>>>>> Stashed changes
         });
     }
 
@@ -31,6 +38,10 @@ export class InitDb {
         const sqlFiles: { schema: string[] } = {
             schema: fs.readdirSync(path.join(__dirname, './migrations/schema')),
         };
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
         for (const [type, files] of Object.entries(sqlFiles)) {
             await this.playSqlQueries(type, files);
         }
@@ -52,6 +63,7 @@ export class InitDb {
     const init = new InitDb();
     await init.init();
     await init.clearDb();
+<<<<<<< Updated upstream
     await init
         .readFiles()
         .then(() => console.log('Migrations Success !'))
@@ -64,5 +76,8 @@ export class InitDb {
     await new TipsFixtures(init.pg).givenSomeTips(500);
     await new PostsFixtures(init.pg).givenSomePosts(500);
     await new ReactionsFixtures(init.pg).givenSomeReactions();
+=======
+    await init.readFiles();
+>>>>>>> Stashed changes
     await init.pg.end();
 })();
