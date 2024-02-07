@@ -13,11 +13,7 @@ describe('A dependency container', () => {
         expect(dependencyContainer.get<NullService>('NullService')).toBeInstanceOf(NullService);
     });
 
-<<<<<<< Updated upstream
     test('the dependency container throw an errors if the service is not initialized', () => {
-=======
-    test('the dependency container throw an error if the service is not initialized', () => {
->>>>>>> Stashed changes
         expect(() => dependencyContainer.get<NullService>('NullService')).toThrow(Error);
     });
 });
