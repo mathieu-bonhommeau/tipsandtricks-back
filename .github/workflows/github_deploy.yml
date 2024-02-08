@@ -42,9 +42,9 @@ jobs:
                   cat private_key
                   ssh -o StrictHostKeyChecking=no -i /home/private_key ${USERNAME}@${HOST_DNS} '
                       source /home/${USERNAME}/.profile &&
-                      cd tipsandtricks &&
-                      export NVM_DIR=/home/ubuntu/.nvm &&
-                      source /home/ubuntu/.nvm/nvm.sh &&
+                      cd /www/tipsandtricks &&
+                      export NVM_DIR=/home/${USERNAME}/.nvm &&
+                      source /home/${USERNAME}/.nvm/nvm.sh &&
                       npm install && npm run build &&
                       npm run restart
                   '
