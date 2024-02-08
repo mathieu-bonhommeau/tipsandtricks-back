@@ -31,7 +31,7 @@ jobs:
                   REMOTE_HOST: ${{ secrets.HOST_DNS }}
                   REMOTE_USER: ${{ secrets.USERNAME }}
                   TARGET: ${{ secrets.TARGET }}
-                  ARGS: "-rlgoDzvc -i --delete"
+              run: echo "$SSH_PRIVATE_KEY"
 
             - name: Build and Run
               env:
