@@ -38,6 +38,7 @@ jobs:
                   NODE_PORT: ${{ secrets.NODE_PORT }}
               run: |
                   echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
+                  cd
                   ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOST_DNS} '
                       source /home/ubuntu/.profile &&
                       cd tipsandtricks &&
