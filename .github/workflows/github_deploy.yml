@@ -23,7 +23,8 @@ jobs:
                   node-version: '18.13'
 
             - name: Display SSH Private Key
-              run: echo "SSH Private Key: ${{ secrets.SSH_KEY }}"
+              run: |
+                    echo "SSH Private Key: ${{ secrets.SSH_KEY }}"
 
             - name: Deploy
               uses: easingthemes/ssh-deploy@main
