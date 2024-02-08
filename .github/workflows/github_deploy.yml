@@ -38,12 +38,13 @@ jobs:
                   USERNAME: ${{ secrets.USERNAME }}
                   NODE_PORT: ${{ secrets.NODE_PORT }}
               run: |
-                    cd
-                    ssh -o StrictHostKeyChecking=no -i $HOME/private_key ${USERNAME}@${HOST_DNS} '
-                    source /home/ubuntu/.profile &&
-                    cd tipsandtricks &&
-                    export NVM_DIR=/home/ubuntu/.nvm &&
-                    source /home/ubuntu/.nvm/nvm.sh &&
-                    npm install && npm run build &&
-                    npm run restart
-                    '
+                  echo "$SSH_PRIVATE_KEY" > /private_key && chmod 600 private_key
+                  cd
+                  ssh -o StrictHostKeyChecking=no -i /private_key ${USERNAME}@${HOST_DNS} '
+                      source /home/ubuntu/.profile &&
+                      cd tipsandtricks &&
+                      export NVM_DIR=/home/ubuntu/.nvm &&
+                      source /home/ubuntu/.nvm/nvm.sh &&
+                      npm install && npm run build &&
+                      npm run restart
+                  '
