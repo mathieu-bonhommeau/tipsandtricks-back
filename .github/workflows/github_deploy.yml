@@ -31,7 +31,6 @@ jobs:
                   REMOTE_HOST: ${{ secrets.HOST_DNS }}
                   REMOTE_USER: ${{ secrets.USERNAME }}
                   TARGET: ${{ secrets.TARGET }}
-              run: echo "$SSH_PRIVATE_KEY"
 
             - name: Build and Run
               env:
