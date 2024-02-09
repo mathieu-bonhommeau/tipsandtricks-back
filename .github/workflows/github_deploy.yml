@@ -42,6 +42,8 @@ jobs:
                   ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOST_DNS} '
                       source /home/matanna/.profile &&
                       cd /www/tipsandtricks/api &&
+                      export NVM_DIR=/home/matanna/.nvm &&
+                      source /home/matanna/.nvm/nvm.sh &&
                       pwd &&
                       npm install && npm run build &&
                       npm run restart
