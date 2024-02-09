@@ -43,6 +43,7 @@ jobs:
                   ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOST_DNS} '
                       source /home/matanna/.profile &&
                       cd /www/tipsandtricks/api &&
+                      echo pwd &&
                       npm install && npm run build &&
                       npm run restart
                   '
