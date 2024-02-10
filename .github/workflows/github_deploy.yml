@@ -40,10 +40,11 @@ jobs:
               run: |
                   echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
                   ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOST_DNS} "
-                      source /home/${USERNAME}/.profile &&
-                      cd /www/tipsandtricks/api &&
-                      export NVM_DIR=/home/${USERNAME}/.nvm &&
-                      source /home/${USERNAME}/.nvm/nvm.sh &&
-                      pwd &&
-                      npm install && npm run build &&
+                    source /home/${USERNAME}/.profile &&
+                    cd /www/tipsandtricks/api &&
+                    export NVM_DIR=/home/${USERNAME}/.nvm &&
+                    source /home/${USERNAME}/.nvm/nvm.sh &&
+                    pwd &&
+                    npm install && npm run build &&
+                    npm run restart
                   "
