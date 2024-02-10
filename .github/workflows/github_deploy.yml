@@ -47,5 +47,5 @@ jobs:
                       source /home/matanna/.nvm/nvm.sh &&
                       pwd &&
                       npm install && npm run build &&
-                      echo ${HOST_PASSWORD} | npm run restart
+                      sudo -S pm2 restart ./dist/index.mjs <<< "${HOST_PASSWORD}"
                   '
