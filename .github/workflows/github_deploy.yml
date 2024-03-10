@@ -1,9 +1,24 @@
 name: Deploy
 # Trigger deployment only on push to master branch
 on:
-    push:
+    workflow_dispatch:
         branches:
             - main
+        inputs:
+            logLevel:
+                description: 'Log level'
+                required: true
+                default: 'information'
+                type: choice
+                options:
+                    - information
+                    - debug
+                    - warning
+                    - critical
+            tags:
+                description: 'Purpose of Run This Workflow?'
+                required: true
+                type: string
 
 permissions:
     id-token: write   # This is required for requesting the JWT
