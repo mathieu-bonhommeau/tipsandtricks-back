@@ -9,7 +9,7 @@ import PostsFixtures from './fixtures/03_postsFixtures';
 import ReactionsFixtures from './fixtures/04_reactionsFixtures';
 dotenv.config();
 
-export class InitDb {
+export class Migrate {
     private _pg: Sql;
 
     get pg(): postgres.Sql {
@@ -19,7 +19,7 @@ export class InitDb {
     async init(): Promise<void> {
         this._pg = postgres({
             host: process.env.PGHOST || '127.0.0.1', // Postgres ip address[s] or domain name[s]
-            port: process.env.PGPORT ? parseInt(process.env.PGPORT) : 5433, // Postgres server port[s]
+            port: process.env.PGPORT ? parseInt(process.env.PGPORT) : 5433, // Postgres server ports[s]
             database: process.env.PGDB || 'tipsandtricks', // Name of database to connect to
             username: process.env.PGUSER || 'ttuser', // Username of database user
             password: process.env.PGPASSWORD || 'changeme', // Username of database
@@ -48,8 +48,8 @@ export class InitDb {
     }
 }
 
-(async () => {
-    const init = new InitDb();
+const main = async () => {
+    const init = new Migrate();
     await init.init();
     await init.clearDb();
     await init
@@ -60,9 +60,11 @@ export class InitDb {
         await init.pg.end();
         return;
     }
-    await new UsersFixtures(init.pg).givenSomeUsers(5);
-    await new TipsFixtures(init.pg).givenSomeTips(500);
-    await new PostsFixtures(init.pg).givenSomePosts(500);
-    await new ReactionsFixtures(init.pg).givenSomeReactions();
+    //await new UsersFixtures(init.pg).givenSomeUsers(5);
+    //await new TipsFixtures(init.pg).givenSomeTips(500);
+    //await new PostsFixtures(init.pg).givenSomePosts(500);
+    //await new ReactionsFixtures(init.pg).givenSomeReactions();
     await init.pg.end();
-})();
+};
+
+main().then(() => process.exit())

@@ -2,6 +2,10 @@
   "compilerOptions": {
     "outDir": "./dist/",
     "baseUrl": ".",
+    "paths": {
+      "@mcd/*": ["mcd/*"],
+      "@modules/*": ["src/*"]
+    },
     "rootDir": ".",
     "sourceMap": true,
     "noImplicitAny": false,

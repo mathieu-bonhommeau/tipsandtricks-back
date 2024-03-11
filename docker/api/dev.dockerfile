@@ -24,6 +24,6 @@ COPY ../../. .
 
 RUN pwd && ls -la
 
-CMD npm install && npm run init-db
+CMD npm install && npm run db:migrate && npm run db:feed && npm run dev
 
 

@@ -16,8 +16,6 @@ services:
             - "5000:5000"
         networks:
             - tipsandtricks
-        volumes:
-            -   ./logs/:/root/.npm/_logs/
 
     pgsql:
         image: postgres:latest

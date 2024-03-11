@@ -10,7 +10,8 @@
     "dev": "DEBUG=tipsandtricks:* nodemon ./src/index.ts",
     "dev:windows": "SET DEBUG=tipsandtricks:* && nodemon ./src/index.ts",
     "pretty-lint": "prettier src --check --write && eslint src --fix",
-    "init-db": "ts-node ./src/_config/db/init-db.ts"
+    "db:migrate": "ts-node ./src/_config/db/migrations/migrate.ts",
+    "db:feed": "ts-node ./src/_config/db/fixtures/feed.ts"
   },
   "repository": {
     "type": "git",
@@ -54,6 +55,8 @@
     "@types/swagger-ui-express": "^4.1.4",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier-plugin-organize-imports": "^3.2.2",
     "eslint": "^8.49.0",
     "jest": "^29.7.0",
     "nodemon": "^3.0.1",
