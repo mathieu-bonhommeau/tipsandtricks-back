@@ -16,7 +16,8 @@ services:
             - "5000:5000"
         networks:
             - tipsandtricks
-        command: ["npm", "run", "init-db"]
+        volumes:
+            -   ./logs/:/root/.npm/_logs/
 
     pgsql:
         image: postgres:latest
